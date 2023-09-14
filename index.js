@@ -1,0 +1,49 @@
+const express = require('express');
+const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const passport = require("passport")
+const session = require("express-session")
+const port = process.env.PORT || 5001;
+
+
+const config = require('./config/database')
+
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+
+mongoose.connect(config.database, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.once("open", () => {
+  console.log("connected to db");
+});
+db.on("error", (err) => {
+  console.error(err);
+});
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+
+
+
+
+
+
+
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });

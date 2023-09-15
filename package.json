@@ -4,6 +4,7 @@
   "description": "This documentation provides an overview of the different branches in the repository and their purposes. It aims to help the team understand the workflow and purpose of each branch.",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "team",
@@ -15,6 +16,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "mongodb": "^6.1.0",
     "mongoose": "^7.5.1",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.1",

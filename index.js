@@ -5,17 +5,19 @@ const mongoose = require('mongoose');
 const passport = require("passport")
 const session = require("express-session")
 const port = process.env.PORT || 5001;
+const cors = require('cors')
+const LocalStrategy = require('passport-local').Strategy;
+const database = require('./config/database')
+// const config = require('./config/database')
 
-
-const config = require('./config/database')
-
-
+// const dotenv = require("dotenv");
+// dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-mongoose.connect(config.database, {
+mongoose.connect(database.connect, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -29,12 +31,12 @@ db.on("error", (err) => {
 });
 
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 
 

@@ -4,14 +4,11 @@ const path = require('path');
 const mongoose = require('mongoose');
 const passport = require("passport")
 const session = require("express-session")
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5000;
 const cors = require('cors')
 const LocalStrategy = require('passport-local').Strategy;
 const database = require('./config/database')
-// const config = require('./config/database')
 
-// const dotenv = require("dotenv");
-// dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

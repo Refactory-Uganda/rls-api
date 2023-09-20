@@ -13,7 +13,7 @@ const router = require('./routes/loginRoutes')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(router)
+app.use( "/" ,router)
 
 mongoose.connect(database.connect, {
   useNewUrlParser: true,

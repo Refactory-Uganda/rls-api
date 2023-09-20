@@ -4,5 +4,5 @@ dotenv.config();
 
 
 module.exports = {
-  connect:process.env.MONGOBD_URI, 
+  connect:process.env.DATABASE, 
 };

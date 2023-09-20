@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 // const passportLocalMongoose = require("passport-local-mongoose")
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 const logInModel = mongoose.Schema({
     username:{
         type:String,

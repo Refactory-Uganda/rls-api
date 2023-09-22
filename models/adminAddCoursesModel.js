@@ -20,4 +20,4 @@ const adminAddCoursesSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("adminAddCourses", adminAddCoursesSchema);
+module.exports = mongoose.model("AdminAddCourses", adminAddCoursesSchema);

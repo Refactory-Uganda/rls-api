@@ -10,16 +10,4 @@ router.post("/login" , login.post);
 
 
 
-
-
-// const {
-//   logIn,
-//   signUp,
-// } = require('../controllers/loginControllers');
-
-// router.post('/login', logIn);
-
-// router.post('/signup', signUp);
-
-
 module.exports = router;

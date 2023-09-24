@@ -9,13 +9,17 @@ const cors = require("cors");
 const bodyParser = require("body-parser")
 const LocalStrategy = require("passport-local").Strategy;
 const database = require("./config/database");
-const router = require("./routes/loginRoutes");
+const Login = require("./routes/loginRoutes");
 const Courses = require("./routes/adminAddCoursesRoutes");
+
+
+
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-app.use("/", router);
+app.use("/", Login);
 app.use("/", Courses);
 
 mongoose.connect(database.connect, {

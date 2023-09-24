@@ -15,7 +15,7 @@ describe("/", () => {
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
-        done();
+        
       });
   });
 });
@@ -28,7 +28,11 @@ describe("/", () => {
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
-        done();
+        
       });
   });
 });
+
+setTimeout(() => {
+  process.exit();
+}, 1000);

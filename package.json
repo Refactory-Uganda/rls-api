@@ -29,5 +29,8 @@
     "express": "^4.18.2",
     "mocha": "^10.2.0",
     "supertest": "^6.3.3"
+  },
+  "directories": {
+    "test": "test"
   }
 }

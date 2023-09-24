@@ -1,16 +1,31 @@
 const express = require("express");
 const Courses = require("../models/adminAddCoursesModel");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+let upload = multer({ storage: storage });
 
 module.exports = {
-  post: async (req, res) => {
-    try {
-      const course = new Courses(req.body);
-      await course.save();
-      res.status(200).send("Successfully added course");
-    } catch (error) {
-      res.status(500).send("Error occured");
-    }
-  },
+  post:
+    (upload.single("image"),
+    async (req, res) => {
+      try {
+        const course = new Courses(req.body,req.image);
+        // course.image = req.file.originalname;
+        await course.save();
+        res.status(200).send("Successfully added course");
+      } catch (error) {
+        res.status(500).send("Failed to Post DATA ");
+      }
+    }),
 
   get: async (req, res) => {
     try {

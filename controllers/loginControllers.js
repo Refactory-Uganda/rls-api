@@ -7,6 +7,13 @@ module.exports = {
 get: async( req , res)=>{
 
         try{
+
+          // find user by unique email
+          //if no user throw an error
+          // find the user role 
+          // verfity the user passwprd
+          // redirect to role of the user 
+
           const { username, password } = req.body;
     
       

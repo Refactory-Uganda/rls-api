@@ -12,6 +12,4 @@ router.put("/admin/addCourses/:id", Courses.put);
 
 router.delete("/admin/addCourses/:id", Courses.delete);
 
-
-
-module.exports = router
+module.exports = router;

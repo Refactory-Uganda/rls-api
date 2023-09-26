@@ -12,7 +12,6 @@ const database = require("./config/database");
 const Login = require("./routes/loginRoutes");
 const AdminAddCourses = require("./routes/adminAddCoursesRoutes");
 const AdminProfile = require("./routes/adminProfileRoutes");
-const Courses = require("./routes/adminAddCoursesRoutes");
 const Facilitator = require("./routes/facilitatorRoutes")
 
 
@@ -25,7 +24,6 @@ app.use(cors());
 app.use("/", Login);
 app.use("/", AdminAddCourses);
 app.use("/", AdminProfile);
-app.use("/", Courses);
 app.use("/", Facilitator)
 
 mongoose.connect(database.connect, {

@@ -2,10 +2,8 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const Courses = require("../routes/adminAddCoursesRoutes");
 const Login = require("../routes/loginRoutes");
-const Facilitator = require("../routes/facilitatorRoutes")
-const AdminProfile = require("../routes/adminProfileRoutes")
-
-
+const Facilitator = require("../routes/facilitatorRoutes");
+const AdminProfile = require("../routes/adminProfileRoutes");
 
 chai.use(chaiHttp);
 
@@ -19,7 +17,6 @@ describe("/", () => {
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
-        
       });
   });
 });
@@ -32,7 +29,6 @@ describe("/", () => {
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
-        
       });
   });
 });
@@ -45,7 +41,6 @@ describe("/", () => {
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
-        
       });
   });
 });
@@ -58,12 +53,9 @@ describe("/", () => {
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
-        
       });
   });
 });
-
-
 
 setTimeout(() => {
   process.exit();

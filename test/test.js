@@ -26,7 +26,7 @@ describe("/", () => {
   it("facilitator route", async () => {
     chai
       .request(Facilitator)
-      .get("/admin/add/facilitator")
+      .get("/admin/addFacilitator")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");

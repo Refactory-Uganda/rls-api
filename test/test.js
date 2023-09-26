@@ -1,6 +1,6 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const Courses = require("../routes/adminAddCoursesRoutes");
+const AdminAddCourses = require("../routes/adminAddCoursesRoutes");
 const Login = require("../routes/loginRoutes");
 const Facilitator = require("../routes/facilitatorRoutes");
 const AdminProfile = require("../routes/adminProfileRoutes");
@@ -12,7 +12,7 @@ const expect = chai.expect;
 describe("/", () => {
   it("admin add courses route", async () => {
     chai
-      .request(Courses)
+      .request(AdminAddCourses)
       .get("/admin/addCourses")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
@@ -46,7 +46,7 @@ describe("/", () => {
 });
 
 describe("/", () => {
-  it("login route", async () => {
+  it("Admin Profile", async () => {
     chai
       .request(AdminProfile)
       .get("/admin/profile")

@@ -2,6 +2,7 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const Courses = require("../routes/adminAddCoursesRoutes");
 const Login = require("../routes/loginRoutes");
+const Facilitator = require("../routes/facilitatorRoutes")
 
 chai.use(chaiHttp);
 
@@ -12,6 +13,19 @@ describe("/", () => {
     chai
       .request(Courses)
       .get("/admin/addCourses")
+      .end((err, res) => {
+        expect(res.json).to.have.status(200);
+        expect(res.text).to.equal("Hello, Express!");
+        
+      });
+  });
+});
+
+describe("/", () => {
+  it("facilitator route", async () => {
+    chai
+      .request(Facilitator)
+      .get("/admin/add/facilitator")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");

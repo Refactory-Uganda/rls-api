@@ -11,6 +11,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const database = require("./config/database");
 const Login = require("./routes/loginRoutes");
 const Courses = require("./routes/adminAddCoursesRoutes");
+const Facilitator = require("./routes/facilitatorRoutes")
 
 
 
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use("/", Login);
 app.use("/", Courses);
+app.use("/", Facilitator)
 
 mongoose.connect(database.connect, {
   useNewUrlParser: true,

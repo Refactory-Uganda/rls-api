@@ -40,7 +40,7 @@ const adminAddCoursesSchema = new mongoose.Schema({
     content: [CourseContentModel], 
 });
 
-const AdminAddCourses = mongoose.model("Courses", adminAddCoursesSchema);
+const AdminAddCourses = mongoose.model("AdminAddCourses", adminAddCoursesSchema);
 
 // Define the Course model using the same schema
 const Course = mongoose.model('Course', CourseContentModel);

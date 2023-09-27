@@ -30,9 +30,7 @@ const adminAddCoursesSchema = new mongoose.Schema({
       ],
 });
 
-const AdminAddCourses = mongoose.model("AdminAddCourses", adminAddCoursesSchema);
+module.exports = mongoose.model("AdminAddCourses", adminAddCoursesSchema);
 
 
-module.exports = {
-  AdminAddCourses,
-};
+

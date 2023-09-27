@@ -1,20 +1,5 @@
 const mongoose = require("mongoose");
 
-const CourseContentModel = mongoose.Schema({
-    video: {
-        type: String,
-        trim: true,
-    },
-    text: {
-        type: String,
-        trim: true,
-    },
-    slide: {
-        type: String,
-        trim: true,
-    },
-});
-
 const adminAddCoursesSchema = new mongoose.Schema({
     course_name: {
         type: String,
@@ -37,15 +22,17 @@ const adminAddCoursesSchema = new mongoose.Schema({
         default: "Pending",
         enum: ["Pending", "Publish"],
     },
-    content: [CourseContentModel], 
+    modules: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Module',
+        },
+      ],
 });
 
 const AdminAddCourses = mongoose.model("AdminAddCourses", adminAddCoursesSchema);
 
-// Define the Course model using the same schema
-const Course = mongoose.model('Course', CourseContentModel);
 
 module.exports = {
   AdminAddCourses,
-  Course
 };

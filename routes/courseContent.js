@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Courses = require("../controllers/courseController");
 
-router.post("/:id/upload", Courses.uploadFiles);
+router.post("/upload", Courses.addModules);
 
 
 router.put('/updateCourseContent/:id')

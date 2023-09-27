@@ -37,7 +37,7 @@ module.exports = {
       } else if (user.userGroup === "student") {
         role = "Student";
       }
-      res.status(200).send("Hello, Express!");
+      // res.status(200).send("Hello, Express!");
       res.status(200).json({ message: "Login successful", role });
     } catch (error) {
       res

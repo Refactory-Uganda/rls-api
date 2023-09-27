@@ -3,18 +3,20 @@ const Module = require("../models/CourseModules");
 const  AdminAddCourses  = require("../models/adminAddCoursesModel");
 
 module.exports = {
+
+  // this creates a new  course modules in the modules for a  course
   addModules: async (req, res) => {
     try {
       const { courseId, course_model, course_name, course_description } = req.body;
 
-      // Create a new module
+      // Create a new  course module
       const newModule = new Module({
         course_model,
         course_name,
         course_description,
       });
 
-      // Save the module to the database
+      // Save the course module to the database
       await newModule.save();
 
       // Add the module to the course's modules array
@@ -80,16 +82,7 @@ module.exports = {
         return res.status(404).json({ error: 'Course not found' });
       }
 
-      // Get the IDs of all modules in the course's modules array
-      const moduleIds = course.modules;
-
-      // Delete each module individually
-      for (const moduleId of moduleIds) {
-        await Module.findByIdAndDelete(moduleId);
-      }
-
-      // Clear the course's modules array
-      course.modules = [];
+      course.content.findByIdAndDelete(moduleId)
 
       // Save the updated course without modules
       await course.save();

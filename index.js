@@ -4,7 +4,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local").Strategy;
@@ -13,6 +13,8 @@ const Login = require("./routes/loginRoutes");
 const AdminAddCourses = require("./routes/adminAddCoursesRoutes");
 const AdminProfile = require("./routes/adminProfileRoutes");
 const Facilitator = require("./routes/facilitatorRoutes")
+
+const CourseMaterail = require ('./routes/courseContent')
 
 
 
@@ -26,6 +28,7 @@ app.use("/", Login);
 app.use("/", AdminAddCourses);
 app.use("/", AdminProfile);
 app.use("/", Facilitator)
+app.use("/", CourseMaterail)
 
 mongoose.connect(database.connect, {
   useNewUrlParser: true,

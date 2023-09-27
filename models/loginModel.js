@@ -18,6 +18,10 @@ const logInModel = mongoose.Schema({
         type:String,
         trim:true,
     },
+    passwordHash:{
+        type:String,
+        trim:true,
+    },
     gender:{
         type:String,
         trim:true,

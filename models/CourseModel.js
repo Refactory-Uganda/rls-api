@@ -1,20 +1,7 @@
-const mongoose = require("mongoose");
+const express = require('express');
+const router = express.Router();
+const courseContent = require('../controllers/courseController')
 
-const CourseContentModel = mongoose.Schema({
-    video: {
-       
-        trim: true,
-    },
-    text: {
-       
-        type: String,
-        trim: true,
-    },
-    slide: {
-     
-        type: String,
-        trim: true,
-    },
-});
+router.post('/:id/upload',courseContent.uploadFiles );
 
-module.exports = mongoose.model('Course', logInModel);
+module.exports = router;

@@ -56,9 +56,7 @@ module.exports = {
   },
   getAllModulesForCourse: async (req, res) => {
     try {
-      const courseId  = req.params.id; // Extract the course ID from the request parameters
-
-      // Find the course by its ID and populate its modules
+      const courseId  = req.params.id; 
       const course = await AdminAddCourses.findById(courseId).populate('modules');
 
       if (!course) {
@@ -66,6 +64,37 @@ module.exports = {
       }
 
       res.status(200).json(course.modules);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+  deleteAllModulesForCourse: async (req, res) => {
+    try {
+      const courseId  = req.params.id; // Extract the course ID from the request parameters
+
+      // Find the course by its ID
+      const course = await AdminAddCourses.findById(courseId);
+
+      if (!course) {
+        return res.status(404).json({ error: 'Course not found' });
+      }
+
+      // Get the IDs of all modules in the course's modules array
+      const moduleIds = course.modules;
+
+      // Delete each module individually
+      for (const moduleId of moduleIds) {
+        await Module.findByIdAndDelete(moduleId);
+      }
+
+      // Clear the course's modules array
+      course.modules = [];
+
+      // Save the updated course without modules
+      await course.save();
+
+      res.status(200).json({ message: 'All modules deleted for the course' });
     } catch (error) {
       console.error('Error:', error);
       res.status(500).json({ error: 'Internal server error' });

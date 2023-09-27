@@ -6,6 +6,8 @@ router.post("/admin/courseModules", Courses.addModules);
 
 router.get('/:id/courseModules',Courses.getAllModulesForCourse)
 
+router.delete(':id/deleteModule/:id', Courses.deleteAllModulesForCourse)
+
 
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const express = require("express");
-const {AdminAddCourses} = require("../models/adminAddCoursesModel");
+const AdminAddCourses = require("../models/adminAddCoursesModel");
 const multer = require("multer");
 
 const storage = multer.diskStorage({

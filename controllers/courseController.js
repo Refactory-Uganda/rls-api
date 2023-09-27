@@ -1,6 +1,6 @@
 const Module = require("../models/CourseModules");
 
-const { AdminAddCourses } = require("../models/adminAddCoursesModel");
+const  AdminAddCourses  = require("../models/adminAddCoursesModel");
 
 module.exports = {
   addModules: async (req, res) => {
@@ -54,11 +54,21 @@ module.exports = {
       });
     }
   },
-  updateCourseContent: async (res, req) => {
+  getAllModulesForCourse: async (req, res) => {
     try {
-      const courseContent = await AdminAddCourses;
+      const courseId  = req.params.id; // Extract the course ID from the request parameters
+
+      // Find the course by its ID and populate its modules
+      const course = await AdminAddCourses.findById(courseId).populate('modules');
+
+      if (!course) {
+        return res.status(404).json({ error: 'Course not found' });
+      }
+
+      res.status(200).json(course.modules);
     } catch (error) {
-      res.status(500).send("failed to update course Content");
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   },
 };

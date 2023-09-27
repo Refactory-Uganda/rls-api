@@ -6,7 +6,7 @@ router.post("/upload", Courses.addModules);
 
 
 router.put('/updateCourseContent/:id')
-router.get('/allCourseMaterails',Courses.getAllCourseContent)
+router.get('/:id/courseModules',Courses.getAllModulesForCourse)
 
 
 

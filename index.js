@@ -15,7 +15,7 @@ const AdminProfile = require("./routes/adminProfileRoutes");
 const Facilitator = require("./routes/facilitatorRoutes")
 
 const CourseMaterail = require ('./routes/courseContent')
-
+const AdminAddCourseMaterial = require("./routes/adminAddCourseMaterialRoutes")
 
 
 // malter middlware 
@@ -29,6 +29,8 @@ app.use("/", AdminAddCourses);
 app.use("/", AdminProfile);
 app.use("/", Facilitator)
 app.use("/", CourseMaterail)
+app.use("/",AdminAddCourseMaterial)
+
 
 mongoose.connect(database.connect, {
   useNewUrlParser: true,

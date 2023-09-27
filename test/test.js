@@ -4,6 +4,7 @@ const AdminAddCourses = require("../routes/adminAddCoursesRoutes");
 const Login = require("../routes/loginRoutes");
 const Facilitator = require("../routes/facilitatorRoutes");
 const AdminProfile = require("../routes/adminProfileRoutes");
+const AdminAddCourseMaterial = require("../routes/adminAddCourseMaterialRoutes")
 
 chai.use(chaiHttp);
 
@@ -50,6 +51,18 @@ describe("/", () => {
     chai
       .request(AdminProfile)
       .get("/admin/profile")
+      .end((err, res) => {
+        expect(res.json).to.have.status(200);
+        expect(res.text).to.equal("Hello, Express!");
+      });
+  });
+});
+
+describe("/", () => {
+  it("Admin Add Course Material", async () => {
+    chai
+      .request(AdminAddCourseMaterial)
+      .get("/admin/addCourseMaterial")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");

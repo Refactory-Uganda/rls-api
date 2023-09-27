@@ -17,7 +17,7 @@ module.exports = {
 
       //if no user throw an error
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).send("User not found" );
       }
 
       // Verify the password
@@ -37,7 +37,7 @@ module.exports = {
       } else if (user.userGroup === "student") {
         role = "Student";
       }
-
+      res.status(200).send("Hello, Express!");
       res.status(200).json({ message: "Login successful", role });
     } catch (error) {
       res

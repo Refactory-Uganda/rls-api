@@ -33,30 +33,6 @@ module.exports = {
       res.status(500).json({ error: 'Internal server error' });
     }
   },
-
-  // getAllCourseContent: async (req, res) => {
-  //   try {
-  //     const courses = await AdminAddCourses.find();
-
-  //     if (!courses || courses.length === 0) {
-  //       return res.status(404).json({ message: "No courses found" });
-  //     }
-
-  //     const allCourseContent = courses.map((course) => course.content);
-
-  //     const flattenedCourseContent = [].concat(...allCourseContent);
-
-  //     res.status(200).json({
-  //       message: "Course content retrieved successfully",
-  //       content: flattenedCourseContent,
-  //     });
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       message: "Error retrieving course content",
-  //       error: error.message,
-  //     });
-  //   }
-  // },
   getAllModulesForCourse: async (req, res) => {
     try {
       const courseId  = req.params.id; 

@@ -47,18 +47,6 @@ describe("authication", () => {
   });
 });
 
-describe("CourseModule", () => {
-  it("get", async () => {
-    chai
-      .request(Login)
-      .get("/login")
-      .send({username:'karl',password:'password' })
-      .end((err, res) => {
-        expect(res.json).to.have.status(200);
-        expect(res.text).to.equal("Hello, Express!");
-      });
-  });
-});
 
 describe("/", () => {
   it("Admin Profile", async () => {

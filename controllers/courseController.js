@@ -1,14 +1,15 @@
 const Module = require("../models/CourseModules");
 
-const  AdminAddCourses  = require("../models/adminAddCoursesModel");
+const  AdminAddCourses = require("../models/adminAddCoursesModel");
 
 module.exports = {
 
   // this creates a new  course modules in the modules for a  course
   addModules: async (req, res) => {
     try {
-      const { courseId, course_model, course_name, course_description } = req.body;
+      const { course_model, course_name, course_description } = req.body;
 
+      const courseId  = req.params.id; 
       // Create a new  course module
       const newModule = new Module({
         course_model,
@@ -33,29 +34,29 @@ module.exports = {
     }
   },
 
-  getAllCourseContent: async (req, res) => {
-    try {
-      const courses = await AdminAddCourses.find();
+  // getAllCourseContent: async (req, res) => {
+  //   try {
+  //     const courses = await AdminAddCourses.find();
 
-      if (!courses || courses.length === 0) {
-        return res.status(404).json({ message: "No courses found" });
-      }
+  //     if (!courses || courses.length === 0) {
+  //       return res.status(404).json({ message: "No courses found" });
+  //     }
 
-      const allCourseContent = courses.map((course) => course.content);
+  //     const allCourseContent = courses.map((course) => course.content);
 
-      const flattenedCourseContent = [].concat(...allCourseContent);
+  //     const flattenedCourseContent = [].concat(...allCourseContent);
 
-      res.status(200).json({
-        message: "Course content retrieved successfully",
-        content: flattenedCourseContent,
-      });
-    } catch (error) {
-      res.status(500).json({
-        message: "Error retrieving course content",
-        error: error.message,
-      });
-    }
-  },
+  //     res.status(200).json({
+  //       message: "Course content retrieved successfully",
+  //       content: flattenedCourseContent,
+  //     });
+  //   } catch (error) {
+  //     res.status(500).json({
+  //       message: "Error retrieving course content",
+  //       error: error.message,
+  //     });
+  //   }
+  // },
   getAllModulesForCourse: async (req, res) => {
     try {
       const courseId  = req.params.id; 
@@ -75,7 +76,7 @@ module.exports = {
     try {
       const courseId  = req.params.id; // Extract the course ID from the request parameters
 
-      // Find the course by its ID
+const moduleId = req.params.id     // Find the course by its ID
       const course = await AdminAddCourses.findById(courseId);
 
       if (!course) {
@@ -93,4 +94,58 @@ module.exports = {
       res.status(500).json({ error: 'Internal server error' });
     }
   },
+  delete: async (req, res) => {
+    try {
+      await Module.findOneAndDelete({ _id: req.params.id });
+      res.status(200).send("successfully deleted module");
+    } catch (error) {
+      res.status(500).send("failed to delete module");
+    }
+  },
+  put: async (req, res) => {
+    try {
+      const model = await Module
+      .findOneAndUpdate(
+        { _id: req.params.id },
+        req.body,
+        { new: true }
+      );
+      
+      res.status(200).json(model);
+    } catch (error) {
+      res.status(500).send("failed to update model");
+    }
+  },get2: async (req, res) => {
+    try {
+      const module = await Module.findOne({ _id: req.params.id });
+  
+      if(!module){
+        return res.status(404).json({error:"module not found"})
+      }
+
+      res.status(200).json(module);
+    } catch (error) {
+      res.status(500).send("failed to find the required model");
+    }
+  }, get: async (req, res) => {
+    try {
+      const model = await Module.find();
+     
+      if (!model) {
+        return res.status(404).json({ error: 'Course not found' });
+      }
+      res.status(200).json(model);
+    } catch (error) {
+      res.status(500).send("failed to retrieve model");
+    }
+  }, post: async (req, res) => {
+    try {
+      const module = new Module(req.body);
+      await module.save();
+      res.status(200).send("Successfully added model");
+    } catch (error) {
+      res.status(500).send("Failed to Post module ");
+    }
+  },
+
 };

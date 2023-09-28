@@ -34,11 +34,24 @@ describe("/", () => {
   });
 });
 
-describe("logIn auth", () => {
+describe("authication", () => {
   it("login route", async () => {
     chai
       .request(Login)
       .post("/login")
+      .send({username:'karl',password:'password' })
+      .end((err, res) => {
+        expect(res.json).to.have.status(200);
+        expect(res.text).to.equal("Hello, Express!");
+      });
+  });
+});
+
+describe("CourseModule", () => {
+  it("get", async () => {
+    chai
+      .request(Login)
+      .get("/login")
       .send({username:'karl',password:'password' })
       .end((err, res) => {
         expect(res.json).to.have.status(200);

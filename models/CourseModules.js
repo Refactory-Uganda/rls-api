@@ -8,6 +8,7 @@ const moduleSchema = new mongoose.Schema({
   course_description: {
      type:String,
 },
+// change to course module
 course_model: {
      type:String,
 }

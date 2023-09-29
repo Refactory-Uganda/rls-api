@@ -4,7 +4,7 @@ const CourseMaterial = require("../controllers/adminAddCourseMaterialControllers
 
 router.post("/admin/addCourseMaterial", CourseMaterial.post);
 
-router.get("/admin/addCourseMaterial", CourseMaterial.get);
+router.get("/admin/addCourseMaterial",CourseMaterial.get);
 
 router.get("/admin/addCourseMaterial/:id", CourseMaterial.get2);
 

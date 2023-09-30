@@ -86,7 +86,7 @@ const moduleId = req.params.id     // Find the course by its ID
         req.body,
         { new: true }
       );
-      
+  
       res.status(200).json(model);
     } catch (error) {
       res.status(500).send("failed to update model");

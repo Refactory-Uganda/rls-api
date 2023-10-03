@@ -16,7 +16,8 @@ const Facilitator = require("./routes/facilitatorRoutes")
 
 const CourseMaterail = require ('./routes/courseContent')
 const AdminAddCourseMaterial = require("./routes/adminAddCourseMaterialRoutes")
-
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocs = require("./swagger");
 
 // malter middlware 
 app.use(express.static(path.join(__dirname , "public/products")))
@@ -31,7 +32,7 @@ app.use("/", Facilitator)
 app.use("/", CourseMaterail)
 app.use("/",AdminAddCourseMaterial)
 
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 mongoose.connect(database.connect, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

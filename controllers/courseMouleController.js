@@ -72,7 +72,10 @@ const moduleId = req.params.id     // Find the course by its ID
   },
   delete: async (req, res) => {
     try {
-      await Module.findOneAndDelete({ _id: req.params.id });
+      const CourseModule = await Module.findOneAndDelete({ _id: req.params.id });
+if(!CourseModule){
+  return res.status(404).json({message: 'The Course Module was not found'})
+}
       res.status(200).send("successfully deleted module");
     } catch (error) {
       res.status(500).send("failed to delete module");
@@ -86,7 +89,9 @@ const moduleId = req.params.id     // Find the course by its ID
         req.body,
         { new: true }
       );
-  
+  if(!model){
+    res.status(404).json({Message:"Module not found"})
+  }
       res.status(200).json(model);
     } catch (error) {
       res.status(500).send("failed to update model");

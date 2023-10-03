@@ -14,6 +14,7 @@ const storage = multer.diskStorage({
 let upload = multer({ storage: storage });
 
 module.exports = {
+
   post:
     (upload.single("image"),
     async (req, res) => {
@@ -23,7 +24,7 @@ module.exports = {
         await courseMaterial.save();
         res.status(200).send("Successfully added course material");
       } catch (error) {
-        res.status(500).send("Failed to Post DATA ");
+        res.status(500).send("Failed to Post new Module");
       }
     }),
 

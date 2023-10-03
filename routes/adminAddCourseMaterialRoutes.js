@@ -21,10 +21,10 @@ const CourseMaterial = require("../controllers/adminAddCourseMaterialControllers
  *           type: string
  *           description: The video for the course module
  *         images:
- *           type: string
+ *           type: document
  *           description: The images used in the video
  *         slides:
- *           type: string
+ *           type: file
  *           description: The slides used in the video
  *       example:
  *         id: d5fE_asz
@@ -95,10 +95,10 @@ router.get("/admin/addCourseMaterial",CourseMaterial.get);
  *         schema:
  *           type: string
  *         required: true
- *         description: The book id
+ *         description: The course Material id
  *     responses:
  *       200:
- *         description: The book description by id
+ *         description: The course Material description by id
  *         contens:
  *           application/json:
  *             schema:
@@ -120,7 +120,7 @@ router.get("/admin/addCourseMaterial/:id", CourseMaterial.get2);
  *        schema:
  *          type: string
  *        required: true
- *        description: The book id
+ *        description: The course Material  id
  *    requestBody:
  *      required: true
  *      content:

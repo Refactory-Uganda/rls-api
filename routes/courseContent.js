@@ -142,7 +142,7 @@ router.get("/admin/coursemodule/:id", Courses.get2);
 router.put("/admin/coursemodule/:id", Courses.put);
 /**
  * @swagger
- * /admin/coursemodule/:id:
+ * /admin/coursemodule/{id}:
  *   delete:
  *     summary: Remove the Course Module by id
  *     tags: [Course Module]

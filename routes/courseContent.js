@@ -9,14 +9,11 @@ const Courses = require("../controllers/courseMouleController");
  * components:
  *   schemas:
  *     Course Module:
- *       type: object
- *       
- *         
- *        
+ *       type: object  
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the course Module
+ *           description: The auto-generated id of the book
  *         course_name:
  *           type: string
  *           description: The course name
@@ -29,6 +26,12 @@ const Courses = require("../controllers/courseMouleController");
  *         author: Alexander K. Dewdney
  */
 
+ /**
+  * @swagger
+  * tags:
+  *   name: Course Module
+  *   description: This is used for managing the course mdules for the courses 
+  */
 
 
 
@@ -81,7 +84,7 @@ router.post("/admin/coursemodule", Courses.post);
 router.get("/admin/coursemodule", Courses.get);
 /**
  * @swagger
- * /admin/coursemodule/:id:
+ * /admin/coursemodule/{id}:
  *   get:
  *     summary: Get the Course Module by id
  *     tags: [Course Module]
@@ -107,7 +110,7 @@ router.get("/admin/coursemodule/:id", Courses.get2);
 
 /**
  * @swagger
- * /admin/coursemodule/:id:
+ * /admin/coursemodule/(id):
  *  put:
  *    summary: Update the Course Module by the id
  *    tags: [Course Module]

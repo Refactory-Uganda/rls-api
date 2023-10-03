@@ -10,17 +10,41 @@ const authentication  = require('../controllers/loginControllers')
  *       properties:
  *         id:
  *           type: string
- *           description: The auto-generated id of the book
- *         course_name:
+ *           description: The auto-generated id of the user 
+ *         username:
  *           type: string
- *           description: The course name
- *         course_description:
+ *           description: The unique  username of the user
+ *         firstName:
  *           type: string
- *           description: The description of course Module
+ *           description: The first Name of the user
+ *         SecondName:
+ *           type: string
+ *           description: The second Name of the user   
+ *         password:
+ *           type: string
+ *           description: The password of the user
+*         gender:
+ *           type: string
+ *           description: The gender of the user
+ *         nationalility:
+ *           type: string
+ *           description: The country of the user
+ *         userGroup:
+ *           type: string
+ *           description: The user Group of the user
+ *         userPhoneNumber:
+ *           type: string
+ *           description: The user phone Number of the use
  *       example:
  *         id: d5fE_asz
- *         title: The New Turing Omnibus
- *         author: Alexander K. Dewdney
+ *         username: opini
+ *         FirstName: Opini
+ *         secondName: Isaac
+ *         nationality : Ugandan 
+ *         userGroup: student
+ *         UserPhoneNumber: 256 787377567
+ *         gender: Male
+ *         
  */
 
  /**

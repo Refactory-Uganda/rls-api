@@ -6,6 +6,10 @@ const logInModel = mongoose.Schema({
         type:String,
         trim:true,
     },
+    email:{
+        type:String,
+        trim:true,
+    },
     fullName:{
         type: String,
         trim:true,

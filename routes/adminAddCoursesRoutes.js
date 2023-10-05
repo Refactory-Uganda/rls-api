@@ -5,8 +5,8 @@ const Courses = require("../controllers/adminAddCoursesControllers");
  * @swagger
  * components:
  *   schemas:
- *      Add Courses:
- *       type: object  
+ *     Add Courses:
+ *       type: object
  *       properties:
  *         id:
  *           type: string
@@ -17,11 +17,24 @@ const Courses = require("../controllers/adminAddCoursesControllers");
  *         course_description:
  *           type: string
  *           description: The description of course Module
+ *         course_display_icon:
+ *           type: string
+ *           description: The icon that will be displayed for the course
+ *         course_duration:
+ *           type: string
+ *           description: The duration in which the course will be undertaken
+ *         status:
+ *           type: string
+ *           description: The status if the course is pending or published
  *       example:
  *         id: d5fE_asz
- *         title: The New Turing Omnibus
- *         author: Alexander K. Dewdney
+ *         course_name: The New Turing Omnibus
+ *         course_description: Course description goes here
+ *         course_display_icon: icon-url.png
+ *         course_duration: 12 weeks
+ *         status: published
  */
+
 
  /**
   * @swagger

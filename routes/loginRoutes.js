@@ -82,23 +82,35 @@ router.post("/signup", authentication.signUp );
  * @swagger
  * /login:
  *   post:
- *     summary: logging in the different user groups
- *     tags: [ Authetication]
+ *     summary: Logging in with username and password
+ *     tags: [Authetication]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Users'
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The unique username of the user
+ *               password:
+ *                 type: string
+ *                 description: The password of the user
+ *             required:
+ *               - username
+ *               - password
  *     responses:
  *       200:
- *         description: The Course was successfully created
+ *         description: Login successful
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Users'
+ *       401:
+ *         description: Unauthorized - Invalid username or password
  *       500:
- *         description: Some server error
+ *         description: Server error
  */
 router.post("/login", authentication.login)
 

@@ -6,11 +6,7 @@ const logInModel = mongoose.Schema({
         type:String,
         trim:true,
     },
-    firstName:{
-        type: String,
-        trim:true,
-    },
-    secondName:{
+    fullName:{
         type: String,
         trim:true,
     },

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Courses = require("../controllers/courseController");
-const { route } = require("./courseContent");
+// const { route } = require("./courseContent");
 
 router.post("/admin/courseModules/:id", Courses.addModules);
 

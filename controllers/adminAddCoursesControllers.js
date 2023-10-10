@@ -18,7 +18,7 @@ module.exports = {
     (upload.single("image"),
     async (req, res) => {
       try {
-        const course = new AdminAddCourses(req.body, req.image);
+        const course = new AdminAddCourses(req.body ,req.image);
         // course.image = req.file.originalname;
         await course.save();
         res.status(200).send("Successfully added course");

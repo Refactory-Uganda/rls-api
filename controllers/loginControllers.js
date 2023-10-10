@@ -31,7 +31,7 @@ module.exports = {
       let role = "";
       if (user.userGroup === "admin") {
         role = "Admin";
-        return res.redirect("/admin");
+        // return res.redirect("/admin");
       } else if (user.userGroup === "facilitator") {
         role = "Facilitator";
       } else if (user.userGroup === "student") {

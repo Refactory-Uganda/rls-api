@@ -19,7 +19,7 @@ const AdminAddCourseMaterial = require("./routes/adminAddCourseMaterialRoutes")
 
 
 // malter middlware 
-app.use(express.static(path.join(__dirname , "public/products")))
+// app.use(express.static(path.join(__dirname , "public/products")))
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

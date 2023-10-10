@@ -18,8 +18,8 @@ module.exports = {
     (upload.single("image"),
     async (req, res) => {
       try {
-        const courseMaterial = new AdminAddCourseMaterial(req.body, req.image);
-        // course.image = req.file.originalname;
+        const courseMaterial = new AdminAddCourseMaterial(req.body);
+        courseMaterial.image = req.file.originalname;
         await courseMaterial.save();
         res.status(200).send("Successfully added course material");
       } catch (error) {

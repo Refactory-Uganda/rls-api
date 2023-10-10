@@ -5,7 +5,7 @@ const Login = require("../routes/loginRoutes");
 const Facilitator = require("../routes/facilitatorRoutes");
 const AdminProfile = require("../routes/adminProfileRoutes");
 const AdminAddCourseMaterial = require("../routes/adminAddCourseMaterialRoutes")
-
+const courseModule = require('../routes/courseContent')
 chai.use(chaiHttp);
 
 const expect = chai.expect;
@@ -46,19 +46,19 @@ describe("authication", () => {
       });
   });
 });
-
-describe("CourseModule", () => {
-  it("get", async () => {
+describe("Course Modules", () => {
+  it("post course modules", async () => {
     chai
-      .request(Login)
-      .get("/login")
-      .send({username:'karl',password:'password' })
+      .request(courseModule)
+      .get("/admin/coursemodule")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
       });
   });
 });
+
+
 
 describe("/", () => {
   it("Admin Profile", async () => {

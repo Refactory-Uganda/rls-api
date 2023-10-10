@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const moduleSchema = new mongoose.Schema({
   course_name: {
      type:String,
@@ -9,7 +10,7 @@ const moduleSchema = new mongoose.Schema({
      type:String,
 },
 // change to course module
-course_model: {
+model_name: {
      type:String,
 }
 });

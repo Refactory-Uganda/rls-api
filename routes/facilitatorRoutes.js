@@ -149,5 +149,6 @@ router.delete("/admin/addFacilitator/:id", Facilitator.delete);
  *        description: Some error happened
  */
 router.put("/admin/addFacilitator/:id", Facilitator.put);
+router.post("/Module/:moduleId/facilitators/:facilitatorId")
 
 module.exports = router;

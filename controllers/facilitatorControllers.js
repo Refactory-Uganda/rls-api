@@ -1,28 +1,23 @@
 const express = require('express')
 const Facilitator  = require("../models/facilitatorModel");
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb)=>{
-        cb(null, "./public/images");
-    },
-    filename:(req, file, cb)=>{
-        cb(null ,file.originalname);
-    },
-});
-let upload = multer({storage: storage});
-
-
+const file= require("../routes/facilitatorRoutes.js")
+const path= require('path')
 module.exports = {
-    post: 
-    async(req,res)=>{
+
+    post:
+      async function(req,res){
         try{
-            const facilitator = new Facilitator(req.body);
+            const fields=req.body
+            const facilitator = new Facilitator({...fields,image:req.file.path});
+            console.log(facilitator)
             await facilitator.save();
             res.status(200).send("Facilitator added as a successfully");
         } catch (error){
-            res.status(500).send("facilitator cant be added");
+            res.status(500).send("facilitator cant be added"+"    " +error);
+          
         }
+        
+      
 },
     get: async(req,res)=>{
         try{

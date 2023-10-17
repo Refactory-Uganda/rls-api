@@ -1,6 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const Facilitator = require("../controllers/facilitatorControllers");
+const multer = require("multer");
+const storage = multer.diskStorage({
+    destination: (req, file, cb)=>{
+        cb(null, "./public/images/facilitators");
+    },
+    filename:(req, file, cb)=>{
+      const name = file.originalname.toString().split(" ").join("_")
+        cb(null ,Date.now()+"_"+name);
+    },
+});
+let upload = multer({storage: storage});
+
 /**
  * @swagger
  * components:
@@ -52,7 +64,7 @@ const Facilitator = require("../controllers/facilitatorControllers");
  *       500:
  *         description: Some server error
  */
-router.post("/admin/addFacilitator", Facilitator.post);
+router.post("/admin/addFacilitator",upload.single('image'), Facilitator.post);
 /**
  * @swagger
  * /admin/addFacilitator/:

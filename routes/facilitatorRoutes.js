@@ -32,7 +32,7 @@ const Facilitator = require("../controllers/facilitatorControllers");
 
 /**
  * @swagger
- * /admin/addFacilitator:
+ * /facilitator:
  *   post:
  *     summary: Create a new course Module
  *     tags: [Add Facilitator]
@@ -52,10 +52,10 @@ const Facilitator = require("../controllers/facilitatorControllers");
  *       500:
  *         description: Some server error
  */
-router.post("/admin/addFacilitator", Facilitator.post);
+router.post("/facilitator", Facilitator.post);
 /**
  * @swagger
- * /admin/addFacilitator/:
+ * /facilitator/:
  *   get:
  *     summary: Returns the list of all the Courses
  *     tags: [Add Facilitator]
@@ -69,10 +69,10 @@ router.post("/admin/addFacilitator", Facilitator.post);
  *               items:
  *                 $ref: '#/components/schemas/Add Facilitator'
  */
-router.get("/admin/addFacilitator", Facilitator.get);
+router.get("/facilitator", Facilitator.get);
 /**
  * @swagger
- * /admin/addFacilitator:
+ * /facilitator:
  *   get:
  *     summary: Get the Course Module by id
  *     tags: [Add Facilitator]
@@ -95,10 +95,10 @@ router.get("/admin/addFacilitator", Facilitator.get);
  */
 
 
-router.get("/admin/addFacilitator/:id", Facilitator.getdetails);
+router.get("/facilitator/:id", Facilitator.getdetails);
 /**
  * @swagger
- * /admin/addFacilitator/(id):
+ * /facilitator/(id):
  *   delete:
  *     summary: Remove the Course Module by id
  *     tags: [Add Facilitator]
@@ -116,10 +116,10 @@ router.get("/admin/addFacilitator/:id", Facilitator.getdetails);
  *       404:
  *         description: The Facilitator was not found
  */
-router.delete("/admin/addFacilitator/:id", Facilitator.delete);
+router.delete("/facilitator/:id", Facilitator.delete);
 /**
  * @swagger
- * /admin/addFacilitator/(id):
+ * /facilitator/(id):
  *  put:
  *    summary: Update the Course Module by the id
  *    tags: [Add Facilitator]
@@ -148,6 +148,6 @@ router.delete("/admin/addFacilitator/:id", Facilitator.delete);
  *      500:
  *        description: Some error happened
  */
-router.put("/admin/addFacilitator/:id", Facilitator.put);
+router.put("/facilitator/:id", Facilitator.put);
 
 module.exports = router;

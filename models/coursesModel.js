@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const adminAddCoursesSchema = new mongoose.Schema({
+const CoursesSchema = new mongoose.Schema({
     course_name: {
         type: String,
         default: null,
@@ -30,7 +30,7 @@ const adminAddCoursesSchema = new mongoose.Schema({
       ],
 });
 
-module.exports = mongoose.model("AdminAddCourses", adminAddCoursesSchema);
+module.exports = mongoose.model("Courses", CoursesSchema);
 
 
 

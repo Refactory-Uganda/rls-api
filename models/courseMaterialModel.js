@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const adminAddCourseMaterialSchema = new mongoose.Schema({
+const CourseMaterialSchema = new mongoose.Schema({
     module_name: {
         type: String,
         default: null,
@@ -25,4 +25,4 @@ const adminAddCourseMaterialSchema = new mongoose.Schema({
    
 });
 
-module.exports = mongoose.model("AdminAddCourseMaterial", adminAddCourseMaterialSchema);
+module.exports = mongoose.model("CourseMaterial", CourseMaterialSchema);

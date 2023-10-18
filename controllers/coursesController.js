@@ -1,5 +1,5 @@
 const express = require("express");
-const AdminAddCourses = require("../models/adminAddCoursesModel");
+const Courses = require("../models/coursesModel");
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -18,8 +18,8 @@ module.exports = {
     (upload.single("image"),
     async (req, res) => {
       try {
-        const course = new AdminAddCourses(req.body ,req.image);
-        // course.image = req.file.originalname;
+        const course = new Courses(req.body);
+        course.image = req.file;
         await course.save();
         res.status(200).send("Successfully added course");
       } catch (error) {
@@ -29,7 +29,7 @@ module.exports = {
 
   get: async (req, res) => {
     try {
-      const course = await AdminAddCourses.find();
+      const course = await Courses.find();
       res.status(200).json(course);
     } catch (error) {
       res.status(500).send("failed to retrieve the course");
@@ -38,7 +38,7 @@ module.exports = {
 
   get2: async (req, res) => {
     try {
-      const course = await AdminAddCourses.findOne({ _id: req.params.id });
+      const course = await Courses.findOne({ _id: req.params.id });
       res.status(200).json(course);
     } catch (error) {
       res.status(500).send("failed to find the required course");
@@ -47,7 +47,7 @@ module.exports = {
 
   put: async (req, res) => {
     try {
-      const course = await AdminAddCourses.findOneAndUpdate(
+      const course = await Courses.findOneAndUpdate(
         { _id: req.params.id },
         req.body,
         { new: true }
@@ -60,7 +60,7 @@ module.exports = {
 
   delete: async (req, res) => {
     try {
-      await AdminAddCourses.findOneAndDelete({ _id: req.params.id });
+      await courses.findOneAndDelete({ _id: req.params.id });
       res.status(200).send("successfully deleted course record");
     } catch (error) {
       res.status(500).send("failed to delete course details");

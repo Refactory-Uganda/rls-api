@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Courses = require("../controllers/courseMouleController");
+const Courses = require("../controllers/courseModuleController");
 
 
 
@@ -35,15 +35,15 @@ const Courses = require("../controllers/courseMouleController");
 
 
 
-router.post("/admin/courseModules/:id", Courses.addModules);
+router.post("/courseModules/:id", Courses.addModules);
 
-router.get("/admin/courseModules/:id", Courses.getAllModulesForCourse);
+router.get("/courseModules/:id", Courses.getAllModulesForCourse);
 
 router.delete(":id/deleteModule/:id", Courses.deleteAllModulesForCourse);
 
 /**
  * @swagger
- * /admin/coursemodule:
+ * /coursemodule:
  *   post:
  *     summary: Create a new course Module
  *     tags: [Course Module]
@@ -64,10 +64,10 @@ router.delete(":id/deleteModule/:id", Courses.deleteAllModulesForCourse);
  *         description: Some server error
  */
 
-router.post("/admin/coursemodule", Courses.post);
+router.post("/coursemodule", Courses.post);
 /**
  * @swagger
- * /admin/coursemodule:
+ * /coursemodule:
  *   get:
  *     summary: Returns the list of all the Course Modules
  *     tags: [Course Module]
@@ -81,10 +81,10 @@ router.post("/admin/coursemodule", Courses.post);
  *               items:
  *                 $ref: '#/components/schemas/Course Module'
  */
-router.get("/admin/coursemodule", Courses.get);
+router.get("/coursemodule", Courses.get);
 /**
  * @swagger
- * /admin/coursemodule/{id}:
+ * /coursemodule/{id}:
  *   get:
  *     summary: Get the Course Module by id
  *     tags: [Course Module]
@@ -106,11 +106,11 @@ router.get("/admin/coursemodule", Courses.get);
  *         description: The Course Module  was not found
  */
 
-router.get("/admin/coursemodule/:id", Courses.get2);
+router.get("/coursemodule/:id", Courses.get2);
 
 /**
  * @swagger
- * /admin/coursemodule/(id):
+ * /coursemodule/(id):
  *  put:
  *    summary: Update the Course Module by the id
  *    tags: [Course Module]
@@ -139,10 +139,10 @@ router.get("/admin/coursemodule/:id", Courses.get2);
  *      500:
  *        description: Some error happened
  */
-router.put("/admin/coursemodule/:id", Courses.put);
+router.put("/coursemodule/:id", Courses.put);
 /**
  * @swagger
- * /admin/coursemodule/{id}:
+ * /coursemodule/{id}:
  *   delete:
  *     summary: Remove the Course Module by id
  *     tags: [Course Module]
@@ -161,6 +161,6 @@ router.put("/admin/coursemodule/:id", Courses.put);
  *         description: The Course Module was not found
  */
 
-router.delete("/admin/coursemodule/:id", Courses.delete);
+router.delete("/coursemodule/:id", Courses.delete);
 
 module.exports = router;

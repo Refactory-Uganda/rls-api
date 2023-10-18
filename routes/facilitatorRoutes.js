@@ -64,7 +64,7 @@ let upload = multer({storage: storage});
  *       500:
  *         description: Some server error
  */
-router.post("/admin/addFacilitator",upload.single('image'), Facilitator.post);
+router.post("/facilitator",upload.single('image'), Facilitator.post);
 /**
  * @swagger
  * /facilitator/:

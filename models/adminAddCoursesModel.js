@@ -11,7 +11,7 @@ const adminAddCoursesSchema = new mongoose.Schema({
     },
     course_display_icon: {
         type: String,
-        default: null,
+        required: true,
     },
     course_duration: {
         type: String,

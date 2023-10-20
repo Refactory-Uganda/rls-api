@@ -1,6 +1,6 @@
 const Module = require("../models/CourseModules");
 
-const  AdminAddCourses = require("../models/adminAddCoursesModel");
+const CourseModule = require("../models/courseModulesModel");
 
 module.exports = {
 
@@ -21,7 +21,7 @@ module.exports = {
       await newModule.save();
 
       // Add the module to the course's modules array
-      const courseAdmin = await AdminAddCourses.findByIdAndUpdate(
+      const courseAdmin = awaitCourseModule.findByIdAndUpdate(
         courseId,
         { $push: { modules: newModule } },
         { new: true }
@@ -36,7 +36,7 @@ module.exports = {
   getAllModulesForCourse: async (req, res) => {
     try {
       const courseId  = req.params.id; 
-      const course = await AdminAddCourses.findById(courseId).populate('modules');
+      const course = awaitCourseModule.findById(courseId).populate('modules');
 
       if (!course) {
         return res.status(404).json({ error: 'Course not found' });
@@ -53,7 +53,7 @@ module.exports = {
       const courseId  = req.params.id; // Extract the course ID from the request parameters
 
 const moduleId = req.params.id     // Find the course by its ID
-      const course = await AdminAddCourses.findById(courseId);
+      const course = awaitCourseModule.findById(courseId);
 
       if (!course) {
         return res.status(404).json({ error: 'Course not found' });

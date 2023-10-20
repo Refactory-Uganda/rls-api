@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const CourseMaterial = require("../controllers/adminAddCourseMaterialControllers");
+const CourseMaterial = require("../controllers/courseMaterialController");
 /**
  * @swagger
  * components:
@@ -43,7 +43,7 @@ const CourseMaterial = require("../controllers/adminAddCourseMaterialControllers
 
 /**
  * @swagger
- * /admin/addCourseMaterial:
+ * /courseMaterial:
  *   post:
  *     summary: Create a new course Module
  *     tags: [Course Material]
@@ -63,10 +63,10 @@ const CourseMaterial = require("../controllers/adminAddCourseMaterialControllers
  *       500:
  *         description: Some server error
  */
-router.post("/admin/addCourseMaterial", CourseMaterial.post);
+router.post("/courseMaterial", CourseMaterial.post);
 /**
  * @swagger
- * /admin/addCourseMaterial:
+ * /courseMaterial:
  *   get:
  *     summary: Returns the list of all the Course Material
  *     tags: [Course Material]
@@ -82,10 +82,10 @@ router.post("/admin/addCourseMaterial", CourseMaterial.post);
  */
 
 
-router.get("/admin/addCourseMaterial",CourseMaterial.get);
+router.get("/courseMaterial",CourseMaterial.get);
 /**
  * @swagger
- * /admin/addCourseMaterial/{id}:
+ * /courseMaterial/{id}:
  *   get:
  *     summary: Get the Course Material by id
  *     tags: [Course Material]
@@ -106,11 +106,11 @@ router.get("/admin/addCourseMaterial",CourseMaterial.get);
  *       404:
  *         description: The Course Material was not found
  */
-router.get("/admin/addCourseMaterial/:id", CourseMaterial.get2);
+router.get("/courseMaterial/:id", CourseMaterial.get2);
 
 /**
  * @swagger
- * /admin/addCourseMaterial/(id):
+ * /courseMaterial/(id):
  *  put:
  *    summary: Update the Course Materiale by the id
  *    tags: [Course Material]
@@ -140,11 +140,11 @@ router.get("/admin/addCourseMaterial/:id", CourseMaterial.get2);
  *        description: Some error happened
  */
 
-router.put("/admin/addCourseMaterial/:id", CourseMaterial.put);
+router.put("/courseMaterial/:id", CourseMaterial.put);
 
 /**
  * @swagger
- * /admin/addCourseMaterial/{id}:
+ * /courseMaterial/{id}:
  *   delete:
  *     summary: Remove the Course Module by id
  *     tags: [Course Material]
@@ -162,6 +162,6 @@ router.put("/admin/addCourseMaterial/:id", CourseMaterial.put);
  *       404:
  *         description: The Course Module was not found
  */
-router.delete("/admin/addCourseMaterial/:id", CourseMaterial.delete);
+router.delete("/courseMaterial/:id", CourseMaterial.delete);
 
 module.exports = router;

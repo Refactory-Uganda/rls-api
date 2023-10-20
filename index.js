@@ -10,12 +10,12 @@ const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local").Strategy;
 const database = require("./config/database");
 const Login = require("./routes/loginRoutes");
-const AdminAddCourses = require("./routes/adminAddCoursesRoutes");
+const Courses = require("./routes/coursesRoutes");
 const AdminProfile = require("./routes/adminProfileRoutes");
 const Facilitator = require("./routes/facilitatorRoutes")
 
-const CourseMaterail = require ('./routes/courseContent')
-const AdminAddCourseMaterial = require("./routes/adminAddCourseMaterialRoutes")
+
+const CourseMaterial = require("./routes/courseMaterialRoutes")
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("./swagger");
 
@@ -26,11 +26,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use("/", Login);
-app.use("/", AdminAddCourses);
+app.use("/", Courses);
 app.use("/", AdminProfile);
 app.use("/", Facilitator)
-app.use("/", CourseMaterail)
-app.use("/",AdminAddCourseMaterial)
+
+app.use("/",CourseMaterial)
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 mongoose.connect(database.connect, {

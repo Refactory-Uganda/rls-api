@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Courses = require("../controllers/adminAddCoursesControllers");
+const Courses = require("../controllers/coursesController");
 /**
  * @swagger
  * components:
@@ -45,7 +45,7 @@ const Courses = require("../controllers/adminAddCoursesControllers");
 
 /**
  * @swagger
- * /admin/addCourses:
+ * /courses:
  *   post:
  *     summary: Create a new course Module
  *     tags: [Add Courses]
@@ -65,10 +65,10 @@ const Courses = require("../controllers/adminAddCoursesControllers");
  *       500:
  *         description: Some server error
  */
-router.post("/admin/addCourses", Courses.post);
+router.post("/courses", Courses.post);
 /**
  * @swagger
- * /admin/addCourses:
+ * /courses:
  *   get:
  *     summary: Returns the list of all the Courses
  *     tags: [Add Courses]
@@ -82,10 +82,10 @@ router.post("/admin/addCourses", Courses.post);
  *               items:
  *                 $ref: '#/components/schemas/Add Course'
  */
-router.get("/admin/addCourses", Courses.get);
+router.get("/courses", Courses.get);
 /**
  * @swagger
- * /admin/addCourses/{id}:
+ * /courses/{id}:
  *   get:
  *     summary: Get the Course Module by id
  *     tags: [Add Courses]
@@ -108,11 +108,11 @@ router.get("/admin/addCourses", Courses.get);
  */
 
 
-router.get("/admin/addCourses/:id", Courses.get2);
+router.get("/courses/:id", Courses.get2);
 
 /**
  * @swagger
- * /admin/addCourses/(id):
+ * /courses/(id):
  *  put:
  *    summary: Update the Course Module by the id
  *    tags: [Add Courses]
@@ -141,10 +141,10 @@ router.get("/admin/addCourses/:id", Courses.get2);
  *      500:
  *        description: Some error happened
  */
-router.put("/admin/addCourses/:id", Courses.put);
+router.put("/courses/:id", Courses.put);
 /**
  * @swagger
- * /admin/addCourses/{id}:
+ * /courses/{id}:
  *   delete:
  *     summary: Remove the Course Module by id
  *     tags: [Add Courses]
@@ -162,6 +162,6 @@ router.put("/admin/addCourses/:id", Courses.put);
  *       404:
  *         description: The Course was not found
  */
-router.delete("/admin/addCourses/:id", Courses.delete);
+router.delete("/courses/:id", Courses.delete);
 
 module.exports = router;

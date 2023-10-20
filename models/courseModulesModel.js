@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const moduleSchema = new mongoose.Schema({
+const CourseModuleSchema = new mongoose.Schema({
   course_name: {
      type:String,
 }
@@ -16,4 +16,4 @@ model_name: {
 facilitators: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Facilitator' }]
 });
 
-module.exports = mongoose.model('Module', moduleSchema);
+module.exports = mongoose.model('CourseModule', CourseModuleSchema);

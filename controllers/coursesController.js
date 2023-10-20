@@ -60,7 +60,7 @@ module.exports = {
 
   delete: async (req, res) => {
     try {
-      await courses.findOneAndDelete({ _id: req.params.id });
+      await Courses.findOneAndDelete({ _id: req.params.id });
       res.status(200).send("successfully deleted course record");
     } catch (error) {
       res.status(500).send("failed to delete course details");

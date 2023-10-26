@@ -156,3 +156,4 @@ router.put("/admin/profile/:id", Profile.put);
 router.delete("/admin/profile/:id", Profile.delete);
 
 module.exports = router;
+

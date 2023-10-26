@@ -1,11 +1,11 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const AdminAddCourses = require("../routes/adminAddCoursesRoutes");
+const AdminAddCourses = require("../routes/coursesRoutes");
 const Login = require("../routes/loginRoutes");
 const Facilitator = require("../routes/facilitatorRoutes");
 const AdminProfile = require("../routes/adminProfileRoutes");
-const AdminAddCourseMaterial = require("../routes/adminAddCourseMaterialRoutes")
-const courseModule = require('../routes/courseContent')
+const AdminAddCourseMaterial = require("../routes/courseMaterialRoutes")
+const courseModule = require('../routes/courseModuleRoutes')
 chai.use(chaiHttp);
 
 const expect = chai.expect;
@@ -14,7 +14,7 @@ describe("/", () => {
   it("admin add courses route", async () => {
     chai
       .request(AdminAddCourses)
-      .get("/admin/addCourses")
+      .get("/courses")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
@@ -26,7 +26,7 @@ describe("/", () => {
   it("facilitator route", async () => {
     chai
       .request(Facilitator)
-      .get("/admin/addFacilitator")
+      .get("/facilitator")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
@@ -50,7 +50,7 @@ describe("Course Modules", () => {
   it("post course modules", async () => {
     chai
       .request(courseModule)
-      .get("/admin/coursemodule")
+      .get("/coursemodule")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");
@@ -76,7 +76,7 @@ describe("/", () => {
   it("Admin Add Course Material", async () => {
     chai
       .request(AdminAddCourseMaterial)
-      .get("/admin/addCourseMaterial")
+      .get("/courseMaterial")
       .end((err, res) => {
         expect(res.json).to.have.status(200);
         expect(res.text).to.equal("Hello, Express!");

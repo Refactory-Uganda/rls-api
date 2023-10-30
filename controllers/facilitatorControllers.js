@@ -1,19 +1,22 @@
 const express = require('express')
 const Facilitator  = require("../models/facilitatorModel");
 const file= require("../routes/facilitatorRoutes.js")
-const path= require('path')
+const path= require('path');
+
 module.exports = {
 
     post:
       async function(req,res){
         try{
             const fields=req.body
-            const facilitator = new Facilitator({...fields,image:req.file.path});
+            const image = req.file.path
+            const facilitator = new Facilitator({...fields,image});
             console.log(facilitator)
             await facilitator.save();
             res.status(200).send("Facilitator added as a successfully");
         } catch (error){
             res.status(500).send("facilitator cant be added"+"    " +error);
+            console.log(error)
           
         }
         

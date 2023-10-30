@@ -3,22 +3,18 @@ const mongoose = require("mongoose");
 const CoursesSchema = new mongoose.Schema({
     course_name: {
         type: String,
-        default: null,
     },
     course_description: {
         type: String,
-        default: null,
     },
-    course_display_icon: {
+    image: {
         type: String,
-        default: null,
     },
     image:{
         type: String,
     },
     course_duration: {
         type: String,
-        default: null,
     },
     status: {
         type: String,

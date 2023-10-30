@@ -47,6 +47,9 @@ db.on("error", (err) => {
 });
 app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "public/images")));
+app.get("/public/images/:path", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/images", req.params.path));
+})
 
 // app.use(passport.initialize());
 // app.use(passport.session());

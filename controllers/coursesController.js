@@ -1,6 +1,6 @@
 const express = require("express");
 const Courses = require("../models/coursesModel");
-const multer = require("multer");
+const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -11,21 +11,28 @@ const storage = multer.diskStorage({
   },
 });
 
-let upload = multer({ storage: storage });
+const upload = multer({ storage: storage });
 
 module.exports = {
-  post:
-    (upload.single("image"),
-    async (req, res) => {
+  post: async (req, res) => {
+    upload.single("image")(req, res, async (err) => {
+      if (err) {
+        // An error occurred when uploading
+        return res.status(500).send(err);
+      }
+
       try {
         const course = new Courses(req.body);
-        course.image = req.file;
+        const imgUrl = process.env.SERVER_URL + req.file.path.replaceAll(/\\/g, "/")
+        course.image = imgUrl;
         await course.save();
         res.status(200).send("Successfully added course");
       } catch (error) {
-        res.status(500).send("Failed to Post DATA ");
+        console.log(error);
+        res.status(500).send("Failed to Post DATA");
       }
-    }),
+    });
+  },
 
   get: async (req, res) => {
     try {

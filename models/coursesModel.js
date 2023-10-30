@@ -13,6 +13,9 @@ const CoursesSchema = new mongoose.Schema({
         type: String,
         default: null,
     },
+    image:{
+        type: String,
+    },
     course_duration: {
         type: String,
         default: null,

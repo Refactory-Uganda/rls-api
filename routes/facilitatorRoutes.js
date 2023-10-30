@@ -160,6 +160,6 @@ router.delete("/facilitator/:id", Facilitator.delete);
  *      500:
  *        description: Some error happened
  */
-router.put("/admin/addFacilitator/:id", Facilitator.put);
+router.put("/facilitator/:id", Facilitator.put);
 
 module.exports = router;

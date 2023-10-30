@@ -4,7 +4,7 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./public/images");
+    cb(null, "public/images");
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -19,7 +19,7 @@ module.exports = {
     async (req, res) => {
       try {
         const course = new Courses(req.body);
-        course.image = req.file;
+        image = req.file;
         await course.save();
         res.status(200).send("Successfully added course");
       } catch (error) {

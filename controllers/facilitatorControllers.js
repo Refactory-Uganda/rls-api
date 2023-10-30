@@ -49,7 +49,7 @@ module.exports = {
 
     delete: async(req,res)=>{
         try{
-            await Facilitator.findOneAndDelete({id: req.params.id});
+            await Facilitator.findOneAndDelete({_id: req.params.id});
             res.status(200).send('facilitator deleted')
         } catch(error){
             res.status(500).send("failed to delete facilitator");
@@ -57,7 +57,7 @@ module.exports = {
     },
     getdetails: async(req, res)=>{
         try {
-            const facilitator = await Facilitator.findOne({id: req.params.id });
+            const facilitator = await Facilitator.findOne({_id: req.params.id });
             res.status(200).json(facilitator);
           } catch (error) {
             res.status(500).send("cannot find facilitator");

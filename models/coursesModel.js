@@ -13,6 +13,9 @@ const CoursesSchema = new mongoose.Schema({
     course_duration: {
         type: String,
     },
+    course_category: {
+        type: String,
+    },
     status: {
         type: String,
         default: "Pending",

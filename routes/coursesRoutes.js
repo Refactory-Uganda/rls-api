@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Courses = require("../controllers/coursesController");
+const connectEnsureLogin = require("connect-ensure-login")
 /**
  * @swagger
  * components:
@@ -82,7 +83,7 @@ router.post("/courses", Courses.post);
  *               items:
  *                 $ref: '#/components/schemas/Add Course'
  */
-router.get("/courses", Courses.get);
+router.get ("/courses", Courses.get);
 /**
  * @swagger
  * /courses/{id}:

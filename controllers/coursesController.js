@@ -26,7 +26,7 @@ module.exports = {
         const imgUrl = process.env.SERVER_URL + req.file.path.replaceAll(/\\/g, "/")
         course.image = imgUrl;
         await course.save();
-        res.status(200).send("Successfully added courses");
+        res.status(200).send("Successfully added course");
       } catch (error) {
         console.log(error);
         res.status(500).send("Failed to Post DATA");

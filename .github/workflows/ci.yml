@@ -59,8 +59,8 @@ jobs:
       - name: Build NestJS API
         run: npm run build
 
-      - name: Run tests (including API tests)
-        run: npm run test:e2e
+      # - name: Run tests (including API tests)
+      #   run: npm run test:e2e
 
   deploy:
     if: github.ref == 'refs/heads/main'

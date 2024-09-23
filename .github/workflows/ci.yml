@@ -37,6 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./rls-api
 
       - name: Build NestJS API
         run: npm run build

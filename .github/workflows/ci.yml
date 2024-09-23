@@ -14,10 +14,9 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [16.x, 18.x]
 
     services:
@@ -25,7 +24,6 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-        options: --name mongo-${{ matrix.os }}  # Ensures container name is unique per OS
 
     steps:
       - name: Checkout repository

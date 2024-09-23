@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -25,6 +25,7 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
+        options: --name mongo-${{ matrix.os }}  # Ensures container name is unique per OS
 
     steps:
       - name: Checkout repository
@@ -33,10 +34,29 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: ${{ matrix['node-version'] }}
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
 
       - name: Install dependencies
         run: npm install
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cypress-
+
+      - name: Install Cypress (if not cached)
+        run: npx cypress install
 
       - name: Build NestJS API
         run: npm run build
@@ -47,7 +67,7 @@ jobs:
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: build
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     steps:
       - name: Deploy to production (main branch)
         run: |

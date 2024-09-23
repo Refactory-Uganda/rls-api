@@ -14,11 +14,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Specify the default OS
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]  # Operating Systems to test
-        node-version: [16.x, 18.x]  # Node.js versions to test
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [16.x, 18.x]
 
     services:
       mongo:
@@ -36,9 +36,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: |
-          cd rls-api
-          npm install
+        run: npm install
 
       - name: Build NestJS API
         run: npm run build
@@ -47,9 +45,9 @@ jobs:
         run: npm run test:e2e
 
   deploy:
-    if: github.ref == 'refs/heads/main'  # Only deploy when on the main branch
-    needs: build  # Runs only if the build job is successful
-    runs-on: ubuntu-latest  # Use ubuntu-latest for the deployment job
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest 
     steps:
       - name: Deploy to production (main branch)
         run: |

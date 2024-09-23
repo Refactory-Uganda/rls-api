@@ -1,0 +1,54 @@
+name: Backend CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - development
+  pull_request:
+    branches:
+      - main
+      - staging
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Specify the default OS
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]  # Operating Systems to test
+        node-version: [16.x, 18.x]  # Node.js versions to test
+
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build NestJS API
+        run: npm run build
+
+      - name: Run tests (including API tests)
+        run: npm run test:e2e
+
+  deploy:
+    if: github.ref == 'refs/heads/main'  # Only deploy when on the main branch
+    needs: build  # Runs only if the build job is successful
+    runs-on: ubuntu-latest  # Use ubuntu-latest for the deployment job
+    steps:
+      - name: Deploy to production (main branch)
+        run: |
+          echo "Deploying to production..."

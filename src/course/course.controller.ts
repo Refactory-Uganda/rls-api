@@ -4,21 +4,20 @@ import { CourseService } from './course.service';
 
 @Controller('course')
 export class CourseController {
-    constructor(private readonly courseService: CourseService) {}
+  constructor(private readonly courseService: CourseService) {}
 
-    @Delete()
-    async deleteCourse() {
-        return await this.courseService.removeCourse();
-    }
+  @Delete()
+  async deleteCourse() {
+    return await this.courseService.removeCourse();
+  }
 
-    @Put()
-    async updateCourse() {
-        return await this.courseService.updateCourse();
-    }
+  @Put()
+  async updateCourse() {
+    return await this.courseService.updateCourse();
+  }
 
-    @Get()
-    async findAll() {
-         return await this.courseService.findAll();
-
-    }
+  @Get()
+  async findAll() {
+    return await this.courseService.findAll();
+  }
 }

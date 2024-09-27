@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Course, CourseSchema } from './course.schema';
 import { CourseService } from './course.service';
-import { CourseController } from './course.controller';
+import { CourseController } from './course.controller'; 
+
 
 @Module({
   imports: [
@@ -12,3 +13,6 @@ import { CourseController } from './course.controller';
   controllers: [CourseController],
 })
 export class CourseModule {}
+
+
+

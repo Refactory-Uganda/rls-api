@@ -16,16 +16,8 @@ export class CourseController {
     return await this.courseService.updateCourse();
   }
 
-<<<<<<< HEAD
-    @Get()
-    async findAll() {
-        return await this.courseSerivce.findAll();
-
-    }
-=======
   @Get()
   async findAll() {
     return await this.courseService.findAll();
   }
->>>>>>> aab71746a72d651879b7228d23dfdf30a19d7da0
 }

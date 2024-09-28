@@ -14,7 +14,7 @@ export class CourseController {
 
     @Get()
     async findAll() {
-         return await this.courseSerivce.findAll();
+        return await this.courseSerivce.findAll();
 
     }
 }

@@ -1,0 +1,39 @@
+{
+    "courseTitle": "Advanced NestJS Course",
+    "courseDescription": "learn about nestjs in full",
+    "courseDuration": "12 weeks",
+    "modules": [
+        {
+            "name": "Module 1: Getting Started",
+            "facilitator": {
+                "email": "john.doe@example.com"
+            },
+            "contents": [
+                {
+                    "type": "TEXT",
+                    "data": "Introduction to NestJS"
+                },
+                {
+                    "type": "VIDEO",
+                    "data": "https://example.com/nestjs-introduction-video"
+                }
+            ]
+        },
+        {
+            "name": "Module 2: Modules,Services & Controllers",
+            "facilitator": {
+                "email": "john.doe@example.com"
+            },
+            "contents": [
+                {
+                    "type": "TEXT",
+                    "data": "Introduction to NestJS"
+                },
+                {
+                    "type": "VIDEO",
+                    "data": "https://example.com/nestjs-introduction-video"
+                }
+            ]
+        }
+    ]
+}

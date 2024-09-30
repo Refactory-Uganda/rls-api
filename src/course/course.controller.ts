@@ -1,10 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Delete, Get, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { CourseService } from './course.service';
+import { CreateCourseDto } from './dto/createCourseDto';
 
 @Controller('course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
+
+  @Post()
+  createCourse(@Body() createCourseDto: CreateCourseDto){
+    return this.courseService.createCourse(createCourseDto);
+  }
 
   @Delete()
   async deleteCourse() {

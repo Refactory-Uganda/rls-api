@@ -2,11 +2,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DatabaseModule } from './database/database.module';
 import { CourseModule } from './course/course.module';
+import { PrismaModule } from './prisma/prisma.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [DatabaseModule, CourseModule],
+  imports: [ ConfigModule.forRoot({isGlobal: true}),CourseModule, PrismaModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -12,18 +12,22 @@ export class CourseController {
     return this.courseService.createCourse(createCourseDto);
   }
 
-  @Delete()
-  async deleteCourse() {
-    return await this.courseService.removeCourse();
+  @Get()
+  async findAll() {
+    return await this.courseService.findAll();
+  }
+  @Get(':id')
+  async findOne() {
+    return await this.courseService.findOne();
   }
 
-  @Put()
+  @Put(':id')
   async updateCourse() {
     return await this.courseService.updateCourse();
   }
 
-  @Get()
-  async findAll() {
-    return await this.courseService.findAll();
+  @Delete(':id')
+  async deleteCourse() {
+    return await this.courseService.removeCourse();
   }
 }

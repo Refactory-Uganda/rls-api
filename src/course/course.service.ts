@@ -5,7 +5,7 @@ import { CreateCourseDto } from './dto/createCourseDto';
 
 @Injectable()
 export class CourseService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {} 
 
   async createCourse(createCourseDto: CreateCourseDto){
     const { courseTitle, courseDescription, courseDuration, modules } = createCourseDto;
@@ -67,6 +67,9 @@ export class CourseService {
   }
   findAll(): string {
     return 'Displaying all courses';
+  }
+  findOne(): string {
+    return 'Displaying one course';
   }
 
   removeCourse(): string {

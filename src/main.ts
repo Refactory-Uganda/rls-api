@@ -8,7 +8,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('RLS Application API')
-    .setDescription('Application API')
+    .setDescription('This API is about create course and modules')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

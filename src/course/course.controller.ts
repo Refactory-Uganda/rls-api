@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Patch } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/createCourseDto';
 import { UpdateCourseDto } from './dto/updateCourseDto';
@@ -12,6 +12,15 @@ export class CourseController {
   createCourse(@Body() createCourseDto: CreateCourseDto){
     return this.courseService.createCourse(createCourseDto);
   }
+
+  @Patch(':id')
+  courseUpdate(
+  @Param('id') id: string,
+  @Body() updateCourseDto: UpdateCourseDto 
+) {
+  return this.courseService.updateCourse(id, updateCourseDto);
+}
+
 
   @Get()
   async findAll() {

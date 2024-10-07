@@ -29,29 +29,20 @@ model Module {
   createdAt DateTime @default(now())
   courseId String @db.ObjectId
   course Course @relation(fields: [courseId], references: [id])
-  facilitator Facilitator? @relation(fields: [facilitatorId], references: [id])
-  facilitatorId String? @db.ObjectId
   contents Content[]
-}
-
-
-model Facilitator {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  email       String
-  modules     Module[]
 }
 
 model Content {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  type       ContentType
-  data       String // Text, URL for video, or link
-  moduleId   String @db.ObjectId
+  name     String
+  fileUrl       String // Text, URL for video, or link
   module     Module   @relation(fields: [moduleId], references: [id])
+  moduleId   String @db.ObjectId
+  
 }
 
-enum ContentType {
-  TEXT
-  VIDEO
-  LINK
-}
+// enum ContentType {
+//   TEXT
+//   VIDEO
+//   LINK
+// }

@@ -3,6 +3,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ModulesService } from './modules.service';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
+import { AssignFacilitatorDto } from './dto/assign-facilitator.dto';
 
 @Controller('course/:courseId/modules')
 export class ModulesController {
@@ -11,6 +12,11 @@ export class ModulesController {
   @Post()
   async createModule(@Param('courseId') courseId: string, @Body() createModuleDto: CreateModuleDto) {
     return await this.modulesService.create(createModuleDto);
+  }
+
+  @Post('assign-facilitator')
+  assignFacilitator(@Body() assignFacilitatorDto: AssignFacilitatorDto) {
+    return this.modulesService.assignFacilitator(assignFacilitatorDto);
   }
 
   @Get()
@@ -32,4 +38,6 @@ export class ModulesController {
   remove(@Param('id') id: string, @Param('courseId') courseId:string) {
     return this.modulesService.remove(id, courseId);
   }
+
+
 }

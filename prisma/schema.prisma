@@ -30,6 +30,7 @@ model Module {
   courseId String @db.ObjectId
   course Course @relation(fields: [courseId], references: [id])
   contents Content[]
+  facilitatorId String?
 }
 
 model Content {

@@ -3,10 +3,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateModuleDto } from './dto/create-module.dto';
 import { UpdateModuleDto } from './dto/update-module.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AssignFacilitatorDto } from './dto/assign-facilitator.dto';
+import { FacilitatorService } from 'src/facilitator/facilitator.service';
 
 @Injectable()
 export class ModulesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private facilitatorService: FacilitatorService) {}
+
   async create(createModuleDto: CreateModuleDto) {
     try {
       await this.prisma.module.create({
@@ -60,7 +63,20 @@ export class ModulesService {
       throw error;
     }
   }
+
+  async assignFacilitator(assignFacilitatorDto: AssignFacilitatorDto) {
+    const { moduleId, facilitatorId } = assignFacilitatorDto
+
+    const facilitator = await this.facilitatorService.getFacilitator(facilitatorId);
+
+    const updatedModule = await this.prisma.module.update({
+      where: { id: moduleId },
+      data: {
+        facilitatorId: facilitator.id },
+    });
+    return updatedModule
   }
+}
 
 
 

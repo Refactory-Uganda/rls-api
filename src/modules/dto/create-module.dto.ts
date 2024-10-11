@@ -17,6 +17,10 @@ export class CreateModuleDto {
     @IsString()
     courseId: string
 
+    @ApiProperty()
+    @IsString()
+    facilitatorId?: string
+
     // contents: CreateContentDto[];
     
 

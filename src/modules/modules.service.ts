@@ -17,6 +17,7 @@ export class ModulesService {
           moduleTitle: createModuleDto.moduleTitle,
           moduleDescription: createModuleDto.moduleDescription,
           courseId: createModuleDto.courseId,
+          facilitatorId: createModuleDto.facilitatorId,
         },
       });
       throw new HttpException(
@@ -30,6 +31,7 @@ export class ModulesService {
       throw error;
     }
   }
+
 
   async findAll() {
     return await this.prisma.module.findMany();

@@ -8,6 +8,7 @@ import { ModulesModule } from './modules/modules.module';
 import { ContentModule } from './content/content.module';
 import { FacilitatorModule } from './facilitator/facilitator.module';
 import { AuthModule } from './auth/auth.module'; // AuthModule includes AuthService
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { AuthModule } from './auth/auth.module'; // AuthModule includes AuthServ
     ModulesModule,
     ContentModule,
     FacilitatorModule,
-    AuthModule, // Ensure AuthModule is imported
+    AuthModule,
+    MailModule, // Ensure AuthModule is imported
   ],
   controllers: [], // You can add global controllers here if needed
   providers: [], // You can add global providers here if needed

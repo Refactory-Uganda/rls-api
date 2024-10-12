@@ -1,18 +1,17 @@
-import { Controller, Post, Body, Query } from '@nestjs/common';
+import { Controller, Post, Body, /*UseGuards*/ } from '@nestjs/common';
 import { AuthService } from './auth.service';
+// import { JwtGuard } from './guards/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+    constructor(private readonly authService: AuthService) { }
 
-  @Post('login')
-  async login(@Body() { email, password }: { email: string; password: string }) {
-    const userData = await this.authService.validateUser(email, password);
-    if (!userData) {
-      return { message: 'Invalid credentials or external system error' };
+    @Post('facilitator/login')
+    // @UseGuards(JwtGuard)
+    async login(@Body() credentials: { email: string, password: string }) {
+        return this.authService.login(credentials);
     }
-    return { tokens: userData.tokens };
-  }
+
 
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
@@ -22,9 +21,9 @@ export class AuthController {
 
   @Post('reset-password')
   async resetPassword(
-    @Query('token') token: string, // Token comes from query parameters (reset link)
+    // @Query('token') token: string, // Token comes from query parameters (reset link)
     @Body('password') newPassword: string // New password from the request body
   ) {
-    return this.authService.resetPassword(token, newPassword);
+    // return this.authService.resetPassword(token, newPassword);
   }
 }

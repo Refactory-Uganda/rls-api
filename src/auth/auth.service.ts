@@ -1,39 +1,57 @@
-import { Injectable, ForbiddenException, BadRequestException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, ForbiddenException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
 
 @Injectable()
 export class AuthService {
+    private apiUrl = 'https://rims-api-xufp.onrender.com/accounts/staff/login';
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    try {
-      const response = await axios.post('https://rims-api-xufp.onrender.com/accounts/staff/login', {
-        email: email,
-        password: pass
-      });
+    constructor(
+        private jwtService: JwtService,
+    ) { }
 
-      console.log('Response from external login API:', response.data); 
-
-      if (response.data && response.data.tokens) {
-        return {
-          user: response.data.user,
-          tokens: response.data.tokens
-        };
-      }
-    } catch (error) {
-      console.error('Error during user validation:', error.response?.data || error.message);
+    createAccessToken(id: string): { accessToken: string } {
+        return { accessToken: this.jwtService.sign({ id }) };
     }
-    return null; 
-  }
 
-  login(userData: any) {
-    return {
-      user: userData.user,
-      tokens: {
-        access_token: userData.tokens.access_token,
-        refresh_token: userData.tokens.refresh_token, 
-      }
-    };
-  }
+    validateToken(token: string) {
+        return this.jwtService.verify(token, {
+            secret : process.env.JWT_SECRET_KEY
+        });
+    }
+    async login(credentials: { email: string; password: string }): Promise<any> {
+        try {
+            console.log('Sending login request with credentials:', credentials);
+
+            const response = await axios.post(this.apiUrl, credentials, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+           // console.log("Data...", JSON.stringify(response.data, null, 2)) // For debug...
+            if (!response.data || !response.data.tokens) {
+                throw new HttpException('Login failed: invalid response from API', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            const { user } = response.data;
+            const access_token = this.createAccessToken(user.id)
+
+            return {
+                id: user.id,
+                access_token: access_token.accessToken
+            };
+
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error('Login failed:', error.response?.data || error.message);
+                throw new HttpException(
+                    `Login failed: ${error.response?.data || error.message}`,
+                    error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR
+                );
+            } else {
+                console.error('Login failed:', error.message);
+                throw new HttpException(`Login failed: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
 
     async forgotPassword(email: string): Promise<any> {
       try {
@@ -72,3 +90,8 @@ export class AuthService {
     }
   }
  
+
+
+
+
+

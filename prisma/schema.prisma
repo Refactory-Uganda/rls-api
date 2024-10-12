@@ -47,3 +47,11 @@ model Content {
 //   VIDEO
 //   LINK
 // }
+
+model User {
+  id           String      @id @default(uuid()) @map("_id")
+  email        String   @unique
+  password     String
+  role         String  
+}
+

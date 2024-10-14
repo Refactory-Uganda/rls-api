@@ -1,0 +1,29 @@
+import { Controller, Post, Body, /*UseGuards*/ } from '@nestjs/common';
+import { AuthService } from './auth.service';
+// import { JwtGuard } from './guards/jwt.guard';
+
+@Controller('auth')
+export class AuthController {
+    constructor(private readonly authService: AuthService) { }
+
+    @Post('facilitator/login')
+    // @UseGuards(JwtGuard)
+    async login(@Body() credentials: { email: string, password: string }) {
+        return this.authService.login(credentials);
+    }
+
+
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    // Call AuthService to send the forgot password request to the external system
+    return this.authService.forgotPassword(email);
+  }
+
+  @Post('reset-password')
+  async resetPassword(
+    // @Query('token') token: string, 
+    @Body('password') newPassword: string // New password from the request body
+  ) {
+    // return this.authService.resetPassword(token, newPassword);
+  }
+}

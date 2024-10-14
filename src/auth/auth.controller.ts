@@ -21,7 +21,7 @@ export class AuthController {
 
   @Post('reset-password')
   async resetPassword(
-    // @Query('token') token: string, // Token comes from query parameters (reset link)
+    // @Query('token') token: string, 
     @Body('password') newPassword: string // New password from the request body
   ) {
     // return this.authService.resetPassword(token, newPassword);

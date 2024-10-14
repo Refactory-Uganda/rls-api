@@ -1,7 +1,8 @@
-export class UpdateProgramDto {
-    readonly name?: string;
-    readonly description?: string;
-    readonly startDate?: string;
-    readonly endDate?: string;
-  }
+import { PartialType } from "@nestjs/swagger";
+import { CreateProgramDto } from "./create-program.dto";
+
+
+
+
+export class UpdateProgramDto extends PartialType(CreateProgramDto) {}
   

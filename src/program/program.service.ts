@@ -8,55 +8,120 @@ import { CreateCohortDto } from './dto/create-cohort.dto';
 export class ProgramService {
   constructor(private readonly httpService: HttpService) {}
 
-  baseUrl = 'https://rims-api-xufp.onrender.com/';
+  baseUrl = 'https://rims-api-xufp.onrender.com';
 
   async createProgram(createProgramDto: CreateProgramDto): Promise<any> {
     const url = `${this.baseUrl}/programs`;
-    return this.httpService.post(url, createProgramDto).toPromise();
+    try {
+      const response = await this.httpService.post(url, createProgramDto).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to create program at ${url}:`, error.message);
+      throw new Error('Failed to create program');
+    }
   }
 
   async getAllPrograms(): Promise<any> {
     const url = `${this.baseUrl}/programs`;
-    return this.httpService.get(url).toPromise();
+    try {
+      const response = await this.httpService.get(url).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to fetch programs from ${url}:`, error.message);
+      throw new Error('Failed to retrieve programs');
+    }
   }
 
   async getProgramById(id: string): Promise<any> {
     const url = `${this.baseUrl}/programs/${id}`;
-    return this.httpService.get(url).toPromise();
+    try {
+      const response = await this.httpService.get(url).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to fetch program with id ${id} from ${url}:`, error.message);
+      throw new Error('Failed to retrieve program');
+    }
   }
 
   async updateProgram(id: string, updateProgramDto: UpdateProgramDto): Promise<any> {
     const url = `${this.baseUrl}/programs/${id}`;
-    return this.httpService.patch(url, updateProgramDto).toPromise();
+    try {
+      const response = await this.httpService.patch(url, updateProgramDto).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to update program with id ${id} at ${url}:`, error.message);
+      throw new Error('Failed to update program');
+    }
   }
 
   async updateAllProgramData(id: string, updateProgramDto: UpdateProgramDto): Promise<any> {
     const url = `${this.baseUrl}/programs/${id}`;
-    return this.httpService.put(url, updateProgramDto).toPromise();
+    try {
+      const response = await this.httpService.put(url, updateProgramDto).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to update all data for program with id ${id} at ${url}:`, error.message);
+      throw new Error('Failed to update program data');
+    }
   }
 
   async deleteProgram(id: string): Promise<any> {
     const url = `${this.baseUrl}/programs/${id}`;
-    return this.httpService.delete(url).toPromise();
+    try {
+      const response = await this.httpService.delete(url).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to delete program with id ${id} at ${url}:`, error.message);
+      throw new Error('Failed to delete program');
+    }
   }
 
-  async createCohort(createCohortDto: CreateCohortDto): Promise<any> {
+  async createCohort(createCohortDto: CreateCohortDto, id: string): Promise<any> {
     const url = `${this.baseUrl}/cohorts`;
-    return this.httpService.post(url, createCohortDto).toPromise();
+    const cohortData = {
+      ...createCohortDto,
+      id,
+  };
+  
+    try {
+      const response = await this.httpService.post(url, cohortData).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to create cohort at ${url}:`, error.message);
+      throw new Error('Failed to create cohort');
+    }
   }
 
   async getAllCohorts(): Promise<any> {
-    const url = `${this.baseUrl}/cohorts`;
-    return this.httpService.get(url).toPromise();
+    const url = `${this.baseUrl}/programs/cohorts`;
+    try {
+      const response = await this.httpService.get(url).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to fetch cohorts from ${url}:`, error.message);
+      throw new Error('Failed to retrieve cohorts');
+    }
   }
 
-  async getCohortsById(Id: string): Promise<any> {
-    const url = `${this.baseUrl}/programs/${Id}/cohorts`;
-    return this.httpService.get(url).toPromise();
+  async getCohortsByProgramId(ProgramId: string): Promise<any> {
+    const url = `${this.baseUrl}/programs/${ProgramId}/cohorts`;
+    try {
+      const response = await this.httpService.get(url).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to fetch cohorts for program with id ${ProgramId} from ${url}:`, error.message);
+      throw new Error('Failed to retrieve cohorts for program');
+    }
   }
 
   async getCohortById(id: string): Promise<any> {
     const url = `${this.baseUrl}/cohorts/${id}`;
-    return this.httpService.get(url).toPromise();
+    try {
+      const response = await this.httpService.get(url).toPromise();
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to fetch cohort with id ${id} from ${url}:`, error.message);
+      throw new Error('Failed to retrieve cohort');
+    }
   }
 }

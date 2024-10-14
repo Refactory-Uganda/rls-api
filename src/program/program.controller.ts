@@ -18,11 +18,6 @@ export class ProgramController {
     return this.programService.getAllPrograms();
   }
 
-  @Get('cohorts')
-  async getAllCohorts() {
-    return this.programService.getAllCohorts();
-  }
-
   @Get(':id')
   async getProgramById(@Param('id') id: string) {
     return this.programService.getProgramById(id);
@@ -44,18 +39,25 @@ export class ProgramController {
   }
 
   // Cohorts related endpoints
-  @Post(':id/cohorts')
-  async createCohort(@Body() createCohortDto: CreateCohortDto) {
-    return this.programService.createCohort(createCohortDto);
+  @Post(':id/cohort') // Route to create a cohort under a specific program
+    async createCohort(
+        @Param('id') id: string, // Extract programId from the route parameters
+        @Body() createCohortDto: CreateCohortDto, // Extract the DTO from the request body
+    ): Promise<any> {
+        return this.programService.createCohort(createCohortDto, id);
+    }
+
+  @Get('cohorts')
+  async getAllCohorts() {
+    return this.programService.getAllCohorts();
   }
 
-
-  @Get(':Id/cohorts')
-  async getCohortsByProgramId(@Param('Id') Id: string) {
-    return this.programService.getCohortsById(Id);
+  @Get(':programId/cohorts')
+  async getCohortsByProgramId(@Param('programId') programId: string) {
+    return this.programService.getCohortsByProgramId(programId);
   }
 
-  @Get(':id /cohorts/:cohorts_id')
+  @Get(':id')
   async getCohortById(@Param('id') id: string) {
     return this.programService.getCohortById(id);
   }

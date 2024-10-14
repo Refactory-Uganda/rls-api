@@ -1,27 +1,23 @@
 /* eslint-disable prettier/prettier */
-import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, IsString } from "class-validator"
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 /* eslint-disable prettier/prettier */
 export class CreateModuleDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    moduleTitle: string
+    name: string;
 
     @ApiProperty()
     @IsString()
-    moduleDescription?: string
+    category: string;
 
     @ApiProperty()
     @IsString()
-    courseId: string
+    description: string;
 
     @ApiProperty()
-    @IsString()
-    facilitatorId?: string
-
-    // contents: CreateContentDto[];
-    
-
+    @IsNumber()
+    duration: number;
 }

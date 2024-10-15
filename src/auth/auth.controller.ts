@@ -1,13 +1,13 @@
 import { Controller, Post, Body, /*UseGuards*/ } from '@nestjs/common';
 import { AuthService } from './auth.service';
-// import { JwtGuard } from './guards/jwt.guard';
+import { JwtAuthGuard} from './jwt-auth.guard';
+import { UseGuards } from '@nestjs/common'; 
 
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
 
     @Post('facilitator/login')
-    // @UseGuards(JwtGuard)
     async login(@Body() credentials: { email: string, password: string }) {
         return this.authService.login(credentials);
     }
@@ -21,9 +21,9 @@ export class AuthController {
 
   @Post('reset-password')
   async resetPassword(
-    // @Query('token') token: string, 
+    @Body('token') token: string, 
     @Body('password') newPassword: string // New password from the request body
   ) {
-    // return this.authService.resetPassword(token, newPassword);
+    return this.authService.resetPassword(token, newPassword);
   }
 }

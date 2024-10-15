@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Post, Body, /*UseGuards*/ } from '@nestjs/common';
 import { AuthService } from './auth.service';
 // import { JwtGuard } from './guards/jwt.guard';
@@ -12,6 +13,12 @@ export class AuthController {
         return this.authService.login(credentials);
     }
 
+    @Post('admin/login')
+    async adminlogin(@Body() credentials: {email: string, password: string }) {
+        return this.authService.adminlogin(credentials);
+    }
+
+
 
   @Post('forgot-password')
   async forgotPassword(@Body('email') email: string) {
@@ -19,11 +26,11 @@ export class AuthController {
     return this.authService.forgotPassword(email);
   }
 
-  @Post('reset-password')
-  async resetPassword(
-    // @Query('token') token: string, 
-    @Body('password') newPassword: string // New password from the request body
-  ) {
-    // return this.authService.resetPassword(token, newPassword);
-  }
+  // @Post('reset-password')
+  // async resetPassword(
+  //   // @Query('token') token: string, 
+  //   @Body('password') newPassword: string // New password from the request body
+  // ) {
+  //   // return this.authService.resetPassword(token, newPassword);
+  // }
 }

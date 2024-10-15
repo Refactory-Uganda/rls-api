@@ -6,66 +6,43 @@ import axios from 'axios';
 export class CohortService {
   async getAllCohorts() {
     try {
-      const response = await axios.get('https://localhost:3001/cohorts', {
-        headers: {
-          Authorization: `Bearer ${process.env.JWT_TOKEN}`,
-        },
-      });
+      const response = await axios.get('http://localhost:3001/cohorts');
       return response.data;
     } catch (error) {
       throw new Error(`Error fetching cohorts: ${error.message}`);
     }
   }
 
-  async getCohortById(id: string) {
+  async getModuleById(cohortId: string, moduleData: any) {
     try {
-      const response = await axios.get(`https://localhost:3001/cohorts/${id}`, {
-        headers: {
-          Authorization: `Bearer ${process.env.JWT_TOKEN}`,
-        },
-      });
+      const response = await axios.get(`https://rims-api-xufp.onrender.com/cohorts/${cohortId}/modules/`, moduleData);
       return response.data;
     } catch (error) {
-      throw new Error(`Error fetching cohort: ${error.message}`);
+      throw new Error(`Error fetching module: ${error.message}`);
     }
   }
 
-
-  async updateCohort(id: string, updateData: any) {
+  async updateCohort(cohortId: string, updateData: any) {
     try {
-      const response = await axios.put(`https://localhost:3001/cohorts/${id}`, updateData, {
-        headers: {
-          Authorization: `Bearer ${process.env.JWT_TOKEN}`,
-        },
-      });
+      const response = await axios.put(`https://rims-api-xufp.onrender.com/cohorts/${cohortId}`, updateData);
       return response.data;
     } catch (error) {
       throw new Error(`Error updating cohort with PUT: ${error.message}`);
     }
   }
 
-  async patchCohort(id: string, updateData: any) {
+  async patchCohort(cohortId: string, updateData: any) {
     try {
-      const response = await axios.patch(`https://localhost:3001/cohorts/${id}`, updateData, {
-        headers: {
-          Authorization: `Bearer ${process.env.JWT_TOKEN}`,
-        },
-      });
+      const response = await axios.patch(`https://rims-api-xufp.onrender.com/cohorts/${cohortId}`, updateData);
       return response.data;
     } catch (error) {
       throw new Error(`Error updating cohort with PATCH: ${error.message}`);
     }
   }
-  
-  
 
-  async deleteCohort(id: string) {
+  async deleteCohort(cohortId: string) {
     try {
-      const response = await axios.delete(`https://localhost:3001/cohorts/${id}`, {
-        headers: {
-          Authorization: `Bearer ${process.env.JWT_TOKEN}`,
-        },
-      });
+      const response = await axios.delete(`https://rims-api-xufp.onrender.com/cohorts/${cohortId}`);
       return response.data;
     } catch (error) {
       throw new Error(`Error deleting cohort: ${error.message}`);
@@ -74,18 +51,10 @@ export class CohortService {
 
   async createCohortModule(cohortId: string, moduleData: any) {
     try {
-      const response = await axios.post(`https://localhost:3001/cohorts/${cohortId}/modules`, moduleData, {
-        headers: {
-          Authorization: `Bearer ${process.env.JWT_TOKEN}`,
-        },
-      });
+      const response = await axios.post(`https://rims-api-xufp.onrender.com/cohorts/${cohortId}/modules/`, moduleData);
       return response.data;
     } catch (error) {
       throw new Error(`Error creating cohort module: ${error.message}`);
     }
   }
-  
 }
-
-
-

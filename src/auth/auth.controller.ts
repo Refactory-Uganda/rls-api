@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
 import { Controller, Post, Body, /*UseGuards*/ } from '@nestjs/common';
 import { AuthService } from './auth.service';
 // import { JwtGuard } from './guards/jwt.guard';
@@ -26,4 +28,9 @@ export class AuthController {
   ) {
     // return this.authService.resetPassword(token, newPassword);
   }
+
+  @Post('learner/login')
+  async loginlearner(@Body() credentials: { email: string; password: string }) {
+    return this.authService.login(credentials);
+    }
 }

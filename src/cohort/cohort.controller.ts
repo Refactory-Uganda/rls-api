@@ -41,10 +41,13 @@ export class CohortController {
     }
   }
 
-  @Post()
-  async createCohortModule(@Param('cohortId') cohortId: string,@Body() createCohorModuletDto: CreateCohortModuleDto) {
+  @Post('cohortId/modules')
+  async createCohortModule(
+    @Param('cohortId') cohortId: string,
+    @Body() createCohortModuleDto: CreateCohortModuleDto) {
     try {
-      const newCohortModule = await this.cohortService.createCohortModule(cohortId,createCohorModuletDto);
+      const newCohortModule = await this.cohortService.createCohortModule(cohortId, createCohortModuleDto);
+      console.log("I am running")
       return { message: 'Cohort module created successfully', cohort: newCohortModule };
     } catch (error) {
       throw new HttpException(

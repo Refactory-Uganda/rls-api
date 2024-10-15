@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { CreateCohortModuleDto } from 'src/modules/dto/create-cohortModule.dto';
 
 @Injectable()
 export class CohortService {
@@ -49,9 +50,11 @@ export class CohortService {
     }
   }
 
-  async createCohortModule(cohortId: string, moduleData: any) {
+  async createCohortModule(cohortId: string, createCohortModuleDto: CreateCohortModuleDto) {
     try {
-      const response = await axios.post(`https://rims-api-xufp.onrender.com/cohorts/${cohortId}/modules/`, moduleData);
+      const response = await axios.post(`https://rims-api-xufp.onrender.com/cohorts/${cohortId}/modules/`,{
+        data: JSON.stringify(createCohortModuleDto),
+      });
       return response.data;
     } catch (error) {
       throw new Error(`Error creating cohort module: ${error.message}`);

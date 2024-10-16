@@ -9,15 +9,28 @@ export class CourseService {
 
   async createCourse(dto: CreateCourseDto) {
     try {
+        // Check if a course with the same title already exists
+        const existingCourse = await this.prisma.course.findUnique({
+            where: {
+                courseTitle: dto.courseTitle,
+            },
+        });
+
+        if (existingCourse) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    message: 'A course with this title already exists',
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        }
       // Create a new course in the database
       const course = await this.prisma.course.create({
         data: {
           courseTitle: dto.courseTitle,
           courseDescription: dto.courseDescription,
           courseDuration: dto.courseDuration,
-          modules: {
-            create: dto.modules?.map(module => ({ title: module })) || [], // Handling modules relation
-          },
         },
       });
 

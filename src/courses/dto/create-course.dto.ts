@@ -1,8 +1,15 @@
 // src/course/dto/create-course.dto.ts
+import { IsString, IsOptional } from 'class-validator';
+
 export class CreateCourseDto {
-    courseTitle: string; // Required
-    courseDescription?: string; // Optional
-    courseDuration: string; // Required
-    modules?: string[]; // Assuming modules are an array of module titles or IDs (depends on your use case)
-  }
-  
+  @IsString()
+  courseTitle: string; // Required field
+
+  @IsOptional()
+  @IsString()
+  courseDescription?: string; // Optional field
+
+  @IsString()
+  courseDuration: string; // Required field
+
+}

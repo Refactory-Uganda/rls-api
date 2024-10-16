@@ -4,23 +4,39 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CoursesService {
-  constructor(private readonly prisma: PrismaService) {}
+    
+}
 
-  // Method to fetch all courses
-  async findAll() {
+async findAll() {
     try {
-      return await this.prisma.course.findMany();
+      return await this.prisma.course.findMany({
+        include: {
+          modules: {
+            include: {
+              facilitator: true,
+              contents: true,
+            },
+          },
+        },
+      });
     } catch (error) {
       throw new Error(`Error fetching courses: ${error.message}`);
     }
   }
 
-  // Method to fetch a single course by ID
+  // Method to fetch a single course by ID (optional if needed for specific course retrieval)
   async findOne(id: string) {
     try {
       return await this.prisma.course.findUnique({
         where: { id: id },
-
+        include: {
+          modules: {
+            include: {
+              facilitator: true,
+              contents: true,
+            },
+          },
+        },
       });
     } catch (error) {
       throw new Error(`Error fetching course with ID ${id}: ${error.message}`);

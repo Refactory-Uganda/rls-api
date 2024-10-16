@@ -21,9 +21,13 @@ model Course {
   createdAt DateTime @default(now())
 }
 
-
-
-
+model Content {
+  id        String   @id @default(uuid())
+  type      String
+  data      String
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id])
+}
 
 
 

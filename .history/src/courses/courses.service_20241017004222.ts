@@ -20,7 +20,14 @@ export class CoursesService {
     try {
       return await this.prisma.course.findUnique({
         where: { id: id },
-
+        include: {
+          modules: {
+            include: {
+              facilitator: true,
+              contents: true,
+            },
+          },
+        },
       });
     } catch (error) {
       throw new Error(`Error fetching course with ID ${id}: ${error.message}`);

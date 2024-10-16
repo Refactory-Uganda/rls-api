@@ -3,13 +3,22 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class CoursesService {
+export class CourseService {
   constructor(private readonly prisma: PrismaService) {}
 
   // Method to fetch all courses
   async findAll() {
     try {
-      return await this.prisma.course.findMany();
+      return await this.prisma.course.findMany({
+        include: {
+          modules: {
+            include: {
+              facilitator: true,
+              contents: true,
+            },
+          },
+        },
+      });
     } catch (error) {
       throw new Error(`Error fetching courses: ${error.message}`);
     }
@@ -20,7 +29,14 @@ export class CoursesService {
     try {
       return await this.prisma.course.findUnique({
         where: { id: id },
-
+        include: {
+          modules: {
+            include: {
+              facilitator: true,
+              contents: true,
+            },
+          },
+        },
       });
     } catch (error) {
       throw new Error(`Error fetching course with ID ${id}: ${error.message}`);

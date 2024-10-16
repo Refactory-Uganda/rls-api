@@ -19,8 +19,7 @@ export class CoursesService {
   async findOne(id: string) {
     try {
       return await this.prisma.course.findUnique({
-        where: { id: id },
-
+        where: { id: id }
       });
     } catch (error) {
       throw new Error(`Error fetching course with ID ${id}: ${error.message}`);

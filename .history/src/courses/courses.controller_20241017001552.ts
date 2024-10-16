@@ -15,6 +15,6 @@ export class CourseController {
   
     @Get(':id') 
     async findOne(@Param('id') id: string) {
-      return await this.courseService.findOne(id); 
+      return await this.courseService.findOne(id); // Call to the service's findOne method
     }
   }

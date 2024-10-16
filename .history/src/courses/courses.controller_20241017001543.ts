@@ -13,8 +13,8 @@ export class CourseController {
       return await this.courseService.findAll(); 
     }
   
-    @Get(':id') 
+    @Get(':id') // Route to get a course by ID
     async findOne(@Param('id') id: string) {
-      return await this.courseService.findOne(id); 
+      return await this.courseService.findOne(id); // Call to the service's findOne method
     }
   }

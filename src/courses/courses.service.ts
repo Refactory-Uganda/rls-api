@@ -1,21 +1,57 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+// src/course/course.service.ts
+import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateCourseDto } from './dto/create-course.dto';
 
 @Injectable()
-export class CoursesService {
-    constructor(
-        private prisma: PrismaService,
-    ) {}
+export class CourseService {
+  constructor(private prisma: PrismaService) {}
 
-    async deleteCourse(id: string) {
-        const course = await this.prisma.course.delete({
-            where: { id: id },
+  async createCourse(dto: CreateCourseDto) {
+    try {
+        // Check if a course with the same title already exists
+        const existingCourse = await this.prisma.course.findUnique({
+            where: {
+                courseTitle: dto.courseTitle,
+            },
         });
-        if (!course) {
-            throw new NotFoundException(`Coursee with ID ${id} not found`)
-        }
 
-        return course
+        if (existingCourse) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    message: 'A course with this title already exists',
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+      // Create a new course in the database
+      const course = await this.prisma.course.create({
+        data: {
+          courseTitle: dto.courseTitle,
+          courseDescription: dto.courseDescription,
+          courseDuration: dto.courseDuration,
+        },
+      });
+
+      // Return a successful response with the created course data
+      return {
+        status: HttpStatus.CREATED,
+        message: `Course ${dto.courseTitle} created successfully`,
+        data: course,  // Return the newly created course object
+      };
+
+    } catch (error) {
+      // Handle and throw the error
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Failed to create course',
+          error: error.message,  // Include the error message for debugging
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
+  }
 }

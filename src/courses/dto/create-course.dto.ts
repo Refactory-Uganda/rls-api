@@ -1,14 +1,15 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from "@nestjs/common";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
-@Injectable()
+
 export class CreateCourseDto {
     @IsString()
     @IsNotEmpty()
     Title: string;
 
     @IsString()
+    @IsOptional()
     Description: string;
 
     @IsString()

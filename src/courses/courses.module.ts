@@ -1,10 +1,11 @@
-/* eslint-disable prettier/prettier */
+// src/course/course.module.ts
 import { Module } from '@nestjs/common';
 import { CoursesService } from './courses.service';
-import { CoursesController } from './courses.controller';
+import { CourseController } from './courses.controller';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
-  providers: [CoursesService],
-  controllers: [CoursesController]
+  controllers: [CourseController],
+  providers: [CoursesService, PrismaService],
 })
 export class CoursesModule {}

@@ -3,13 +3,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { PrismaModule } from './prisma/prisma.module';
-import { ContentModule } from './content/content.module';
 import { FacilitatorModule } from './facilitator/facilitator.module';
 import { AuthModule } from './auth/auth.module'; // AuthModule includes AuthService
 import { MailModule } from './mail/mail.module';
 import { CohortModule } from './cohort/cohort.module';
 import { LearnerModule } from './learner/learner.module';
 import { ModulesModule } from './modules/modules.module';
+import { ProgramModule } from './program/program.module';
 
 @Module({
   imports: [
@@ -17,12 +17,12 @@ import { ModulesModule } from './modules/modules.module';
     HttpModule, // For external API calls (e.g., fetching roles)
     PrismaModule,
     ModulesModule,
-    ContentModule,
     FacilitatorModule,
     AuthModule,
     MailModule,
     CohortModule,
-    LearnerModule, // Ensure AuthModule is imported
+    LearnerModule,
+    ProgramModule, // Ensure AuthModule is imported
   ],
   controllers: [], // You can add global controllers here if needed
   providers: [], // You can add global providers here if needed

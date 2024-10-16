@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.service.ts
-import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 
@@ -13,7 +13,7 @@ export class CourseService {
         // Check if a course with the same title already exists
         const existingCourse = await this.prisma.course.findUnique({
             where: {
-                courseTitle: dto.courseTitle,
+                Title: dto.Title,
             },
         });
 
@@ -29,16 +29,16 @@ export class CourseService {
       // Create a new course in the database
       const course = await this.prisma.course.create({
         data: {
-          courseTitle: dto.courseTitle,
-          courseDescription: dto.courseDescription,
-          courseDuration: dto.courseDuration,
+          Title: dto.Title,
+          Description: dto.Description,
+          Duration: dto.Duration,
         },
       });
 
       // Return a successful response with the created course data
       return {
         status: HttpStatus.CREATED,
-        message: `Course ${dto.courseTitle} created successfully`,
+        message: `Course ${dto.Title} created successfully`,
         data: course,  // Return the newly created course object
       };
 

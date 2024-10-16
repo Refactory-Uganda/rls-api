@@ -10,4 +10,5 @@ export class LearnerController {
     getLearner() {
         return this.learnerService.getAll();
     }
+    
 }

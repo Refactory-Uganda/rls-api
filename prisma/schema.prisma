@@ -19,39 +19,8 @@ model Course {
   courseDescription String?
   courseDuration String
   createdAt DateTime @default(now())
-  modules Module[]
 }
 
-model Module {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  moduleTitle     String @unique
-  moduleDescription String
-  createdAt DateTime @default(now())
-  courseId String @db.ObjectId
-  course Course @relation(fields: [courseId], references: [id])
-  contents Content[]
-  facilitatorId String?
-}
 
-model Content {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  fileUrl       String // Text, URL for video, or link
-  module     Module   @relation(fields: [moduleId], references: [id])
-  moduleId   String @db.ObjectId
-  
-}
 
-// enum ContentType {
-//   TEXT
-//   VIDEO
-//   LINK
-// }
-
-model User {
-  id           String      @id @default(uuid()) @map("_id")
-  email        String   @unique
-  password     String
-  role         String  
-}
 

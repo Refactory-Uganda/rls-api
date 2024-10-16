@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Post, Body, /*UseGuards*/ } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard} from './jwt-auth.guard';
@@ -11,6 +12,12 @@ export class AuthController {
     async login(@Body() credentials: { email: string, password: string }) {
         return this.authService.login(credentials);
     }
+
+    @Post('admin/login')
+    async adminlogin(@Body() credentials: {email: string, password: string }) {
+        return this.authService.adminlogin(credentials);
+    }
+
 
 
   @Post('forgot-password')

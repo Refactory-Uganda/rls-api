@@ -1,12 +1,14 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, HttpException, HttpStatus, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
 import * as bcrypt from 'bcrypt';
+import { console } from 'inspector';
 
 @Injectable()
 export class AuthService {
     private apiUrl = 'https://rims-api-xufp.onrender.com/accounts/staff/login';
-
+    
     constructor(
         private jwtService: JwtService,
     ) { }
@@ -22,6 +24,33 @@ export class AuthService {
             secret: process.env.JWT_SECRET_KEY,
         });
     }
+
+  // ADMIN LOGIN
+
+        private apiUrl1 = 'https://rims-api-xufp.onrender.com/accounts/admin/login';
+    
+        async adminlogin(credentials: { email: string; password: string }): Promise<any> {
+            try {
+                console.log('Sending login request with credentials:', credentials);
+    
+                const response = await axios.post(this.apiUrl1, credentials, {
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const {user} = response.data
+                console.log(user)
+                const access_token = this.createAccessToken(user.id)
+                      console.log(access_token)
+                if (!response.data || !response.data.tokens) {
+                    throw new HttpException('Login failed: invalid response from API', HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+                return response.data;
+            } catch (error) {
+                console.error('Login request failed:', error);
+                throw error;
+            }
+        }
+
+    // STAFF
 
     // Utility function to hash passwords
     async hashPassword(password: string): Promise<string> {

@@ -20,7 +20,10 @@ model Course {
   courseDuration String
   createdAt DateTime @default(now())
 }
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> create-course
 

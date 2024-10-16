@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // src/course/course.service.ts
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';

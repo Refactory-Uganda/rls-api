@@ -53,22 +53,5 @@ export class CourseService {
       );
     }
   }
-  async findAll() {
-    try {
-      return await this.prisma.course.findMany();
-    } catch (error) {
-      throw new Error(`Error fetching courses: ${error.message}`);
-    }
-  }
-
-  // Method to fetch a single course by ID
-  async findOne(id: string) {
-    try {
-      return await this.prisma.course.findUnique({
-        where: { id: id },
-
-      });
-    } catch (error) {
-      throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
-    }
-}}
+  
+}

@@ -21,9 +21,7 @@ model Course {
   createdAt DateTime @default(now())
 }
 
-
-
-
+m
 
 
 

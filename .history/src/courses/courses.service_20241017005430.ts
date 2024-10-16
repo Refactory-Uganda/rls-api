@@ -71,4 +71,4 @@ export class CourseService {
     } catch (error) {
       throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
     }
-}}
+})

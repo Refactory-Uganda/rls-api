@@ -1,0 +1,7 @@
+import { Controller, Get, Para } from '@nestjs/common';
+
+
+@Controller('courses')
+export class CoursesController {}
+
+

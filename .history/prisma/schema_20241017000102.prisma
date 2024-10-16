@@ -15,13 +15,11 @@ datasource db {
 
 model Course {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  Title     String @unique 
-  Description String?
-  Duration String
+  courseTitle     String @unique 
+  courseDescription String?
+  courseDuration String
   createdAt DateTime @default(now())
 }
-
-
 
 
 

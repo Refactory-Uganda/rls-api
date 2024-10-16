@@ -15,13 +15,19 @@ datasource db {
 
 model Course {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  Title     String @unique 
-  Description String?
-  Duration String
+  courseTitle     String @unique 
+  courseDescription String?
+  courseDuration String
   createdAt DateTime @default(now())
 }
 
-
+model Content {
+  id        String   @id @default(cuid())
+  type      String
+  data      String
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id])
+}
 
 
 

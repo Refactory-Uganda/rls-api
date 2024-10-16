@@ -4,7 +4,6 @@ import { Controller, Get, Post, Put, Delete, Patch, Body, Param, HttpException, 
 import { CohortService } from './cohort.service';
 import { CreateCohortModuleDto } from '../modules/dto/create-cohortModule.dto';
 import { UpdateCohortDto } from '../modules/dto/update-cohort.dto';
-import { create } from 'domain';
 
 @Controller('cohorts')
 export class CohortController {
@@ -57,14 +56,14 @@ export class CohortController {
     }
   }
 
-  @Put(':id')
+  @Put('cohortId')
   async updateCohort(
-    @Param('id') id: string,
+    @Param('cohortId') cohortId: string,
     @Body() updateCohortDto: UpdateCohortDto,
   ) {
     try {
       const updatedCohort = await this.cohortService.updateCohort(
-        id,
+        cohortId,
         updateCohortDto,
       );
       if (!updatedCohort) {
@@ -79,13 +78,13 @@ export class CohortController {
     }
   }
 
-  @Patch(':id')
+  @Patch(':cohortId')
   async patchCohort(
-    @Param('id') id: string,
+    @Param('cohortId') cohortId: string,
     @Body() partialUpdateDto: Partial<UpdateCohortDto>,
   ) {
     try {
-      const patchedCohort = await this.cohortService.patchCohort(id, partialUpdateDto);
+      const patchedCohort = await this.cohortService.patchCohort(cohortId, partialUpdateDto);
       if (!patchedCohort) {
         throw new HttpException('Cohort not found', HttpStatus.NOT_FOUND);
       }
@@ -98,10 +97,10 @@ export class CohortController {
     }
   }
 
-  @Delete(':id')
-  async deleteCohort(@Param('id') id: string) {
+  @Delete(':cohortId')
+  async deleteCohort(@Param('cohortId') cohortId: string) {
     try {
-      const deleted = await this.cohortService.deleteCohort(id);
+      const deleted = await this.cohortService.deleteCohort(cohortId);
       if (!deleted) {
         throw new HttpException('Cohort not found', HttpStatus.NOT_FOUND);
       }

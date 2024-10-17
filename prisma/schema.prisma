@@ -19,6 +19,15 @@ model Course {
   Description String?
   Duration String
   createdAt DateTime @default(now())
+  topics Topic[]
+}
+
+model Topic {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  Title     String @unique 
+  Description String?
+  createdAt DateTime @default(now())
+  Course Course @relation(fields: [id], references: [id])
 }
 
 

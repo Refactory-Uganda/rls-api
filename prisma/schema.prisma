@@ -14,44 +14,27 @@ datasource db {
 }
 
 model Course {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  courseTitle     String @unique 
-  courseDescription String?
-  courseDuration String
-  createdAt DateTime @default(now())
-  modules Module[]
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  Title       String   @unique 
+  Description String?
+  Duration    String
+  createdAt   DateTime @default(now())
+  topics      Topic[]  @relation("CourseTopics")
 }
 
-model Module {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  moduleTitle     String @unique
-  moduleDescription String
-  createdAt DateTime @default(now())
-  courseId String @db.ObjectId
-  course Course @relation(fields: [courseId], references: [id])
-  contents Content[]
-  facilitatorId String?
+model Topic {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  Title       String   @unique 
+  Description String?
+  createdAt   DateTime @default(now())
+  courseId    String  @map("_courseId") @db.ObjectId
+  Course      Course   @relation(fields: [courseId], references: [id], name: "CourseTopics")
 }
 
-model Content {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  fileUrl       String // Text, URL for video, or link
-  module     Module   @relation(fields: [moduleId], references: [id])
-  moduleId   String @db.ObjectId
-  
-}
 
-// enum ContentType {
-//   TEXT
-//   VIDEO
-//   LINK
-// }
 
-model User {
-  id           String      @id @default(uuid()) @map("_id")
-  email        String   @unique
-  password     String
-  role         String  
-}
+
+
+
+
 

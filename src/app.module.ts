@@ -10,6 +10,8 @@ import { CohortModule } from './cohort/cohort.module';
 import { LearnerModule } from './learner/learner.module';
 import { ModulesModule } from './modules/modules.module';
 import { ProgramModule } from './program/program.module';
+import { CoursesModule } from './courses/courses.module';
+import { TopicModule } from './topic/topic.module';
 
 @Module({
   imports: [
@@ -22,7 +24,9 @@ import { ProgramModule } from './program/program.module';
     MailModule,
     CohortModule,
     LearnerModule,
-    ProgramModule, // Ensure AuthModule is imported
+    ProgramModule,
+    CoursesModule,
+    TopicModule, // Ensure AuthModule is imported
   ],
   controllers: [], // You can add global controllers here if needed
   providers: [], // You can add global providers here if needed

@@ -2,8 +2,8 @@
 // src/course/course.controller.ts
 import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Put, Patch } from '@nestjs/common';
 import {  CourseService } from './courses.service';
-import { UpdateCourseDto } from '../modules/dto/update-course.dto';
 import { CreateCourseDto } from './dto/create-course.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('courses')
 export class CourseController {

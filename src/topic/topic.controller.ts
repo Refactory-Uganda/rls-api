@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
-// src/topics/topics.controller.ts
-import { Body, Controller, Post, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Param, Delete, Patch, Put } from '@nestjs/common';
 import { TopicService } from './topic.service'; 
 import { Topic } from '@prisma/client';
 import { CreateTopicDto } from './dto/create-topic.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UpdateTopicDto } from './dto/update-topic.dto';
 
 @Controller('topic')
 @ApiTags('Topic')
@@ -21,6 +21,24 @@ export class TopicController {
     return this.topicService.create({ ...body, courseId });
   }
 
+  @Put(':id')
+  @ApiOperation({ summary: 'Update Topic' })
+  async update(
+    @Param('id') id: string,
+    @Body() updateTopicDto: UpdateTopicDto,
+  ) {
+    return this.topicService.updateTopic(id, updateTopicDto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Partially Update Topic'})
+  async patch(
+    @Param('id') id: string,
+    @Body() partialUpdateDto: Partial<UpdateTopicDto>,
+  ) {
+    return this.topicService.patchTopic(id, partialUpdateDto);
+  }
+
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete Topic'})
@@ -28,5 +46,3 @@ export class TopicController {
         return this.topicService.deleteTopic(id);
     }
 }
-
-

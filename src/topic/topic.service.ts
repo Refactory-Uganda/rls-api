@@ -15,6 +15,7 @@ export class TopicService {
         Description: data.Description, 
         courseId: data.courseId, 
       },
+      include: {Course: true}
     });
   }
 

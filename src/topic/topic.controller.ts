@@ -1,5 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Controller } from '@nestjs/common';
+import { Controller, Delete, Param } from '@nestjs/common';
+import { TopicService } from './topic.service';
 
-@Controller('courses/:courseId/topic')
-export class TopicController {}
+@Controller('topic')
+export class TopicController {
+    constructor(private topicsService: TopicService) {}
+
+    @Delete(':id')
+    deleteTopic(@Param('id') id: string) {
+        return this.topicsService.deleteTopic(id);
+    }
+}

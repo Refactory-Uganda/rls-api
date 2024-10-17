@@ -1,15 +1,16 @@
-// src/course/dto/create-course.dto.ts
-import { IsString, IsOptional } from 'class-validator';
+/* eslint-disable prettier/prettier */
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+
 
 export class CreateCourseDto {
-  @IsString()
-  courseTitle: string; // Required field
+    @IsString()
+    @IsNotEmpty()
+    Title: string;
 
-  @IsOptional()
-  @IsString()
-  courseDescription?: string; // Optional field
+    @IsString()
+    @IsOptional()
+    Description: string;
 
-  @IsString()
-  courseDuration: string; // Required field
-
+    @IsString()
+    Duration: string;
 }

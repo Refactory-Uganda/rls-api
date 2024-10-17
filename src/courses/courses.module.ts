@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // src/course/course.module.ts
 import { Module } from '@nestjs/common';
 import { CourseService } from './courses.service';

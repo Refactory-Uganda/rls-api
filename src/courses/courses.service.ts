@@ -1,42 +1,45 @@
+/* eslint-disable prettier/prettier */
+// src/course/course.service.ts
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { UpdateCourseDto } from '../modules/dto/update-course.dto';
 import { CreateCourseDto } from './dto/create-course.dto';
 
 @Injectable()
 export class CourseService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async createCourse(dto: CreateCourseDto) {
     try {
-        // Check if a course with the same title already exists
-        const existingCourse = await this.prisma.course.findUnique({
-            where: {
-                courseTitle: dto.courseTitle,
-            },
-        });
+      // Check if a course with the same title already exists
+      const existingCourse = await this.prisma.course.findUnique({
+        where: {
+          Title: dto.Title,
+        },
+      });
 
-        if (existingCourse) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.BAD_REQUEST,
-                    message: 'A course with this title already exists',
-                },
-                HttpStatus.BAD_REQUEST,
-            );
-        }
+      if (existingCourse) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            message: 'A course with this title already exists',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       // Create a new course in the database
       const course = await this.prisma.course.create({
         data: {
-          courseTitle: dto.courseTitle,
-          courseDescription: dto.courseDescription,
-          courseDuration: dto.courseDuration,
+          Title: dto.Title,
+          Description: dto.Description,
+          Duration: dto.Duration,
         },
       });
 
       // Return a successful response with the created course data
       return {
         status: HttpStatus.CREATED,
-        message: `Course ${dto.courseTitle} created successfully`,
+        message: `Course ${dto.Title} created successfully`,
         data: course,  // Return the newly created course object
       };
 
@@ -50,6 +53,50 @@ export class CourseService {
         },
         HttpStatus.BAD_REQUEST,
       );
+    }
+  }
+
+  async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
+    return this.prisma.course.update({
+      where: { id },
+      data: updateCourseDto,
+    });
+  }
+
+
+  async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
+    return this.prisma.course.update({
+      where: { id },
+      data: partialUpdateDto,
+    });
+  }
+  async findAll() {
+    try {
+      return await this.prisma.course.findMany();
+    } catch (error) {
+      throw new Error(`Error fetching courses: ${error.message}`);
+    }
+  }
+
+  // Method to fetch a single course by ID
+  async findOne(id: string) {
+    try {
+      return await this.prisma.course.findUnique({
+        where: { id: id },
+
+      });
+    } catch (error) {
+      throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
+    }
+  }
+
+  async deleteCourse(id: string) {
+    try {
+      return await this.prisma.course.delete({
+        where: { id: id },
+      });
+    } catch (error) {
+      throw new Error(`Error deleting course with ID ${id}: ${error.message}`);
     }
   }
 }

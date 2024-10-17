@@ -1,6 +1,6 @@
 // src/topics/topics.controller.ts
 import { Body, Controller, Post, Param, Delete } from '@nestjs/common';
-import { TopicService } from './topic.service'; // Correct import
+import { TopicService } from './topic.service'; 
 import { Topic } from '@prisma/client';
 import { CreateTopicDto } from './dto/create-topic.dto';
 

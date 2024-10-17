@@ -8,7 +8,6 @@ export class TopicService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: { Title: string; Description?: string; courseId: string }): Promise<Topic> {
-    // Ensure the data object contains the necessary fields
     return this.prisma.topic.create({
       data: {
         Title: data.Title, 

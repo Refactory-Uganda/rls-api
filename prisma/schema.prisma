@@ -14,20 +14,21 @@ datasource db {
 }
 
 model Course {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  Title     String @unique 
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  Title       String   @unique 
   Description String?
-  Duration String
-  createdAt DateTime @default(now())
-  topics Topic[]
+  Duration    String
+  createdAt   DateTime @default(now())
+  topics      Topic[]  @relation("CourseTopics")
 }
 
 model Topic {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  Title     String @unique 
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  Title       String   @unique 
   Description String?
-  createdAt DateTime @default(now())
-  Course Course @relation(fields: [id], references: [id])
+  createdAt   DateTime @default(now())
+  courseId    String  @map("_courseId") @db.ObjectId
+  Course      Course   @relation(fields: [courseId], references: [id], name: "CourseTopics")
 }
 
 

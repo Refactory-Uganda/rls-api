@@ -1,4 +1,5 @@
+/* eslint-disable prettier/prettier */
 import { Controller } from '@nestjs/common';
 
-@Controller('topic')
+@Controller('courses/:courseId/topic')
 export class TopicController {}

@@ -4,11 +4,12 @@ import { Controller, Put, Patch, Param, Body } from '@nestjs/common';
 import { TopicService } from './topic.service';
 import { UpdateTopicDto } from './dto/update-topic.dto';
 
-@Controller('courses/:courseId/topic')
+@Controller('topic/:id')
 export class TopicController {
 constructor(private readonly topicService: TopicService) {}
 
   @Put(':id')
+
   async update(
     @Param('id') id: string,
     @Body() updateTopicDto: UpdateTopicDto,

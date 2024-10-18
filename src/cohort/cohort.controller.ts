@@ -1,15 +1,19 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Put, Delete, Patch, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { CohortService } from './cohort.service';
 import { CreateCohortModuleDto } from '../modules/dto/create-cohortModule.dto';
 import { UpdateCohortDto } from '../modules/dto/update-cohort.dto';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('cohorts')
+@ApiTags('Cohort')
 export class CohortController {
   constructor(private readonly cohortService: CohortService) {}
 
   @Get()
+  @ApiOperation({ summary: ' Get All Cohorts '})
   async getAllCohorts() {
     try {
       const cohorts = await this.cohortService.getAllCohorts();
@@ -23,7 +27,7 @@ export class CohortController {
   }
 
   @Get()
-
+  @ApiOperation({ summary: ' Get Cohort by ID '})
   async getCohortById(@Param('cohortId') cohortId: string) {
     const moduleData = {};
     try {
@@ -41,6 +45,7 @@ export class CohortController {
   }
 
   @Post('cohortId/modules')
+  @ApiOperation({ summary: ' Create Cohort Module '})
   async createCohortModule(
     @Param('cohortId') cohortId: string,
     @Body() createCohortModuleDto: CreateCohortModuleDto) {
@@ -57,6 +62,7 @@ export class CohortController {
   }
 
   @Put('cohortId')
+  @ApiOperation({ summary: ' Update Cohort '})
   async updateCohort(
     @Param('cohortId') cohortId: string,
     @Body() updateCohortDto: UpdateCohortDto,
@@ -79,6 +85,7 @@ export class CohortController {
   }
 
   @Patch(':cohortId')
+  @ApiOperation({ summary: ' Partially Update Cohort'})
   async patchCohort(
     @Param('cohortId') cohortId: string,
     @Body() partialUpdateDto: Partial<UpdateCohortDto>,
@@ -98,6 +105,7 @@ export class CohortController {
   }
 
   @Delete(':cohortId')
+  @ApiOperation({ summary: ' Delete a Cohort '})
   async deleteCohort(@Param('cohortId') cohortId: string) {
     try {
       const deleted = await this.cohortService.deleteCohort(cohortId);

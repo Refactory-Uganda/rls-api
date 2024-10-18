@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // src/topics/topics.module.ts
 import { Module } from '@nestjs/common';
 import { TopicController } from './topic.controller';

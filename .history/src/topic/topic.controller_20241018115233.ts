@@ -52,6 +52,8 @@ async findAllTopics(@Param('courseId') courseId: string) {
 @Get(':id')
 @ApiOperation({ summary: 'Get Topic by id' })
 async findOneTopic(@Param('id') id: string) {
-  return await this.topicService.findOneTopic(id);
 }
-}
+
+@Get(':id')
+@ApiOperation({ summary: 'Get Topic by id' })
+async findOneTopic(@Param('id') id: string) {

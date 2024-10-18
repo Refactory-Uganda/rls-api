@@ -62,11 +62,5 @@ export class TopicService {
       where: { courseId },
     });
   }
-  async findOneTopic(id: string) {
-    return this.prisma.topic.findUnique({
-      where: { id },
-      include: { Course: true },
-    });
-  }
-
+  
 }

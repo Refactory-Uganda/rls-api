@@ -71,23 +71,73 @@ export class CourseService {
       );
     }
   }
-
   async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
-    return this.prisma.course.update({
-      where: { id },
-      include: { topics: true },
-      data: updateCourseDto,
-    });
+    try {
+      return await this.prisma.course.update({
+        where: { id },
+        data: {
+          Title: updateCourseDto.Title,
+          Description: updateCourseDto.Description,
+          Duration: updateCourseDto.Duration,
+          topics: {
+            update: updateCourseDto.topics?.map((topic) => ({
+              where: { id: topic.id },
+              data: {
+                Title: topic.Title,
+                Description: topic.Description,
+              },
+            })),
+          },
+        },
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Failed to update course',
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
-
-
+  
+  
+  
   async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
-    return this.prisma.course.update({
-      where: { id },
-      include: { topics: true },
-      data: partialUpdateDto,
-    });
+    try {
+      return await this.prisma.course.update({
+        where: { id },
+        data: {
+          Title: partialUpdateDto.Title,
+          Description: partialUpdateDto.Description,
+          Duration: partialUpdateDto.Duration,
+          topics: {
+            update: partialUpdateDto.topics?.map((topic) => ({
+              where: { id: topic.id },
+              data: {
+                Title: topic.Title,
+                Description: topic.Description,
+              },
+            })),
+          },
+        },
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Failed to partially update course',
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
+  
+  
+  
+  
   async findAll() {
     try {
       return await this.prisma.course.findMany({

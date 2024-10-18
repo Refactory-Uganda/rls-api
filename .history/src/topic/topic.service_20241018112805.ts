@@ -9,6 +9,7 @@ import { UpdateTopicDto } from './dto/update-topic.dto';
 @Injectable()
 export class TopicService {
   constructor(private prisma: PrismaService) {}
+
   async create(data: {
     Title: string;
     Description?: string;
@@ -26,7 +27,7 @@ export class TopicService {
 
   async updateTopic(id: string, updateTopicDto: UpdateTopicDto) {
     try {
-      return await this.prisma.topic.update({
+      return await this.prisma..update({
         where: { id },
         data: updateTopicDto,
       });

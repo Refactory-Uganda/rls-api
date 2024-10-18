@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Post, Param, Delete, Patch, Put, Get} from '@nestjs/common';
+import { Body, Controller, Post, Param, Delete, Patch, Put,} from '@nestjs/common';
 import { TopicService } from './topic.service'; 
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateTopicDto } from './dto/create-topic.dto';
@@ -44,7 +44,7 @@ export class TopicController {
   }
 
 
-@Get()
+@Get('course/:courseId')
 @ApiOperation({ summary: 'Get all Topics by courseId' })
 async findAllTopics(@Param('courseId') courseId: string) {
   return await this.topicService.findAllTopicsByCourse(courseId);

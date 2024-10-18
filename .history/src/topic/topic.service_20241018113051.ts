@@ -9,6 +9,7 @@ import { UpdateTopicDto } from './dto/update-topic.dto';
 @Injectable()
 export class TopicService {
   constructor(private prisma: PrismaService) {}
+const akram = this.prisma.
   async create(data: {
     Title: string;
     Description?: string;

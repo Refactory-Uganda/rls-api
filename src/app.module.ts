@@ -11,7 +11,8 @@ import { LearnerModule } from './learner/learner.module';
 import { ModulesModule } from './modules/modules.module';
 import { ProgramModule } from './program/program.module';
 import { CoursesModule } from './courses/courses.module';
-import { TopicModule } from './topic/topic.module';
+import { TopicsModule } from './topic/topic.module';
+import { LessonModule } from './lesson/lesson.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { TopicModule } from './topic/topic.module';
     LearnerModule,
     ProgramModule,
     CoursesModule,
-    TopicModule, // Ensure AuthModule is imported
+    TopicsModule,
+    LessonModule, // Ensure AuthModule is imported
   ],
   controllers: [], // You can add global controllers here if needed
   providers: [], // You can add global providers here if needed

@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsOptional } from 'class-validator';
+import { IsArray, IsOptional, IsString } from "class-validator";
 
 export class UpdateCourseDto {
+  @IsOptional()
   @IsString()
   Title?: string;
 
@@ -9,6 +10,15 @@ export class UpdateCourseDto {
   @IsString()
   Description?: string;
 
+  @IsOptional()
   @IsString()
   Duration?: string;
+
+  @IsOptional()
+  @IsArray()
+  topics?: {
+    id: string;
+    Title?: string;
+    Description?: string;
+  }[];
 }

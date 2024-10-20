@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
-import { Topic } from "@prisma/client";
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { CourseStatus } from "@prisma/client";
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 
 export class CreateTopicDto {
@@ -30,7 +30,11 @@ export class CreateTopicDto {
     @IsString()
     @ApiProperty()
     Duration: string;
-  
+
+    @IsEnum(CourseStatus)
+    @ApiProperty()
+    status?: CourseStatus
+
     @ApiProperty({ type: [CreateTopicDto] })
     topics: CreateTopicDto[];
   }

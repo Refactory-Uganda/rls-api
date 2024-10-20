@@ -30,11 +30,11 @@ export class CourseService {
 
       // Handle topics creation if topics are provided
       const topicsData = dto.topics && Array.isArray(dto.topics)
-      ? dto.topics.map((topic) => ({
+        ? dto.topics.map((topic) => ({
           Title: topic.Title,
           Description: topic.Description,
         }))
-      : []; // Default to an empty array if no topics are provided
+        : []; // Default to an empty array if no topics are provided
 
 
       // Create a new course in the database
@@ -101,9 +101,9 @@ export class CourseService {
       );
     }
   }
-  
-  
-  
+
+
+
   async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
     try {
       return await this.prisma.course.update({
@@ -134,10 +134,10 @@ export class CourseService {
       );
     }
   }
-  
-  
-  
-  
+
+
+
+
   async findAll() {
     try {
       return await this.prisma.course.findMany({

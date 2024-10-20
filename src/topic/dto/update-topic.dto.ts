@@ -10,4 +10,13 @@ export class UpdateTopicDto {
 
   @IsString()
   courseId: string;
+
+  @IsOptional()
+  @IsString()
+  lessons?: {
+    id: string;
+    title?: string;
+    content?: string;
+    quiz?: any;
+  }[];
 }

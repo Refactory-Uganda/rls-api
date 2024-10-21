@@ -59,11 +59,11 @@ export class LessonService {
       
     });
     }
-    async findLessonById(lessonId: string) {
+    async findLessonById(topicId: string, lessonId: string) {
       return this.prisma.lesson.findUnique({
         where: {
           id: lessonId,
-        
+          topicId: topicId,
         },
       });
     }

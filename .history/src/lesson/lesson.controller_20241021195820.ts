@@ -48,18 +48,19 @@ export class LessonController {
   async deleteLesson(lesson_id: string) {
     return this.lessonService.deleteLesson(lesson_id);
   }
-  @Get()
+  @Get('lessons')
   @ApiOperation({ summary: 'Get all Lessons under different topics' })
   async findAllLessons() {
     return await this.lessonService.findAllLessons();
   }
 
-  @Get(':lessonId')
+  @Get('topics/:topicId/lessons/:lessonId')
 @ApiOperation({ summary: 'Get a particular Lesson under a specific Topic' })
 
 async findLessonById(
-@Param('lessonId') lessonId: string
+  @Param('topicId') topicId: string,
+  @Param('lessonId') lessonId: string
 ) {
-  return await this.lessonService.findLessonById(lessonId);
+  return await this.lessonService.findLessonById(topicId, lessonId);
 }
 }

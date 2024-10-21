@@ -13,10 +13,9 @@ export class TopicController {
   @Post()
   @ApiOperation({ summary: 'Create Topic' })
   async create(
-    @Param(
     @Body() body: CreateTopicDto,
   ) {
-    return this.topicService.create({ ...body});
+    return this.topicService.createNew({ ...body });
   }
 
   @Put(':id')

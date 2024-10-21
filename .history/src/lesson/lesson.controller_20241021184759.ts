@@ -7,7 +7,7 @@ import {
   Put,
   Param,
   Patch,
-  Get,
+  
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LessonService } from './lesson.service';

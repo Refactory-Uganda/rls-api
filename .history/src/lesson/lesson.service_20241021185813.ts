@@ -60,7 +60,6 @@ export class LessonService {
           title: true,
           content: true,
           topic: true,   
-      },
-    });
+      }),
     }
 }

@@ -58,9 +58,9 @@ export class LessonService {
       return this.prisma.lesson.findMany({
         select: {
           title: true,
-          content: true,
-          topic: true,   
-      },
-    });
+          content: true, // Assuming 'content' is the text format for lessons
+          topic: true,   // Assuming 'topic' is the relationship field
+        },
+      });
     }
 }

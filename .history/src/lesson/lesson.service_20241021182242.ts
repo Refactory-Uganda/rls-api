@@ -54,13 +54,4 @@ export class LessonService {
         )
         return lesson;
     }
-    async findAllLessons() {
-      return this.prisma.lesson.findMany({
-        select: {
-          title: true,
-          content: true,
-          topic: true,   
-      },
-    });
-    }
 }

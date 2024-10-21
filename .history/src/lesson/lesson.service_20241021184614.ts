@@ -59,8 +59,8 @@ export class LessonService {
         select: {
           title: true,
           content: true,
-          topic: true,   
-      },
-    });
+          topic: true,   // Assuming 'topic' is the relationship field
+        },
+      });
     }
 }

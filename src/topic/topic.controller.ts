@@ -10,13 +10,13 @@ import { UpdateTopicDto } from './dto/update-topic.dto';
 export class TopicController {
   constructor(private readonly topicService: TopicService) {}
 
-  @Post(':courseId')
+  @Post(':course_id')
   @ApiOperation({ summary: 'Create Topic' })
   async create(
-    @Param('courseId') courseId: string,
+    @Param('course_id') course_id: string,
     @Body() body: CreateTopicDto,
   ) {
-    return this.topicService.create({ ...body, courseId });
+    return this.topicService.create({ ...body, courseId: course_id });
   }
 
   @Put(':id')

@@ -18,6 +18,7 @@ model Course {
   Title       String   @unique
   Description String?
   Duration    String
+  status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
 }
@@ -28,7 +29,7 @@ model Topic {
   Description String?
   createdAt   DateTime @default(now())
   courseId    String   @map("_courseId") @db.ObjectId
-  Course      Course   @relation(fields: [courseId], references: [id], name: "CourseTopics")
+  Course      Course   @relation(fields: [courseId], references: [id], name: "CourseTopics", onDelete:Cascade)
 
   Lesson Lesson[]
 }
@@ -37,7 +38,7 @@ model Lesson {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   content   String // text content
-  topic     Topic    @relation(fields: [topicId], references: [id])
+  topic     Topic    @relation(fields: [topicId], references: [id], onDelete:Cascade)
   topicId   String   @db.ObjectId
   quiz      Quiz?
   createdAt DateTime @default(now())
@@ -48,7 +49,7 @@ model Quiz {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   questions Question[]
-  lesson    Lesson     @relation(fields: [lessonId], references: [id])
+  lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete:Cascade)
   lessonId  String     @unique @db.ObjectId
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -63,4 +64,10 @@ model Question {
   quizId    String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
 }

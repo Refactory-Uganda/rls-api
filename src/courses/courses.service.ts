@@ -9,6 +9,60 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 export class CourseService {
   constructor(private prisma: PrismaService) { }
 
+  async createCourseDraft(dto: CreateCourseDto) {
+    // check for topics
+    const hasTopics = dto.topics && dto.topics.length>0;
+
+    // set to draft if no topics
+    const status = hasTopics?dto.status?? `DRAFT`:`DRAFT`;
+
+    return await this.prisma.course.create({
+      data: {
+        Title: dto.Title,
+        Description: dto.Description,
+        Duration: dto.Duration,
+        status,
+        topics: {
+          create: dto.topics,
+        },
+      },
+    })
+  }
+
+  async publishCourse(id:string) {
+    // check for topis
+    const course = await this.prisma.course.findUnique({ 
+      where: { id },
+      include: { topics:true }
+    });
+
+    if(!course.topics || course.topics.length === 0) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Cannot publish a course without topics',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return await this.prisma.course.update({
+      where: { id },
+      data: {
+        status: `PUBLISHED`,
+      },
+    });
+  }
+
+  async draftCourse(id:string) {
+    return await this.prisma.course.update({
+      where: { id },
+      data: {
+        status: `DRAFT`,
+      },
+    });
+  }
+
   async createCourse(dto: CreateCourseDto) {
     try {
       // Check if a course with the same title already exists
@@ -136,6 +190,23 @@ export class CourseService {
   }
 
 
+  // async findCourseTopics() {
+  //   try {
+  //     return await this.prisma.course.findMany({
+  //       include: {
+  //         topics: true,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     throw new HttpException(
+  //       {
+  //         status: HttpStatus.BAD_REQUEST,
+  //         message: 'Failed to fetch course topics',
+  //         error: error.message,
+  //       },
+  //       HttpStatus.BAD_REQUEST,
+  //     );}
+  // }
 
 
   async findAll() {

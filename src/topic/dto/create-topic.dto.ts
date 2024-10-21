@@ -17,5 +17,5 @@ export class CreateTopicDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
-  courseId: string;
+  courseId?: string;
 }

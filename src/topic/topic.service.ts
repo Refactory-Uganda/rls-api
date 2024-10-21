@@ -11,12 +11,13 @@ import { UpdateTopicDto } from './dto/update-topic.dto';
 @Injectable()
 export class TopicService {
   constructor(private prisma: PrismaService) {}
+  
   async create(data: CreateTopicDto): Promise<Topic> {
     return this.prisma.topic.create({
       data: {
         Title: data.Title,
         Description: data.Description,
-        courseId: data.courseId,
+        // courseId: data.courseId,
       },
       include: { Course: true },
     });

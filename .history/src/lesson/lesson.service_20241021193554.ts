@@ -67,7 +67,7 @@ export class LessonService {
       return this.prisma.lesson.findFirst({
         where: {
           id: lessonId,
-          topicId: topicId, 
+          topicId: topicId, // Ensure the lesson belongs to the correct topic
         },
       });
     }

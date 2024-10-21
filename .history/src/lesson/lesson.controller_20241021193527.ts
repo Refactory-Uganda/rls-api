@@ -54,12 +54,5 @@ export class LessonController {
     return await this.lessonService.findAllLessons();
   }
 
-  @Get('topics/:topicId/lessons/:lessonId')
-@ApiOperation({ summary: 'Get a particular Lesson under a specific Topic' })
-async findLessonById(
-  @Param('topicId') topicId: string,
-  @Param('lessonId') lessonId: string
-) {
-  return await this.lessonService.findLessonById(topicId, lessonId);
-}
+  
 }

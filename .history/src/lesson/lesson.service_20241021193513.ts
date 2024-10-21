@@ -63,13 +63,5 @@ export class LessonService {
       },
     });
     }
-    async findLessonById(topicId: string, lessonId: string) {
-      return this.prisma.lesson.findFirst({
-        where: {
-          id: lessonId,
-          topicId: topicId, 
-        },
-      });
-    }
     
 }

@@ -4,16 +4,14 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { Topic } from '@prisma/client';
+import { CreateTopicDto } from './dto/create-topic.dto'; // adjust path as needed
 import { UpdateTopicDto } from './dto/update-topic.dto';
+
 
 @Injectable()
 export class TopicService {
   constructor(private prisma: PrismaService) {}
-  async create(data: {
-    Title: string;
-    Description?: string;
-    courseId: string;
-  }): Promise<Topic> {
+  async create(data: CreateTopicDto): Promise<Topic> {
     return this.prisma.topic.create({
       data: {
         Title: data.Title,

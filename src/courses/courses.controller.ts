@@ -11,12 +11,12 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Create a Course'})
-  @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
-  async createCourse(@Body() createCourseDto: CreateCourseDto) {
-    return this.courseService.createCourse(createCourseDto);
-  }
+  // @Post()
+  // @ApiOperation({ summary: 'Create a Course'})
+  // @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
+  // async createCourse(@Body() createCourseDto: CreateCourseDto) {
+  //   return this.courseService.createCourse(createCourseDto);
+  // }
 
     @Delete(':id')
     @ApiOperation({summary: 'Delete a Course'})
@@ -51,4 +51,33 @@ export class CourseController {
   async findOne(@Param('id') id: string) {
     return await this.courseService.findOne(id); 
   }
+
+  // get topics specific to a course 
+  // @Get(':id/topics')
+  // @ApiOperation({summary: 'Get Topics for a Course'})
+  // async getTopics() {
+  //   return await this.courseService.findCourseTopics();
+  // }
+
+  @Post()
+  @ApiOperation({ summary: 'Create a Course draft'})
+  @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
+  async createCourseP_D(@Body() createCourseDto: CreateCourseDto) {
+    return this.courseService.createCourseDraft(createCourseDto);
+  }
+
+  @Patch(':id/publish')
+  @ApiOperation({ summary: 'Publish a Course'})
+  @HttpCode(HttpStatus.OK) // Set the response status code to 200
+  async publishCourse(@Param('id') id: string) {
+    return this.courseService.publishCourse(id);
+  }
+
+  @Patch(`:id/draft`)
+  @ApiOperation({ summary: 'Draft a Course'})
+  @HttpCode(HttpStatus.OK) // Set the response status code to 200
+  async draftCourse(@Param('id') id: string) {
+    return this.courseService.draftCourse(id);
+  }
+
 }

@@ -18,6 +18,7 @@ model Course {
   Title       String   @unique
   Description String?
   Duration    String
+  status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
 }
@@ -27,8 +28,8 @@ model Topic {
   Title       String   @unique
   Description String?
   createdAt   DateTime @default(now())
-  courseId    String   @map("_courseId") @db.ObjectId
-  Course      Course   @relation(fields: [courseId], references: [id], name: "CourseTopics")
+  courseId    String?   @map("_courseId") @db.ObjectId
+  Course      Course?   @relation(fields: [courseId], references: [id], name: "CourseTopics", onDelete:Cascade)
 
   Lesson Lesson[]
 }
@@ -36,19 +37,39 @@ model Topic {
 model Lesson {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  content   String // text content
-  topic     Topic    @relation(fields: [topicId], references: [id])
-  topicId   String   @db.ObjectId
+  text      String
+  content   TextContent[]
+  topic     Topic?    @relation(fields: [topicId], references: [id], onDelete:Cascade)
+  topicId   String?   @db.ObjectId
   quiz      Quiz?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+// model notes {
+//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+//   notestext   String
+//   textContent textContent? @relation(fields: [textContentId], references: [id])
+//   textContentId String?    @db.ObjectId
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model subTitle {
+//   id          String       @id @default(auto()) @map("_id") @db.ObjectId
+//   subTitle    String
+//   textContent textContent? @relation(fields: [textContentId], references: [id])
+//   textContentId String?    @db.ObjectId
+//   createdAt   DateTime     @default(now())
+//   updatedAt   DateTime     @updatedAt
+// }
+
+
 model Quiz {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   questions Question[]
-  lesson    Lesson     @relation(fields: [lessonId], references: [id])
+  lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete:Cascade)
   lessonId  String     @unique @db.ObjectId
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -57,10 +78,55 @@ model Quiz {
 model Question {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String
-  options   String[] // Array of possible answers
-  answer    Int // Index of the correct answer in the options array
+  options   String[] 
+  answer    Int 
   quiz      Quiz     @relation(fields: [quizId], references: [id])
   quizId    String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model TextContent {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  heading      String
+  
+  notes        Note[]    
+  subHeadings  SubHeading[]
+
+  lessonId String? @db.ObjectId
+  lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt  
+  // quizzes      Quiz[]    
+}
+
+model Note {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  notesText  String
+  textContentId String? @db.ObjectId
+  textContent   TextContent? @relation(fields: [textContentId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt  
+}
+
+model SubHeading {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId 
+  subText       String
+  textContentId String? @db.ObjectId
+  textContent   TextContent? @relation(fields: [textContentId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt  
+}
+
+// model Quiz {
+//   id          Int      @id @default(autoincrement())
+//   quizContent String
+//   textContentId Int
+//   textContent   TextContent @relation(fields: [textContentId], references: [id], onDelete: Cascade)
+// }

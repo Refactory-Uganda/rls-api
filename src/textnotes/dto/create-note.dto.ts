@@ -1,21 +1,16 @@
 /* eslint-disable prettier/prettier */
-// src/topics/dto/create-topic.dto.ts
+// src/note/dto/create-note.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class CreateTopicDto {
+export class CreateNoteDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
-  Title: string;
+  notesText: string; 
 
   @IsOptional()
   @IsString()
-  @ApiProperty()
-  Description?: string;
-
-  // @IsNotEmpty()
-  // @IsString()
   // @ApiProperty()
-  // courseId?: string;
+  textContentId?: string; 
 }

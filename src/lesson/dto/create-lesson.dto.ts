@@ -50,6 +50,10 @@ export class CreateNoteDto {
     @IsString()
     title: string;
 
+    @ApiProperty()
+    @IsString()
+    text: string;
+
     // @ApiProperty()
     @IsString()
     topicId?: string;

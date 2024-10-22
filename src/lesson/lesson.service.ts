@@ -8,30 +8,12 @@ import { CreateLessonDto } from './dto/create-lesson.dto';
 export class LessonService {
     constructor(private prisma: PrismaService) {}
 
-    // async createLesson(createLessonDto: CreateLessonDto) {
-    //     const lesson = await this.prisma.lesson.create({
-    //         data: {
-    //             title: createLessonDto.title,
-    //             content: createLessonDto.content,
-    //             topicId: createLessonDto.topicId,
-              
-    //         },
-    //     });
-
-    //     return lesson
-    // }
-
-
     async createNew(createLessonDto: CreateLessonDto) {
       const lesson = await this.prisma.lesson.create({
         data: {
           title: createLessonDto.title,
           topicId: createLessonDto.topicId,
-          // content: {
-          //   create: {
-          //     notes: createLessonDto.content,
-          //   },
-          // },
+          text: createLessonDto.text
         },
       });
       return lesson;

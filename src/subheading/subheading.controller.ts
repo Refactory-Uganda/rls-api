@@ -16,24 +16,7 @@ export class SubHeadingController {
     return this.subHeadingService.create(createSubHeadingDto);
   }
 
-  @Get()
-  @ApiOperation({summary: 'get a all subheader'})
-  findAll() {
-    return this.subHeadingService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({summary: 'get a particular subheader'})
-  findOne(@Param('id') id: string) {
-    return this.subHeadingService.findOne(id);
-  }
-
-  @Patch(':id')
-  @ApiOperation({summary: 'update a particular subheader'})
-  update(@Param('id') id: string, @Body() updateSubHeadingDto: CreateSubHeadingDto) {
-    return this.subHeadingService.update(id, updateSubHeadingDto);
-  }
-
+  
   @Delete(':id')
   @ApiOperation({summary: 'delete a particular subheader'})
   remove(@Param('id') id: string) {

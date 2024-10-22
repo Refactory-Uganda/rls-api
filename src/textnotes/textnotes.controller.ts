@@ -17,27 +17,11 @@ export class NoteController {
     return this.noteService.create(createNoteDto);
   }
 
-  @Get()
-  @ApiOperation({summary: 'get all notes'})
-  findAll() {
-    return this.noteService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({summary: 'get a particular note'})
-  findOne(@Param('id') id: string) {
-    return this.noteService.findOne(id);
-  }
-
-  @Patch(':id')
-  @ApiOperation({summary: 'update a particular note'})
-  update(@Param('id') id: string, @Body() updateNoteDto: CreateNoteDto) {
-    return this.noteService.update(id, updateNoteDto);
-  }
-
   @Delete(':id')
   @ApiOperation({summary: 'delete a particular note'})
   remove(@Param('id') id: string) {
     return this.noteService.remove(id);
   }
+
+
 }

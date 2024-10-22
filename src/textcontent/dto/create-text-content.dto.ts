@@ -11,16 +11,16 @@ export class CreateTextContentDto {
 
   @IsOptional()
   @IsString()
-  // @ApiProperty()
+  @ApiProperty()
   lessonId?: string;
 
   @IsOptional()
   @IsString()
-  // @ApiProperty()
+  @ApiProperty()
   notes?: { content: string }[];
 
   @IsOptional()
   @IsString()
-  // @ApiProperty()
+  @ApiProperty()
   subHeadings?: { title: string }[];
 }

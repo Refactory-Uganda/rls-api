@@ -21,22 +21,6 @@ export class SubHeadingService {
     return subHeading;
   }
 
-  async findAll() {
-    return this.prisma.subHeading.findMany();
-  }
-
-  async findOne(id: string) {
-    return this.prisma.subHeading.findUnique({
-      where: { id },
-    });
-  }
-
-  async update(id: string, updateSubHeadingDto: CreateSubHeadingDto) {
-    return this.prisma.subHeading.update({
-      where: { id },
-      data: updateSubHeadingDto,
-    });
-  }
 
   async remove(id: string) {
     return this.prisma.subHeading.delete({

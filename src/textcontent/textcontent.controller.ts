@@ -15,16 +15,4 @@ export class TextContentController {
   async create(@Body() createTextContentDto: CreateTextContentDto) {
     return this.textContentService.createNew(createTextContentDto);
   }
-
-  @Get()
-  @ApiOperation({ summary: 'Get all textcontent' })
-  async findAll() {
-    return this.textContentService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Get a particular textcontent' })
-  async findOne(id: string) {
-    return this.textContentService.findOne(id);
-  }
 }

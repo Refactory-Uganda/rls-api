@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { CreateLessonDto } from './dto/create-lesson.dto';
 
 @Injectable()
 export class LessonService {
@@ -22,38 +22,19 @@ export class LessonService {
     // }
 
 
-    async create(createLessonDto: CreateLessonDto) {
-      const { title, topicId, content } = createLessonDto;
-  
-      return this.prisma.lesson.create({
+    async createNew(createLessonDto: CreateLessonDto) {
+      const lesson = await this.prisma.lesson.create({
         data: {
-          title,
-          topicId,
-          content: {
-            create: content.map(textContent => ({
-              heading: textContent.heading,
-              notes: {
-                create: textContent.notes?.map(note => ({
-                  notesText: note.notesText,
-                })) || [],
-              },
-              subHeadings: {
-                create: textContent.subHeadings?.map(subHeading => ({
-                  subText: subHeading.subText,
-                })) || [],
-              },
-            })),
-          },
-        },
-        include: {
-          content: {
-            include: {
-              notes: true,
-              subHeadings: true,
-            },
-          },
+          title: createLessonDto.title,
+          topicId: createLessonDto.topicId,
+          // content: {
+          //   create: {
+          //     notes: createLessonDto.content,
+          //   },
+          // },
         },
       });
+      return lesson;
     }
 
     async updateLesson(id: string, updateLessonDto: UpdateLessonDto) {
@@ -64,12 +45,12 @@ export class LessonService {
             {
               title: updateLessonDto.title,
               topicId: updateLessonDto.topicId,
-              content: {
-                update: {
-                  where: { id: string},
+              // content: {
+              //   update: {
+              //     where: { id: string},
                   
-                },
-              },
+              //   },
+              // },
             },
           });
         } catch (error) {
@@ -77,11 +58,21 @@ export class LessonService {
         }
       }
     
-      async patchLesson(id: string, partialUpdateDto: Partial<UpdateLessonDto>) {
+    async patchLesson(id: string, partialUpdateDto: Partial<UpdateLessonDto>) {
         try {
           return await this.prisma.lesson.update({
             where: { id },
-            data: partialUpdateDto,
+            data: 
+            {
+              title: partialUpdateDto.title,
+              topicId: partialUpdateDto.topicId,
+              // content: {
+              //   update: {
+              //     where: { id: string},
+                  
+              //   },
+              // },
+            },
           });
         } catch (error) {
           throw new Error(

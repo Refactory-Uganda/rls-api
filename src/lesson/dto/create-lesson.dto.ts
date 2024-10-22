@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { TextContent } from '@prisma/client';
 import { IsString, IsNotEmpty } from 'class-validator';
 
 // export class CreateLessonDto {
@@ -18,30 +17,44 @@ import { IsString, IsNotEmpty } from 'class-validator';
 // }
 // dto/create-lesson.dto.ts
 export class CreateNoteDto {
+
     @ApiProperty()
+    @IsString()
     notesText: string;
   }
   
   export class CreateSubHeadingDto {
+
     @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     subText: string;
   }
   
   export class CreateTextContentDto {
+
     @ApiProperty()
+    @IsString()
     heading: string;
+
     @ApiProperty()
     notes?: CreateNoteDto[];
+
     @ApiProperty()
     subHeadings?: CreateSubHeadingDto[];
   }
   
   export class CreateLessonDto {
+
     @ApiProperty()
+    @IsString()
     title: string;
-    @ApiProperty()
+
+    // @ApiProperty()
+    @IsString()
     topicId?: string;
-    @ApiProperty()
-    content: CreateTextContentDto[];
+
+    // @ApiProperty()
+    content?: CreateTextContentDto[];
   }
   

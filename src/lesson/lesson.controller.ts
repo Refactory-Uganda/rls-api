@@ -22,7 +22,7 @@ export class LessonController {
   @Post()
   @ApiOperation({ summary: 'Create a Lesson' })
   async createLesson(@Body() createLessonDto: CreateLessonDto) {
-    return this.lessonService.create(createLessonDto);
+    return this.lessonService.createNew(createLessonDto);
   }
 
   @Put(':id')

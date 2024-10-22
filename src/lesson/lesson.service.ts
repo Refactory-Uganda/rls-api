@@ -8,22 +8,69 @@ import { UpdateLessonDto } from './dto/update-lesson.dto';
 export class LessonService {
     constructor(private prisma: PrismaService) {}
 
-    async createLesson(createLessonDto: CreateLessonDto) {
-        const lesson = await this.prisma.lesson.create({
-            data: {
-                title: createLessonDto.title,
-                content: createLessonDto.content,
-                topicId: createLessonDto.topicId,
-            },
-        });
+    // async createLesson(createLessonDto: CreateLessonDto) {
+    //     const lesson = await this.prisma.lesson.create({
+    //         data: {
+    //             title: createLessonDto.title,
+    //             content: createLessonDto.content,
+    //             topicId: createLessonDto.topicId,
+              
+    //         },
+    //     });
 
-        return lesson
+    //     return lesson
+    // }
+
+
+    async create(createLessonDto: CreateLessonDto) {
+      const { title, topicId, content } = createLessonDto;
+  
+      return this.prisma.lesson.create({
+        data: {
+          title,
+          topicId,
+          content: {
+            create: content.map(textContent => ({
+              heading: textContent.heading,
+              notes: {
+                create: textContent.notes?.map(note => ({
+                  notesText: note.notesText,
+                })) || [],
+              },
+              subHeadings: {
+                create: textContent.subHeadings?.map(subHeading => ({
+                  subText: subHeading.subText,
+                })) || [],
+              },
+            })),
+          },
+        },
+        include: {
+          content: {
+            include: {
+              notes: true,
+              subHeadings: true,
+            },
+          },
+        },
+      });
     }
+
     async updateLesson(id: string, updateLessonDto: UpdateLessonDto) {
         try {
           return await this.prisma.lesson.update({
             where: { id },
-            data: updateLessonDto,
+            data: 
+            {
+              title: updateLessonDto.title,
+              topicId: updateLessonDto.topicId,
+              content: {
+                update: {
+                  where: { id: string},
+                  
+                },
+              },
+            },
           });
         } catch (error) {
           throw new Error(`Error updating lesson with ID ${id}: ${error.message}`);

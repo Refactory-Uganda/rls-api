@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TextnotesService } from './textnotes.service';
-import { TextnotesController } from './textnotes.controller';
+import { NoteService } from './textnotes.service';
+import { NoteController } from './textnotes.controller';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
-  providers: [TextnotesService],
-  controllers: [TextnotesController]
+  controllers: [NoteController],
+  providers: [NoteService, PrismaService],  
 })
 export class TextnotesModule {}

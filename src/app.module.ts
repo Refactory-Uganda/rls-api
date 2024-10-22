@@ -13,6 +13,9 @@ import { ProgramModule } from './program/program.module';
 import { CoursesModule } from './courses/courses.module';
 import { TopicsModule } from './topic/topic.module';
 import { LessonModule } from './lesson/lesson.module';
+import { TextcontentModule } from './textcontent/textcontent.module';
+import { TextnotesModule } from './textnotes/textnotes.module';
+import { SubheadingModule } from './subheading/subheading.module';
 
 @Module({
   imports: [
@@ -28,7 +31,10 @@ import { LessonModule } from './lesson/lesson.module';
     ProgramModule,
     CoursesModule,
     TopicsModule,
-    LessonModule, // Ensure AuthModule is imported
+    LessonModule,
+    TextcontentModule,
+    TextnotesModule,
+    SubheadingModule, // Ensure AuthModule is imported
   ],
   controllers: [], // You can add global controllers here if needed
   providers: [], // You can add global providers here if needed

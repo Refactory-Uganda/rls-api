@@ -54,18 +54,4 @@ export class LessonService {
         )
         return lesson;
     }
-    async findAllLessons() {
-      return this.prisma.lesson.findMany({
-      
-    });
-    }
-    async findLessonById(lessonId: string) {
-      return this.prisma.lesson.findUnique({
-        where: {
-          id: lessonId,
-        
-        },
-      });
-    }
-    
 }

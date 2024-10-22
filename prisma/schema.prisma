@@ -30,6 +30,8 @@ model Topic {
   createdAt   DateTime @default(now())
   courseId    String?   @map("_courseId") @db.ObjectId
   Course      Course?   @relation(fields: [courseId], references: [id], name: "CourseTopics", onDelete:Cascade)
+  courseId    String?   @map("_courseId") @db.ObjectId
+  Course      Course?   @relation(fields: [courseId], references: [id], name: "CourseTopics", onDelete:Cascade)
 
   Lesson Lesson[]
 }

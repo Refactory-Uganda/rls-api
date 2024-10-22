@@ -14,8 +14,8 @@ export class CreateTopicDto {
   @ApiProperty()
   Description?: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  courseId: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // @ApiProperty()
+  // courseId?: string;
 }

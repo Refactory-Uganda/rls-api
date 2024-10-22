@@ -63,7 +63,7 @@ export class LessonService {
       return this.prisma.lesson.findUnique({
         where: {
           id: lessonId,
-        
+          topicId: topicId,
         },
       });
     }

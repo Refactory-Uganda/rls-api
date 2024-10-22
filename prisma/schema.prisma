@@ -75,8 +75,10 @@ enum CourseStatus {
 model TextContent {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   heading      String
+  
   notes        Note[]    
   subHeadings  SubHeading[]
+
   lessonId String? @db.ObjectId
   lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())

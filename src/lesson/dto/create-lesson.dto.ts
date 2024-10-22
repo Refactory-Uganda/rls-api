@@ -18,7 +18,7 @@ import { IsString, IsNotEmpty } from 'class-validator';
 // dto/create-lesson.dto.ts
 export class CreateNoteDto {
 
-    @ApiProperty()
+    @ApiProperty() 
     @IsString()
     notesText: string;
   }

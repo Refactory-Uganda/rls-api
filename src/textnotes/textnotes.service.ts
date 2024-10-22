@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // src/note/note.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -20,26 +21,26 @@ export class NoteService {
     return note;
   }
 
-//   async findAll() {
-//     return this.prisma.note.findMany();
-//   }
+  async findAll() {
+    return this.prisma.note.findMany();
+  }
 
-//   async findOne(id: string) {
-//     return this.prisma.note.findUnique({
-//       where: { id },
-//     });
-//   }
+  async findOne(id: string) {
+    return this.prisma.note.findUnique({
+      where: { id },
+    });
+  }
 
-//   async update(id: string, updateNoteDto: CreateNoteDto) {
-//     return this.prisma.note.update({
-//       where: { id },
-//       data: updateNoteDto,
-//     });
-//   }
+  async update(id: string, updateNoteDto: CreateNoteDto) {
+    return this.prisma.note.update({
+      where: { id },
+      data: updateNoteDto,
+    });
+  }
 
-//   async remove(id: string) {
-//     return this.prisma.note.delete({
-//       where: { id },
-//     });
-//   }
+  async remove(id: string) {
+    return this.prisma.note.delete({
+      where: { id },
+    });
+  }
 }

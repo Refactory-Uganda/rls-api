@@ -56,14 +56,18 @@ export class LessonService {
     }
     async findAllLessons() {
       return this.prisma.lesson.findMany({
-      
+        select: {
+          title: true,
+          content: true,
+          topic: true,   
+      },
     });
     }
-    async findLessonById(lessonId: string) {
-      return this.prisma.lesson.findUnique({
+    async findLessonByUnique(topicId: string, lessonId: string) {
+      return this.prisma.lesson.findFirst({
         where: {
           id: lessonId,
-        
+          topicId: topicId, 
         },
       });
     }

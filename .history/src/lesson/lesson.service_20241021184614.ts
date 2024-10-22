@@ -56,16 +56,11 @@ export class LessonService {
     }
     async findAllLessons() {
       return this.prisma.lesson.findMany({
-      
-    });
-    }
-    async findLessonById(lessonId: string) {
-      return this.prisma.lesson.findUnique({
-        where: {
-          id: lessonId,
-        
+        select: {
+          title: true,
+          content: true,
+          topic: true,   // Assuming 'topic' is the relationship field
         },
       });
     }
-    
 }

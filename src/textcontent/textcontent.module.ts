@@ -1,9 +1,11 @@
+// src/text-content/text-content.module.ts
 import { Module } from '@nestjs/common';
-import { TextcontentService } from './textcontent.service';
-import { TextcontentController } from './textcontent.controller';
+import { TextContentService } from './textcontent.service';
+import { TextContentController } from './textcontent.controller';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
-  providers: [TextcontentService],
-  controllers: [TextcontentController]
+  controllers: [TextContentController],
+  providers: [TextContentService, PrismaService],
 })
-export class TextcontentModule {}
+export class TextContentModule {}

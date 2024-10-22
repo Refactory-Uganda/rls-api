@@ -1,40 +1,78 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { CreateLessonDto } from './dto/create-lesson.dto';
 
 @Injectable()
 export class LessonService {
     constructor(private prisma: PrismaService) {}
 
-    async createLesson(createLessonDto: CreateLessonDto) {
-        const lesson = await this.prisma.lesson.create({
-            data: {
-                title: createLessonDto.title,
-                content: createLessonDto.content,
-                topicId: createLessonDto.topicId,
-            },
-        });
+    // async createLesson(createLessonDto: CreateLessonDto) {
+    //     const lesson = await this.prisma.lesson.create({
+    //         data: {
+    //             title: createLessonDto.title,
+    //             content: createLessonDto.content,
+    //             topicId: createLessonDto.topicId,
+              
+    //         },
+    //     });
 
-        return lesson
+    //     return lesson
+    // }
+
+
+    async createNew(createLessonDto: CreateLessonDto) {
+      const lesson = await this.prisma.lesson.create({
+        data: {
+          title: createLessonDto.title,
+          topicId: createLessonDto.topicId,
+          // content: {
+          //   create: {
+          //     notes: createLessonDto.content,
+          //   },
+          // },
+        },
+      });
+      return lesson;
     }
+
     async updateLesson(id: string, updateLessonDto: UpdateLessonDto) {
         try {
           return await this.prisma.lesson.update({
             where: { id },
-            data: updateLessonDto,
+            data: 
+            {
+              title: updateLessonDto.title,
+              topicId: updateLessonDto.topicId,
+              // content: {
+              //   update: {
+              //     where: { id: string},
+                  
+              //   },
+              // },
+            },
           });
         } catch (error) {
           throw new Error(`Error updating lesson with ID ${id}: ${error.message}`);
         }
       }
     
-      async patchLesson(id: string, partialUpdateDto: Partial<UpdateLessonDto>) {
+    async patchLesson(id: string, partialUpdateDto: Partial<UpdateLessonDto>) {
         try {
           return await this.prisma.lesson.update({
             where: { id },
-            data: partialUpdateDto,
+            data: 
+            {
+              title: partialUpdateDto.title,
+              topicId: partialUpdateDto.topicId,
+              // content: {
+              //   update: {
+              //     where: { id: string},
+                  
+              //   },
+              // },
+            },
           });
         } catch (error) {
           throw new Error(

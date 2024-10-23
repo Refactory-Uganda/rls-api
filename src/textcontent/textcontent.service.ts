@@ -17,6 +17,30 @@ export class TextContentService {
     return text;
   }
 
+  async updateTextContent(id: string, updateTextContentDto: UpdateTextContentDto) {
+    try {
+      return await this.prisma.note.update({
+        where: { id },
+        data: updateTextContentDto,
+      });
+    } catch (error) {
+      throw new Error(`Error updating textcontent with ID ${id}: ${error.message}`);
+    }
+  }
+
+  async patchTextContent(id: string, partialUpdateDto: Partial<UpdateTextContentDto>) {
+    try {
+      return await this.prisma.note.update({
+        where: { id },
+        data: partialUpdateDto,
+      });
+    } catch (error) {
+      throw new Error(
+        `Error partially updating textcontent with ID ${id}: ${error.message}`,
+      );
+    }
+  }
+
 async delete( id: string) {
   const text = await this.prisma.textContent.delete({
     where: 

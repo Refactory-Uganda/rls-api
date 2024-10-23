@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto, UpdateQuizDto } from './dto/create-quiz.dto';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuizDto, UpdateQuizDto } from './dto/create-quiz.dto';
@@ -21,7 +22,13 @@ export class QuizService {
   }
 
   async findAll() {
-    return this.prisma.quiz.findMany({ include: { questions: true } });
+    const Quiz = await this.prisma.quiz.findMany({
+      include: { 
+        questions: true
+      } 
+    });
+
+    return {'Quiz': Quiz}
   }
 
   async findOne(id: string) {

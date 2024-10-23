@@ -21,6 +21,30 @@ export class NoteService {
     return note;
   }
 
+  async updateTextnotes(id: string, updateTextnotesDto: UpdateTextnotesDto) {
+    try {
+      return await this.prisma.note.update({
+        where: { id },
+        data: updateTextnotesDto,
+      });
+    } catch (error) {
+      throw new Error(`Error updating textnotes with ID ${id}: ${error.message}`);
+    }
+  }
+
+  async patchTextnotes(id: string, partialUpdateDto: Partial<UpdateTextnotesDto>) {
+    try {
+      return await this.prisma.note.update({
+        where: { id },
+        data: partialUpdateDto,
+      });
+    } catch (error) {
+      throw new Error(
+        `Error partially updating textnotes with ID ${id}: ${error.message}`,
+      );
+    }
+  }
+
   async remove(id: string) {
     return this.prisma.note.delete({
       where: { id },

@@ -48,6 +48,7 @@ model Lesson {
 model Quiz {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   title     String
+  description String
   questions Question[]
   lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete:Cascade)
   lessonId  String     @unique @db.ObjectId
@@ -58,12 +59,25 @@ model Quiz {
 model Question {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String
-  options   String[] 
-  answer    Int 
+  // options   String[] 
+  answer    String
+  order     Int
+  explanation String?
   quiz      Quiz     @relation(fields: [quizId], references: [id])
   quizId    String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Option Option[]
+}
+
+
+model Option {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  optionText String
+  iscorrect Boolean
+  order Int
+  questionId String? @db.ObjectId
+  question Question? @relation(fields: [questionId], references: [id])
 }
 
 
@@ -104,9 +118,3 @@ model SubHeading {
   updatedAt DateTime @updatedAt  
 }
 
-// model Quiz {
-//   id          Int      @id @default(autoincrement())
-//   quizContent String
-//   textContentId Int
-//   textContent   TextContent @relation(fields: [textContentId], references: [id], onDelete: Cascade)
-// }

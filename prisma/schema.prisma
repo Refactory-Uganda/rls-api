@@ -37,7 +37,7 @@ model Topic {
 model Lesson {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  text      String
+  text      String?
   content   TextContent[]
   topic     Topic?    @relation(fields: [topicId], references: [id], onDelete:Cascade)
   topicId   String?   @db.ObjectId

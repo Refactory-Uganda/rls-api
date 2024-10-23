@@ -52,13 +52,13 @@ export class CreateNoteDto {
 
     @ApiProperty()
     @IsString()
-    text: string;
+    text?: string;
 
-    // @ApiProperty()
+    @ApiProperty()
     @IsString()
     topicId?: string;
 
     // @ApiProperty()
-    content?: CreateTextContentDto[];
+    // content?: CreateTextContentDto[];
   }
   

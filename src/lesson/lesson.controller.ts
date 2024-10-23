@@ -19,11 +19,20 @@ import { UpdateLessonDto } from '../lesson/dto/update-lesson.dto';
 export class LessonController {
   constructor(private lessonService: LessonService) {}
 
-  @Post()
+  @Post(':topic_id')
   @ApiOperation({ summary: 'Create a Lesson' })
-  async createLesson(@Body() createLessonDto: CreateLessonDto) {
+  async createLesson(@Param('topic_id') topic_id:string, @Body() createLessonDto: CreateLessonDto) {
     return this.lessonService.createNew(createLessonDto);
   }
+
+  // @Post(':course_id')
+  // @ApiOperation({ summary: 'Create Topic' })
+  // async create(
+  //   @Param('course_id') course_id: string,
+  //   @Body() body: CreateTopicDto,
+  // ) {
+  //   return this.topicService.create({ ...body, courseId: course_id });
+  // }
 
   @Put(':id')
   @ApiOperation({ summary: 'Update Lesson' })

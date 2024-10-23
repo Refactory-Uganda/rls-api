@@ -1,28 +1,31 @@
 /* eslint-disable prettier/prettier */
 import { IsOptional, IsString, IsArray, IsNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateTextContentDto {
   
   @IsOptional()
   @IsString()
   @IsNotEmpty()
+  @ApiProperty()
   heading?: string;
 
   @IsOptional()
   @IsArray()
-  notes?: string[];
+  @ApiProperty()
+  notes?: { content: string }[];
 
   @IsOptional()
   @IsArray()
-  subHeadings?: string[];
+  @ApiProperty()
+  subHeadings?: { title: string }[];
 
   @IsOptional()
   @IsString()
+  @ApiProperty()
   lessonId?: string;
 
   @IsOptional()
-  createdAt?: Date;
-
-  @IsOptional()
+  @ApiProperty()
   updatedAt?: Date;
 }

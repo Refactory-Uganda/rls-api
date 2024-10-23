@@ -1,9 +1,11 @@
 /* eslint-disable prettier/prettier */
 // src/note/note.controller.ts
-import { Controller, Post, Body, Get, Param, Delete, Patch } from '@nestjs/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Controller, Post, Body, Get, Param, Delete, Patch, Put } from '@nestjs/common';
 import { NoteService } from './textnotes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UpdateTextnotesDto } from './dto/update-textnotes.dto';
 
 @Controller('notes')
 @ApiTags('Notes')
@@ -17,22 +19,22 @@ export class NoteController {
     return this.noteService.create(createNoteDto);
   }
 
-  @Put('textnotes_id')
+  @Put(':textnotes_id')
   @ApiOperation({ summary: 'Update Textnotes' })
   async update(
     @Param('textnotes_id') textnotes_id: string,
     @Body() updateTextnotesDto: UpdateTextnotesDto,
   ) {
-    return this.textnotesService.updateTextnotes(textnotes_id, updateTextnotesDto);
+    return this.noteService.updateTextnotes(textnotes_id, updateTextnotesDto);
   }
 
-  @Patch('textnotes_id')
+  @Patch(':textnotes_id')
   @ApiOperation({ summary: 'Partially Update Textnotes' })
   async patch(
     @Param('textnotes_id') textnotes_id: string,
     @Body() partialUpdateDto: Partial<UpdateTextnotesDto>,
   ) {
-    return this.textnotesService.patchTextnotes(textnotes_id, partialUpdateDto);
+    return this.noteService.patchTextnotes(textnotes_id, partialUpdateDto);
   }
 
   @Delete(':id')

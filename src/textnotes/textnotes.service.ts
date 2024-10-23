@@ -3,6 +3,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateNoteDto } from './dto/create-note.dto';
+import { UpdateTextnotesDto } from './dto/update-textnotes.dto';
 
 @Injectable()
 export class NoteService {
@@ -23,9 +24,17 @@ export class NoteService {
 
   async updateTextnotes(id: string, updateTextnotesDto: UpdateTextnotesDto) {
     try {
+      const updateData: {
+        notesText?: string;
+        textContentId?: string;
+      } = {
+        notesText: updateTextnotesDto.notesText,
+        textContentId: updateTextnotesDto.textContentId,
+      };
+
       return await this.prisma.note.update({
         where: { id },
-        data: updateTextnotesDto,
+        data: updateData,
       });
     } catch (error) {
       throw new Error(`Error updating textnotes with ID ${id}: ${error.message}`);
@@ -34,9 +43,16 @@ export class NoteService {
 
   async patchTextnotes(id: string, partialUpdateDto: Partial<UpdateTextnotesDto>) {
     try {
+      const partialUpdateData: {
+        notesText?: string;
+        textContentId?: string;
+      } = {
+        ...partialUpdateDto,
+      };
+
       return await this.prisma.note.update({
         where: { id },
-        data: partialUpdateDto,
+        data: partialUpdateData,
       });
     } catch (error) {
       throw new Error(
@@ -44,6 +60,9 @@ export class NoteService {
       );
     }
   }
+
+
+
 
   async remove(id: string) {
     return this.prisma.note.delete({

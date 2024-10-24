@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
@@ -9,7 +10,7 @@ export class QuestionService {
   async create(createQuestionDto: CreateQuestionDto) {
     const { options, ...questionData } = createQuestionDto;
 
-    return this.prisma.question.create({
+    const question = await this.prisma.question.create({
       data: {
         ...questionData,
         // Option: {
@@ -18,6 +19,8 @@ export class QuestionService {
       },
       include: { Option: true },
     });
+
+    return {'Question': question}
   }
 
   async remove(id: string) {

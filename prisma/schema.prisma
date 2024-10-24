@@ -48,7 +48,7 @@ model Lesson {
 model Quiz {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   title     String
-  description String
+  description String?
   questions Question[]
   lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete:Cascade)
   lessonId  String     @unique @db.ObjectId

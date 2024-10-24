@@ -7,10 +7,9 @@ import { Topic } from '@prisma/client';
 // import { CreateTopicDto } from './dto/create-topic.dto'; // adjust path as needed
 import { UpdateTopicDto } from './dto/update-topic.dto';
 
-
 @Injectable()
 export class TopicService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async create(data: {
     Title: string;
@@ -41,7 +40,10 @@ export class TopicService {
     try {
       return await this.prisma.topic.update({
         where: { id },
-        data: updateTopicDto,
+        data: {
+          Title: updateTopicDto.Title,
+          Description: updateTopicDto.Description,
+        },
       });
     } catch (error) {
       throw new Error(`Error updating topic with ID ${id}: ${error.message}`);
@@ -81,5 +83,4 @@ export class TopicService {
       include: { Course: true },
     });
   }
-
 }

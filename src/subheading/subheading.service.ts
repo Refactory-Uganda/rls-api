@@ -3,6 +3,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSubHeadingDto } from './dto/create-sub-heading.dto';
+import { UpdateSubheadingDto } from './dto/update-subheading.dto';
 
 @Injectable()
 export class SubHeadingService {
@@ -19,6 +20,38 @@ export class SubHeadingService {
     }); 
 
     return subHeading;
+  }
+
+  async updateSubheading(id: string, updateSubheadingDto: UpdateSubheadingDto) {
+    try {
+      const updateData = {
+        subText: updateSubheadingDto.subText,
+      textContentId: updateSubheadingDto.textContentId,
+      };
+      return await this.prisma.subHeading.update({
+        where: { id },
+        data: updateData,
+      });
+    } catch (error) {
+      throw new Error(`Error updating subheading with ID ${id}: ${error.message}`);
+    }
+  }
+
+  async patchTextContent(id: string, partialUpdateDto: Partial<UpdateSubheadingDto>) {
+    try {
+      const updateData = {
+        subText: partialUpdateDto.subText,
+        textContentId: partialUpdateDto.textContentId,
+      };
+      return await this.prisma.subHeading.update({
+        where: { id },
+        data: updateData,
+      });
+    } catch (error) {
+      throw new Error(
+        `Error partially updating subheading with ID ${id}: ${error.message}`,
+      );
+    }
   }
 
 

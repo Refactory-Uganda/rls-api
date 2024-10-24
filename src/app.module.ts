@@ -16,6 +16,9 @@ import { LessonModule } from './lesson/lesson.module';
 import { TextContentModule } from './textcontent/textcontent.module'; // Corrected from TextcontentModule to TextContentModule
 import { TextnotesModule } from './textnotes/textnotes.module';
 import { SubheadingModule } from './subheading/subheading.module';
+import { QuizModule } from './quiz/quiz.module';
+import { QuestionModule } from './question/question.module';
+import { OptionModule } from './option/option.module';
 
 @Module({
   imports: [
@@ -34,7 +37,10 @@ import { SubheadingModule } from './subheading/subheading.module';
     LessonModule,
     TextContentModule, // Corrected from TextcontentModule to TextContentModule
     TextnotesModule,
-    SubheadingModule, 
+    SubheadingModule,
+    QuizModule,
+    QuestionModule,
+    OptionModule, 
   ],
   controllers: [], 
   providers: [], 

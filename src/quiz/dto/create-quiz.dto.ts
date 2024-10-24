@@ -15,22 +15,10 @@ export class CreateQuizDto {
 
   @IsArray()
   @IsOptional()
-  @ApiProperty()
+  // @ApiProperty()
   questions?: CreateQuestionDto[];
 
   @IsString()
   @ApiProperty()
   lessonId: string;
-}
-
-export class UpdateQuizDto {
-  @IsString()
-  @IsOptional()
-  @ApiProperty()
-  title?: string;
-
-  @IsString()
-  @IsOptional()
-  @ApiProperty()
-  description?: string;
 }

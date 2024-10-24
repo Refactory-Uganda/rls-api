@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { QuizService } from './quiz.service';
-import { CreateQuizDto, UpdateQuizDto } from './dto/create-quiz.dto';
+import { CreateQuizDto } from './dto/create-quiz.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('quizzes')
@@ -14,22 +14,8 @@ export class QuizController {
     return this.quizService.create(createQuizDto);
   }
 
-  @Get()
-  findAll() {
-    return this.quizService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.quizService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateQuizDto: UpdateQuizDto) {
-    return this.quizService.update(id, updateQuizDto);
-  }
-
   @Delete(':id')
+  @ApiOperation({summary: 'Delete a Quiz'})
   remove(@Param('id') id: string) {
     return this.quizService.remove(id);
   }

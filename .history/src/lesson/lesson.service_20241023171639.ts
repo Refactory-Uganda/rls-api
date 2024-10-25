@@ -104,15 +104,6 @@ export class LessonService {
       });
     }
 
-    async findContentByLessonId(lessonId: string) {
-      return this.prisma.lesson.findUnique({
-        where: {
-          id: lessonId,
-        },
-        select: {
-          content: true, 
-        },
-      });
-    }
+    
     
 }

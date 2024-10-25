@@ -34,15 +34,9 @@ export class QuizService {
         id: quizId,
       },
       include: {
-        questions: true,  
+        questions: true,  // Assuming there's a relationship between quiz and questions
       },
     });
   }
-  async findQuizzes() {
-    return this.prisma.quiz.findMany({
-      include: {
-        questions: true, 
-      },
-    });
-  }
+  
 }

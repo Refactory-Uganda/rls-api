@@ -29,8 +29,11 @@ export class QuestionService {
     });
   }
 
-  async findQuestions() {
+  async findQuestionsByQuizId(quizId: string) {
     return this.prisma.question.findMany({
+      where: {
+        quizId: quizId,
+      },
     });
   }
   

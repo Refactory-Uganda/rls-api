@@ -28,10 +28,4 @@ export class QuestionService {
       where: { id },
     });
   }
-
-  async findQuestions() {
-    return this.prisma.question.findMany({
-    });
-  }
-  
 }

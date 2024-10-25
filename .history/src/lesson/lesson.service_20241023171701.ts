@@ -110,7 +110,7 @@ export class LessonService {
           id: lessonId,
         },
         select: {
-          content: true, 
+          content: true, // Assuming the "content" field is where your text content is stored
         },
       });
     }

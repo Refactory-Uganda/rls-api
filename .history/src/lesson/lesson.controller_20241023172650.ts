@@ -74,7 +74,7 @@ async findLessonById(
 
 @Get(':lessonId/content')
 @ApiOperation({ summary: 'Get Content of a Lesson by lessonId' })
-async getLessonContent(@Param('lessonId') lessonId: string) {
+async getLessonContent(('lessonId') lessonId: string) {
   return this.lessonService.findContentByLessonId(lessonId);
 }
 

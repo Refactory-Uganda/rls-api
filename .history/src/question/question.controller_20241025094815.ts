@@ -22,9 +22,5 @@ export class QuestionController {
     return this.questionService.remove(id);
   }
 
-  @Get()
-  @ApiOperation({summary: 'Get all questions'})
-  findAll() {
-    return this.questionService.findQuestions();
-  }
+  @Get
 }

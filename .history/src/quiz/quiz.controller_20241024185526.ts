@@ -21,17 +21,5 @@ export class QuizController {
     return this.quizService.remove(id);
   }
 
-  @Get(':quizId')
-@ApiOperation({ summary: 'Get a Quiz and its Questions' })
-async findQuizAndQuestions(
-  @Param('quizId') quizId: string
-) {
-  return await this.quizService.findQuizById(quizId);
-}
-
- @Get()
- @ApiOperation({ summary: 'Get all Quizzes' })
- findAll() {
-  return this.quizService.findQuizzes();
-}
+  
 }

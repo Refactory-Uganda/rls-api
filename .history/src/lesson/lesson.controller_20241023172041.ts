@@ -72,7 +72,7 @@ async findLessonById(
   return await this.lessonService.findLessonById(lessonId);
 }
 
-@Get(':lessonId/content')
+@Get('lessons/:lessonId/content')
 @ApiOperation({ summary: 'Get Content of a Lesson by lessonId' })
 async getLessonContent(@Param('lessonId') lessonId: string) {
   return this.lessonService.findContentByLessonId(lessonId);

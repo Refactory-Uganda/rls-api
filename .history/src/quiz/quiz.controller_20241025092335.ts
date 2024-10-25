@@ -30,8 +30,4 @@ async findQuizAndQuestions(
 }
 
  @Get()
- @ApiOperation({ summary: 'Get all Quizzes' })
- findAll() {
-  return this.quizService.findQuizzes();
-}
 }

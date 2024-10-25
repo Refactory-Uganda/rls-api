@@ -28,21 +28,5 @@ export class QuizService {
     });
   }
 
-  async findQuizById(quizId: string) {
-    return this.prisma.quiz.findUnique({
-      where: {
-        id: quizId,
-      },
-      include: {
-        questions: true,  
-      },
-    });
-  }
-  async findQuizzes() {
-    return this.prisma.quiz.findMany({
-      include: {
-        questions: true, 
-      },
-    });
-  }
+  
 }

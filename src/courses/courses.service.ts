@@ -142,13 +142,15 @@ export class CourseService {
               data: {
                 Title: topic.Title,
                 Description: topic.Description,
-                lessons: topic.lessons?.map((lesson) => ({
-                  where: { id: lesson.id },
-                  data: {
-                    title: lesson.title,
-                    content: lesson.content,
-                  },
-                })),
+                lessons: {
+                  update: topic.lessons?.map((lesson) => ({
+                    where: { id: lesson.id },
+                    data: {
+                      title: lesson.title,
+                      content: lesson.content,
+                    },
+                  })),
+                },
               },
             })),
           },
@@ -166,7 +168,7 @@ export class CourseService {
     }
   }
   
-
+  
   async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
     try {
       return await this.prisma.course.update({
@@ -181,13 +183,15 @@ export class CourseService {
               data: {
                 Title: topic.Title,
                 Description: topic.Description,
-                lessons: topic.lessons?.map((lesson) => ({
-                  where: { id: lesson.id },
-                  data: {
-                    title: lesson.title,
-                    content: lesson.content,
-                  },
-                })),
+                lessons: {
+                  update: topic.lessons?.map((lesson) => ({
+                    where: { id: lesson.id },
+                    data: {
+                      title: lesson.title,
+                      content: lesson.content,
+                    },
+                  })),
+                },
               },
             })),
           },
@@ -204,6 +208,7 @@ export class CourseService {
       );
     }
   }
+  
   
 
 

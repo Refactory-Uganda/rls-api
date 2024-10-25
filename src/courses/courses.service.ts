@@ -213,7 +213,11 @@ export class CourseService {
   async findAll() {
     try {
       return await this.prisma.course.findMany({
-        include: { topics: true }
+        include: { 
+          topics: {
+          include: { Lesson: true }
+        }
+      }
       });
     } catch (error) {
       throw new Error(`Error fetching courses: ${error.message}`);
@@ -225,7 +229,9 @@ export class CourseService {
     try {
       return await this.prisma.course.findUnique({
         where: { id: id },
-        include: { topics: true }
+        include: { topics: {
+          include: {Lesson:true}
+        } }
 
       });
     } catch (error) {

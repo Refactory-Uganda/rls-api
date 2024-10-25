@@ -142,6 +142,13 @@ export class CourseService {
               data: {
                 Title: topic.Title,
                 Description: topic.Description,
+                lessons: topic.lessons?.map((lesson) => ({
+                  where: { id: lesson.id },
+                  data: {
+                    title: lesson.title,
+                    content: lesson.content,
+                  },
+                })),
               },
             })),
           },
@@ -158,6 +165,7 @@ export class CourseService {
       );
     }
   }
+  
 
   async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
     try {
@@ -173,6 +181,13 @@ export class CourseService {
               data: {
                 Title: topic.Title,
                 Description: topic.Description,
+                lessons: topic.lessons?.map((lesson) => ({
+                  where: { id: lesson.id },
+                  data: {
+                    title: lesson.title,
+                    content: lesson.content,
+                  },
+                })),
               },
             })),
           },
@@ -189,6 +204,7 @@ export class CourseService {
       );
     }
   }
+  
 
 
   // async findCourseTopics() {

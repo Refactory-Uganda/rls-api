@@ -17,6 +17,7 @@ export class UpdateCourseDto {
   @IsOptional()
   @IsArray()
   topics?: {
+    lessons: any;
     id: string;
     Title?: string;
     Description?: string;

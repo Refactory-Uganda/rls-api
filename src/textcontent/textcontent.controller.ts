@@ -10,6 +10,12 @@ import { UpdateTextContentDto } from './dto/update-textcontent.dto';
 @Controller('text_content')
 @ApiTags('textcontent')
 export class TextContentController {
+  remove(id: string) {
+    throw new Error('Method not implemented.');
+  }
+  delete(id: string) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly textContentService: TextContentService) {}
 
   @Post()

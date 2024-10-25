@@ -5,10 +5,14 @@ import {  CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+// import { Course } from '@prisma/client';
 
 @Controller('courses')
 @ApiTags('Course')
 export class CourseController {
+  createCourseDraft(createCourseDto: CreateCourseDto) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly courseService: CourseService) {}
 
   // @Post()

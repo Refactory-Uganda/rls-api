@@ -15,7 +15,7 @@ export class CreateTopicDto {
   @ApiProperty()
   Description?: string;
 
-  @ApiProperty({type: [CreateLessonDto]})
+  @ApiProperty({ type: [CreateLessonDto] })
   lessons: CreateLessonDto[]
 
   // @IsNotEmpty()

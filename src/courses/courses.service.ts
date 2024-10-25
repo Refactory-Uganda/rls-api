@@ -11,10 +11,10 @@ export class CourseService {
 
   async createCourseDraft(dto: CreateCourseDto) {
     // check for topics
-    const hasTopics = dto.topics && dto.topics.length>0;
+    const hasTopics = dto.topics && dto.topics.length > 0;
 
     // set to draft if no topics
-    const status = hasTopics?dto.status?? `DRAFT`:`DRAFT`;
+    const status = hasTopics ? dto.status ?? `DRAFT` : `DRAFT`;
 
     return await this.prisma.course.create({
       data: {
@@ -29,14 +29,14 @@ export class CourseService {
     })
   }
 
-  async publishCourse(id:string) {
+  async publishCourse(id: string) {
     // check for topis
-    const course = await this.prisma.course.findUnique({ 
+    const course = await this.prisma.course.findUnique({
       where: { id },
-      include: { topics:true }
+      include: { topics: true }
     });
 
-    if(!course.topics || course.topics.length === 0) {
+    if (!course.topics || course.topics.length === 0) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -54,7 +54,7 @@ export class CourseService {
     });
   }
 
-  async draftCourse(id:string) {
+  async draftCourse(id: string) {
     return await this.prisma.course.update({
       where: { id },
       data: {
@@ -87,6 +87,7 @@ export class CourseService {
         ? dto.topics.map((topic) => ({
           Title: topic.Title,
           Description: topic.Description,
+          lessons: topic.lessons
         }))
         : []; // Default to an empty array if no topics are provided
 
@@ -125,6 +126,8 @@ export class CourseService {
       );
     }
   }
+
+
   async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
     try {
       return await this.prisma.course.update({

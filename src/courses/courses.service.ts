@@ -156,8 +156,6 @@ export class CourseService {
     }
   }
 
-
-
   async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
     try {
       return await this.prisma.course.update({

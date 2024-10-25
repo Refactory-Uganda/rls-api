@@ -42,6 +42,7 @@ export class LessonService {
             data: 
             {
               title: updateLessonDto.title,
+              text: updateLessonDto.text,
               topicId: updateLessonDto.topicId,
               // content: {
               //   update: {

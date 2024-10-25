@@ -25,6 +25,6 @@ export class QuestionController {
   @Get()
   @ApiOperation({summary: 'Get all questions'})
   findAll() {
-    return this.questionService.findQuestions();
+    return this.questionService.findAll();
   }
 }

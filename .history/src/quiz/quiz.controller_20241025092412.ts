@@ -34,4 +34,4 @@ async findQuizAndQuestions(
  findAll() {
   return this.quizService.findQuizzes();
 }
-}
+

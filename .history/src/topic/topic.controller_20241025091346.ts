@@ -45,9 +45,9 @@ export class TopicController {
 
 
 @Get()
-@ApiOperation({ summary: 'Get all Topics by courseId' })
-async findAllTopics() {
-  return await this.topicService.findAllTopicsByCourse();
+@ApiOperation({ summary: 'Get all Topics ' })
+async findAllTopics(@Param('courseId') courseId: string) {
+  return await this.topicService.findAllTopicsByCourse(courseId);
 }
 @Get(':id')
 @ApiOperation({ summary: 'Get Topic by id' })

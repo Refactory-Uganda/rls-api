@@ -37,12 +37,6 @@ export class QuizService {
         questions: true,  
       },
     });
-  }
-  async findQuizzes() {
-    return this.prisma.quiz.findMany({
-      include: {
-        questions: true, 
-      },
-    });
-  }
+  
+  
 }

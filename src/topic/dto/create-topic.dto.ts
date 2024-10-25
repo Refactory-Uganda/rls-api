@@ -2,6 +2,7 @@
 // src/topics/dto/create-topic.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { CreateLessonDto } from 'src/lesson/dto/create-lesson.dto';
 
 export class CreateTopicDto {
   @IsNotEmpty()
@@ -13,6 +14,9 @@ export class CreateTopicDto {
   @IsString()
   @ApiProperty()
   Description?: string;
+
+  @ApiProperty({ type: [CreateLessonDto] })
+  lessons: CreateLessonDto[]
 
   // @IsNotEmpty()
   // @IsString()

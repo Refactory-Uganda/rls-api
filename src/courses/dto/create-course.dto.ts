@@ -2,6 +2,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { CourseStatus } from "@prisma/client";
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
 
 export class CreateTopicDto {
@@ -14,6 +15,9 @@ export class CreateTopicDto {
     @IsOptional()
     @ApiProperty()
     Description: string;
+
+    @ApiProperty({ type: [CreateLessonDto] })
+    lessons?: CreateLessonDto[]
   }
   
   export class CreateCourseDto {

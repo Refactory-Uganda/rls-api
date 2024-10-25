@@ -29,9 +29,5 @@ export class QuestionService {
     });
   }
 
-  async findQuestions() {
-    return this.prisma.question.findMany({
-    });
-  }
   
 }

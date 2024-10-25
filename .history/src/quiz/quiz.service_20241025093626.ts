@@ -38,11 +38,12 @@ export class QuizService {
       },
     });
   }
-  async findQuizzes() {
+  async findAllQuizzes() {
     return this.prisma.quiz.findMany({
       include: {
-        questions: true, 
+        questions: true, // Includes related questions with each quiz
       },
     });
   }
+
 }

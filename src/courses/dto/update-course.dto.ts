@@ -1,24 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { IsArray, IsOptional, IsString } from "class-validator";
+import { PartialType } from "@nestjs/swagger";
+import { CreateCourseDto, CreateTopicDto } from "./create-course.dto";
+import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
-export class UpdateCourseDto {
-  @IsOptional()
-  @IsString()
-  Title?: string;
-
-  @IsOptional()
-  @IsString()
-  Description?: string;
-
-  @IsOptional()
-  @IsString()
-  Duration?: string;
-
-  @IsOptional()
-  @IsArray()
-  topics?: {
-    id: string;
-    Title?: string;
-    Description?: string;
-  }[];
-}
+export class UpdateCourseDto extends PartialType(CreateCourseDto) {}
+export class UpdateTopicDto extends PartialType(CreateTopicDto) {}
+export class UpdateLessonDto extends PartialType (CreateLessonDto) {}

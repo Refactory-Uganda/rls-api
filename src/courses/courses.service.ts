@@ -127,7 +127,6 @@ export class CourseService {
     }
   }
 
-
   async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
     try {
       return await this.prisma.course.update({
@@ -142,10 +141,24 @@ export class CourseService {
               data: {
                 Title: topic.Title,
                 Description: topic.Description,
+                Lesson: {
+                  update: topic.lessons?.map((lesson) => ({
+                    where: { id: lesson.id },
+                    data: {
+                      title: lesson.title,
+                      text: lesson.text,
+                    },
+                  })) || [], // send empty array if undefined
+                },
               },
-            })),
+            })) || [], // send empty array if no topics
           },
         },
+        include: {
+          topics: {
+            include: { Lesson: true }
+          }
+        }
       });
     } catch (error) {
       throw new HttpException(
@@ -169,7 +182,7 @@ export class CourseService {
           Duration: partialUpdateDto.Duration,
           topics: {
             update: partialUpdateDto.topics?.map((topic) => ({
-              where: { id: topic.id },
+              where: { id },
               data: {
                 Title: topic.Title,
                 Description: topic.Description,
@@ -213,11 +226,11 @@ export class CourseService {
   async findAll() {
     try {
       return await this.prisma.course.findMany({
-        include: { 
+        include: {
           topics: {
-          include: { Lesson: true }
+            include: { Lesson: true }
+          }
         }
-      }
       });
     } catch (error) {
       throw new Error(`Error fetching courses: ${error.message}`);
@@ -229,9 +242,11 @@ export class CourseService {
     try {
       return await this.prisma.course.findUnique({
         where: { id: id },
-        include: { topics: {
-          include: {Lesson:true}
-        } }
+        include: {
+          topics: {
+            include: { Lesson: true }
+          }
+        }
 
       });
     } catch (error) {

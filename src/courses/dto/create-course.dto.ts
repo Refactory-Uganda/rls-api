@@ -6,6 +6,10 @@ import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
 
 export class CreateTopicDto {
+
+  @IsString()
+  id: string
+
     @IsString()
     @IsNotEmpty()
     @ApiProperty()
@@ -21,6 +25,10 @@ export class CreateTopicDto {
   }
   
   export class CreateCourseDto {
+
+    @IsString()
+    id: string
+
     @IsString()
     @IsNotEmpty()
     @ApiProperty()

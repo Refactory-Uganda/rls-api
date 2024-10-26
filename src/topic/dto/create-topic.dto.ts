@@ -5,6 +5,10 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { CreateLessonDto } from 'src/lesson/dto/create-lesson.dto';
 
 export class CreateTopicDto {
+
+  @IsString()
+  id: string;
+
   @IsNotEmpty()
   @IsString()
   @ApiProperty()

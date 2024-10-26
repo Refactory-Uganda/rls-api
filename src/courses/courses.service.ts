@@ -29,6 +29,40 @@ export class CourseService {
     })
   }
 
+  async updateCourse(id:string, dto: UpdateCourseDto) {
+    if (!id) {
+      throw new Error('Course ID must be provided');
+  }
+  // Check if the course exists
+  const course = await this.prisma.course.findUnique({
+      where: {
+          id: id,  // Ensure id is not undefined
+      }
+  });
+
+    if (!course) {
+        throw new Error('Course not found');
+    }
+
+    // Check for topics and set status accordingly
+    const hasTopics = dto.topics && dto.topics.length > 0;
+    const status = hasTopics ? dto.status ?? course.status : 'DRAFT';
+
+    return await this.prisma.course.update({
+        where: { id: dto.id },
+        data: {
+            Title: dto.Title ?? course.Title,
+            Description: dto.Description ?? course.Description,
+            Duration: dto.Duration ?? course.Duration,
+            status,
+            topics: {
+                deleteMany: {}, // Clear existing topics if needed
+                create: dto.topics ? dto.topics : [],
+            },
+        },
+    });
+}
+
   async publishCourse(id: string) {
     // check for topis
     const course = await this.prisma.course.findUnique({
@@ -128,75 +162,145 @@ export class CourseService {
   }
 
 
-  async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
-    try {
-      return await this.prisma.course.update({
-        where: { id },
-        data: {
-          Title: updateCourseDto.Title,
-          Description: updateCourseDto.Description,
-          Duration: updateCourseDto.Duration,
-          topics: {
-            update: updateCourseDto.topics?.map((topic) => ({
-              where: { id: topic.id },
-              data: {
-                Title: topic.Title,
-                Description: topic.Description,
-                lessons: {
-                  update: topic.lessons?.map((lesson) => ({
-                    where: { id: lesson.id },
-                    data: {
-                      title: lesson.title,
-                      content: lesson.content,
-                    },
-                  })),
-                },
-              },
-            })),
-          },
-        },
-      });
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'Failed to update course',
-          error: error.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
+  // async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
+  //   try {
+  //     const existingCourse = await this.prisma.course.findUnique({
+  //       where: { id },
+  //       include: { topics: { include: { Lesson: true } } }, // Include topics and lessons to check if the course exists
+  //     });
+  
+  //     if (!existingCourse) {
+  //       throw new HttpException(
+  //         {
+  //           status: HttpStatus.NOT_FOUND,
+  //           message: 'Course not found',
+  //         },
+  //         HttpStatus.NOT_FOUND,
+  //       );
+  //     }
+  
+  //     // Prepare topics and lessons data
+  //     const topicsData = updateCourseDto.topics?.map((topic) => ({
+  //       where: { id: topic.id },
+  //       data: {
+  //         Title: topic.Title,
+  //         Description: topic.Description,
+  //         Lesson: {
+  //           upsert: topic.lessons?.map((lesson) => ({
+  //             where: { id: lesson.id },
+  //             create: {
+  //               title: lesson.title,
+  //               text: lesson.text,
+  //               topicId: topic.id,
+  //             },
+  //             update: {
+  //               title: lesson.title,
+  //               text: lesson.text,
+  //             },
+  //           })),
+  //         },
+  //       },
+  //     }));
+  
+  //     const updatedCourse = await this.prisma.course.update({
+  //       where: { id },
+  //       data: {
+  //         Title: updateCourseDto.Title,
+  //         Description: updateCourseDto.Description,
+  //         Duration: updateCourseDto.Duration,
+  //         topics: {
+  //           update: topicsData,
+  //         },
+  //       },
+  //       include: {
+  //         topics: {
+  //           include: { Lesson: true },
+  //         },
+  //       },
+  //     });
+  
+  //     return {
+  //       status: HttpStatus.OK,
+  //       message: `Course ${updateCourseDto.Title} updated successfully`,
+  //       data: updatedCourse,
+  //     };
+  //   } catch (error) {
+  //     throw new HttpException(
+  //       {
+  //         status: HttpStatus.BAD_REQUEST,
+  //         message: 'Failed to update course',
+  //         error: error.message,
+  //       },
+  //       HttpStatus.BAD_REQUEST,
+  //     );
+  //   }
+  // }
+  
+  
+  
   
   
   async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
     try {
-      return await this.prisma.course.update({
+      const existingCourse = await this.prisma.course.findUnique({
+        where: { id },
+        include: { topics: { include: { Lesson: true } } },
+      });
+  
+      if (!existingCourse) {
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            message: 'Course not found',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+  
+      const topicsData = partialUpdateDto.topics?.map((topic) => ({
+        where: { id: topic.id },
+        data: {
+          Title: topic.Title,
+          Description: topic.Description,
+          Lesson: {
+            upsert: topic.lessons?.map((lesson) => ({
+              where: { id: lesson.id },
+              create: {
+                title: lesson.title,
+                text: lesson.text,
+                topicId: topic.id,
+              },
+              update: {
+                title: lesson.title,
+                text: lesson.text,
+              },
+            })),
+          },
+        },
+      }));
+  
+      const updatedCourse = await this.prisma.course.update({
         where: { id },
         data: {
           Title: partialUpdateDto.Title,
           Description: partialUpdateDto.Description,
           Duration: partialUpdateDto.Duration,
           topics: {
-            update: partialUpdateDto.topics?.map((topic) => ({
-              where: { id: topic.id },
-              data: {
-                Title: topic.Title,
-                Description: topic.Description,
-                lessons: {
-                  update: topic.lessons?.map((lesson) => ({
-                    where: { id: lesson.id },
-                    data: {
-                      title: lesson.title,
-                      content: lesson.content,
-                    },
-                  })),
-                },
-              },
-            })),
+            update: topicsData,
+          },
+        },
+        include: {
+          topics: {
+            include: { Lesson: true },
           },
         },
       });
+  
+      return {
+        status: HttpStatus.OK,
+        message: `Course ${partialUpdateDto.Title} patched successfully`,
+        data: updatedCourse,
+      };
     } catch (error) {
       throw new HttpException(
         {
@@ -208,6 +312,9 @@ export class CourseService {
       );
     }
   }
+  
+  
+  
   
   
 

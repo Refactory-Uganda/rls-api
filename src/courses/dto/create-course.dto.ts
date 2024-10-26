@@ -2,25 +2,29 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { CourseStatus } from "@prisma/client";
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
-import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
+import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
 
 
-export class CreateTopicDto {
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty()
-    Title: string;
+// export class CreateTopicDto {
+//     @IsString()
+//     @IsNotEmpty()
+//     @ApiProperty()
+//     Title: string;
   
-    @IsString()
-    @IsOptional()
-    @ApiProperty()
-    Description: string;
+//     @IsString()
+//     @IsOptional()
+//     @ApiProperty()
+//     Description: string;
 
-    @ApiProperty({ type: [CreateLessonDto] })
-    lessons?: CreateLessonDto[]
-  }
+//     @ApiProperty({ type: [CreateLessonDto] })
+//     lessons?: CreateLessonDto[]
+//   }
   
   export class CreateCourseDto {
+
+    @IsString()
+    id: string
+
     @IsString()
     @IsNotEmpty()
     @ApiProperty()

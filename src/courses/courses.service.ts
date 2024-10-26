@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.service.ts
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -127,50 +127,124 @@ export class CourseService {
     }
   }
 
-  async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
-    try {
-      return await this.prisma.course.update({
-        where: { id },
-        data: {
-          Title: updateCourseDto.Title,
-          Description: updateCourseDto.Description,
-          Duration: updateCourseDto.Duration,
-          topics: {
-            update: updateCourseDto.topics?.map((topic) => ({
-              where: { id: topic.id },
-              data: {
-                Title: topic.Title,
-                Description: topic.Description,
-                Lesson: {
-                  update: topic.lessons?.map((lesson) => ({
-                    where: { id: lesson.id },
-                    data: {
-                      title: lesson.title,
-                      text: lesson.text,
-                    },
-                  })) || [], // send empty array if undefined
-                },
-              },
-            })) || [], // send empty array if no topics
-          },
-        },
-        include: {
-          topics: {
-            include: { Lesson: true }
-          }
-        }
-      });
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'Failed to update course',
-          error: error.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+  // async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
+  //   try {
+  //     return await this.prisma.course.update({
+  //       where: { id },
+  //       data: {
+  //         Title: updateCourseDto.Title,
+  //         Description: updateCourseDto.Description,
+  //         Duration: updateCourseDto.Duration,
+  //         topics: {
+  //           update: updateCourseDto.topics?.map((topic) => ({
+  //             where: { id: topic.id },
+  //             data: {
+  //               Title: topic.Title,
+  //               Description: topic.Description,
+  //               Lesson: {
+  //                 update: topic.lessons?.map((lesson) => ({
+  //                   where: { id: lesson.id },
+  //                   data: {
+  //                     title: lesson.title,
+  //                     text: lesson.text,
+  //                   },
+  //                 })) || [], // send empty array if undefined
+  //               },
+  //             },
+  //           })) || [], // send empty array if no topics
+  //         },
+  //       },
+  //       include: {
+  //         topics: {
+  //           include: { Lesson: true }
+  //         }
+  //       }
+  //     });
+  //   } catch (error) {
+  //     throw new HttpException(
+  //       {
+  //         status: HttpStatus.BAD_REQUEST,
+  //         message: 'Failed to update course',
+  //         error: error.message,
+  //       },
+  //       HttpStatus.BAD_REQUEST,
+  //     );
+  //   }
+  // }
+
+
+
+  async update(id: string, updateCourseDto: UpdateCourseDto) {
+    const course = await this.prisma.course.findUnique({
+      where: { id },
+      include: { topics: { include: { Lesson: true } } }, // Include lessons
+    });
+
+    if (!course) {
+      throw new NotFoundException(`Course with ID ${id} not found`);
     }
+
+    // Update course fields
+    const updatedCourse = await this.prisma.course.update({
+      where: { id },
+      data: {
+        Title: updateCourseDto.Title,
+        Description: updateCourseDto.Description,
+        Duration: updateCourseDto.Duration,
+        status: updateCourseDto.status,
+        topics: {
+          // Loop through topics to handle updates
+          upsert: updateCourseDto.topics?.map(topic => ({
+            where: { id: topic.id },
+            update: {
+              Title: topic.Title,
+              Description: topic.Description,
+              Lesson: {
+                // Loop through lessons to handle updates
+                upsert: topic.lessons?.map(lesson => ({
+                  where: { id: lesson.id },
+                  update: {
+                    title: lesson.title,
+                    text: lesson.text,
+                  },
+                  create: {
+                    title: lesson.title,
+                    text: lesson.text,
+                    topicId: topic.id,
+                  },
+                })),
+              },
+            },
+            create: {
+              Title: topic.Title,
+              Description: topic.Description,
+              Lesson: {
+                create: topic.lessons?.map(lesson => ({
+                  title: lesson.title,
+                  text: lesson.text,
+                  topicId: topic.id,
+                })),
+              },
+            },
+          })),
+        },
+      },
+      include: { topics: { include: { Lesson: true } } }, // Include lessons in response
+    });
+
+    // try {
+    //   const updatedcourse = await this.prisma.course.update({...});
+    //   console.log('updated course:', updatedCourse)
+    // }catch (error){
+    //   console.error('Error updating course:', error)
+    // }
+    console.log(updateCourseDto);
+
+
+    return updatedCourse;
   }
+
+
 
   async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
     try {

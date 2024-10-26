@@ -30,7 +30,7 @@ export class CourseController {
       @Param('id') id: string,
       @Body() updateCourseDto: UpdateCourseDto,
   ) {
-      return this.courseService.updateCourse(id, updateCourseDto);
+      return this.courseService.update(id, updateCourseDto);
   }
   @Patch(':id')
   @ApiOperation({summary: 'Partially update a Course'})

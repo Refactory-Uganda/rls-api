@@ -22,7 +22,7 @@ import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
   
   export class CreateCourseDto {
 
-    @IsString()
+    @IsString() 
     id: string
 
     @IsString()

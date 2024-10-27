@@ -32,14 +32,14 @@ export class CourseController {
   ) {
       return this.courseService.updateCourse(id, updateCourseDto);
   }
-  @Patch(':id')
-  @ApiOperation({summary: 'Partially update a Course'})
-  async patch(
-      @Param('id') id: string,
-      @Body() partialUpdateDto: Partial<UpdateCourseDto>,
-  ) {
-      return this.courseService.patchCourse(id, partialUpdateDto);
-  }
+  // @Patch(':id')
+  // @ApiOperation({summary: 'Partially update a Course'})
+  // async patch(
+  //     @Param('id') id: string,
+  //     @Body() partialUpdateDto: Partial<UpdateCourseDto>,
+  // ) {
+  //     return this.courseService.patchCourse(id, partialUpdateDto);
+  // }
   @Get() 
   @ApiOperation({summary: 'Get all Courses'})
   async findAll() {

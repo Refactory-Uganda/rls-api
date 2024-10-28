@@ -37,17 +37,17 @@ export class CreateTopicDto {
 
     @ApiProperty({ type: [CreateTopicDto] })
     topics: CreateTopicDto[];
-    // page: number;
-    // limit: number;
+    page: number;
+    limit: number;
 
-    @IsOptional()
-    @IsNumber()
-    @ApiProperty({ description: "Page number for pagination", example: 1 })
-    page?: number;
+    // @IsOptional()
+    // @IsNumber()
+    // @ApiProperty({ description: "Page number for pagination", example: 1 })
+    // page?: number;
 
-    @IsOptional()
-    @IsNumber()
-    @ApiProperty({ description: "Number of items per page", example: 6 })
-    limit?: number;
+    // @IsOptional()
+    // @IsNumber()
+    // @ApiProperty({ description: "Number of items per page", example: 6 })
+    // limit?: number;
 
   }

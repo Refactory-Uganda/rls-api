@@ -42,8 +42,11 @@ export class CourseController {
   }
   @Get()
   @ApiOperation({ summary: 'Get all Courses' })
-  async findAll(@Query() courseDto: CreateCourseDto) {
-    return await this.courseService.findAll(courseDto);
+  async findAll(
+    @Query('page') page: number =1,
+    @Query('limit') limit: number = 6
+  ) {
+    return await this.courseService.findAll(Number(page),Number(limit));
   }
 
 

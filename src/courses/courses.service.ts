@@ -210,26 +210,27 @@ export class CourseService {
 
 
   // Find all courses with pagination
-  async findAll(courseDto: CreateCourseDto) {
-    // Default to the first page with 6 items per page if not provided
-    const page = courseDto.page ?? 1;
-    const limit = courseDto.limit ?? 6;
-    const skip = (page - 1) * limit;
+  async findAll(page: number = 1, limit: number = 6) {
 
     try {
+      const skip = (page - 1) * limit;
       const courses = await this.prisma.course.findMany({
         skip,
         take: limit,
-        include: { topics: true },
+        include: {
+          topics: { 
+            include: { Lesson: true } 
+          }
+        }
       });
 
-      const total = await this.prisma.course.count();
+      const totalCourses = await this.prisma.course.count();
 
       return {
-        courses,
-        // total,
+        data: courses,
+        total: totalCourses,
         page,
-        // lastPage: Math.ceil(total / limit),
+        lastPage: Math.ceil(totalCourses / limit),
       };
     } catch (error) {
       throw new Error(`Error fetching courses: ${error.message}`);

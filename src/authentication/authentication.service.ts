@@ -1,93 +1,19 @@
 /* eslint-disable prettier/prettier */
-// /* eslint-disable prettier/prettier */
-// import { Injectable } from '@nestjs/common';
-// import { JwtService } from '@nestjs/jwt';
-// import { PrismaService } from 'src/prisma/prisma.service';
-// // import * as bcrypt from 'bcrypt';
-// import { HttpService } from '@nestjs/axios';
-// import { lastValueFrom } from 'rxjs';
-
-// @Injectable()
-// export class AuthenticationService {
-//     constructor(
-//         private readonly prisma: PrismaService,
-//         private readonly jwtService: JwtService,
-//         private readonly httpService: HttpService,
-//     ) { }
-
-//     private readonly loginEndpoints = {
-//         admin: "https://rims-api-xufp.onrender.com/accounts/admin/login",
-//         staff: "https://rims-api-xufp.onrender.com/accounts/staff/login",
-//         student: "https://rims-api-xufp.onrender.com/accounts/student/login",
-//         user: "https://rims-api-xufp.onrender.com/accounts/users/login"
-//     }
-
-//     // loginUser = "https://rims-api-xufp.onrender.com/accounts/users/login"
-
-//     async validateUser(email: string, pass: string): Promise<any> {
-//         const loginUrl = this.loginEndpoints[email];
-//         if (!loginUrl) {
-//             return null;
-//         }
-
-//         try {
-//         const response = await lastValueFrom(this.httpService.post(loginUrl, { email, password: pass }));
-//         const user = response.data;
-//         if (user) {
-//             return user;
-//         }
-//         return null;
-//     }catch (error) {
-//         console.error('Error during user validation:', error);
-//         if (error.response) {
-//             console.error('Response data:', error.response.data);
-//             console.error('Response status:', error.response.status);
-//             console.error('Response headers:', error.response.headers);
-//         }
-//         throw new Error('User validation Failed');
-//     }
-// }
-
-//     async login(user: any) {
-//         const payload = { email: user.email, sub: user.id, role: user.role }
-//         return {
-//             access_token: this.jwtService.sign(payload)
-//         };
-//     }
-
-// }
-
-
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
-
-interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
-    gender: string;
-    nationality: string;
-    residence: string;
-    DOB: Date | null;
-    isVerified: boolean;
-    userGroup: string;
-    emailID: string;
-    email: {
-        id: string;
-        email: string;
-    };
-}
+import { LoginDto } from './dto/create-login.dto';
+import axios from 'axios';
+import { RefeshTokendto } from './dto/refresh-token.dto';
 
 @Injectable()
 export class AuthenticationService {
     private readonly loginEndpoints = {
         admin: "https://rims-api-xufp.onrender.com/accounts/admin/login",
-        staff: "https://rims-api-xufp.onrender.com/accounts/staff/login",
-        student: "https://rims-api-xufp.onrender.com/accounts/student/login",
-        user: "https://rims-api-xufp.onrender.com/accounts/users/login",
+        // staff: "https://rims-api-xufp.onrender.com/accounts/staff/login",
+        // student: "https://rims-api-xufp.onrender.com/accounts/student/login",
+        // user: "https://rims-api-xufp.onrender.com/accounts/users/login",
     };
 
     constructor(
@@ -96,42 +22,138 @@ export class AuthenticationService {
         private readonly httpService: HttpService,
     ) { }
 
-    async validateUser(email: string, password: string): Promise<User> {
-        const loginUrl = this.loginEndpoints[email];
+    urlAdmin = "https://rims-api-xufp.onrender.com/accounts/admin/login"
 
-        if (!loginUrl) {
-            throw new NotFoundException('Login endpoint not found for this user type');
-        }
 
+    async login(dto: LoginDto) {
         try {
-            const response = await lastValueFrom(this.httpService.post(loginUrl, { email, password }));
-            const user: User = response.data.user;
+            console.log('Starting')
+            const response = await axios.post(this.urlAdmin, {
+                email: dto.email,
+                password: dto.password
+            });
 
-            if (!user) {
-                throw new UnauthorizedException('Invalid credentials');
+            const { user: externalUser, tokens } = response.data;
+            if (!externalUser || !tokens) {
+                throw new HttpException('Invalid response from external API', HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            console.log('Received response from API:', externalUser);
 
-            return user;
+            // find user 
+            let user = await this.prisma.user.findUnique({
+                where: {
+                    email: externalUser.email.email
+                }
+            });
+            if (!user) {
+                console.log('creating new user')
+                user = await this.prisma.user.create({
+                    data: {
+                        externalId: externalUser.id,
+                        email: externalUser.email.email,
+                        firstName: externalUser.firstName,
+                        lastName: externalUser.lastName,
+                        userGroup: externalUser.userGroup,
+                        nationality: externalUser.nationality,
+                        residence: externalUser.residence,
+                        refresh_token: externalUser.refresh_token
+                    },
+                });
+            } else {
+                console.log('updating existing user')
+                // update user
+                user = await this.prisma.user.update({
+                    where: {
+                        id: user.id
+                    },
+                    data: {
+                        firstName: externalUser.firstName,
+                        lastName: externalUser.lastName,
+                        userGroup: externalUser.userGroup,
+                        nationality: externalUser.nationality,
+                        residence: externalUser.residence,
+                        refresh_token: externalUser.refresh_token
+                    },
+                });
+            }
+            // Generate Jwt Token
+            const payload = {
+                sub: user.id,
+                email: user.email,
+                userGroup: user.userGroup
+            };
+            // console.log('Recieved response: ', response.data)
+            return {
+                message: 'Login Successfully to RLS',
+                success: true,
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    userGroup: user.userGroup,
+                },
+                tokens: {
+                    access_token: this.jwtService.sign(payload),
+                    refresh_token: tokens.refresh_token
+                }
+            };
+
         } catch (error) {
-            console.error('Error during user validation:', error);
-            throw new UnauthorizedException('User validation failed');
+            if (axios.isAxiosError(error)) {
+                console.error('Axios error details:', error.response?.data);
+                throw new UnauthorizedException('Illegal Alien');
+            } else {
+                console.error('Unexpected error:', error);
+                throw new HttpException('something isnot right', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
-    async login(user: User) {
-        const payload = { email: user.email.email, sub: user.id, role: user.userGroup }; // Adjust the role if necessary
-        const access_token = this.jwtService.sign(payload);
-        const refresh_token = this.jwtService.sign(payload, { expiresIn: '30d' }); // Example for a refresh token
+    async refreshToken(refreshToken: RefeshTokendto) {
+        try {
+            const user = await this.prisma.user.findFirst({
+                where: { refresh_token: refreshToken.refresh_token },
+            });
+            if (!user) {
+                throw new UnauthorizedException('Invalid refresh token');
+            }
 
-        return {
-            message: "Login successful",
-            success: true,
-            token: access_token,
-            user,
-            tokens: {
-                access_token,
-                refresh_token,
-            },
-        };
+            // verify refresh token with rims
+            const response = await axios.post(this.urlAdmin, {
+                refresh_token: refreshToken.refresh_token
+            });
+
+            const { tokens } = response.data;
+
+            // update user
+            await this.prisma.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    refresh_token: tokens.refresh_token
+                }
+            });
+
+            const payload = {
+                sub: user.id,
+                email: user.email,
+                userGroup: user.userGroup
+            };
+
+            return {
+                access_token: this.jwtService.sign(payload),
+                refresh_token: tokens.refresh_token
+            };
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error('Axios error details:', error.response?.data);
+                throw new UnauthorizedException('Invalid refresh token');
+            } else {
+                console.error('Unexpected error:', error);
+                throw new HttpException('something isnot right', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 }

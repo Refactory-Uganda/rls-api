@@ -102,10 +102,14 @@ model Option {
 
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  externalId String @unique // ID from RIMS
   email     String   @unique
-  name      String?
-  password  String
-  role      Role     @default(USER)
+  firstName String
+  lastName String
+  userGroup     String
+  nationality String?
+  residence String?
+  refresh_token String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

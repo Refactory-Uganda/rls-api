@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
 import { CourseStatus } from "@prisma/client";
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 
 export class CreateTopicDto {
@@ -37,4 +37,17 @@ export class CreateTopicDto {
 
     @ApiProperty({ type: [CreateTopicDto] })
     topics: CreateTopicDto[];
+    // page: number;
+    // limit: number;
+
+    @IsOptional()
+    @IsNumber()
+    @ApiProperty({ description: "Page number for pagination", example: 1 })
+    page?: number;
+
+    @IsOptional()
+    @IsNumber()
+    @ApiProperty({ description: "Number of items per page", example: 6 })
+    limit?: number;
+
   }

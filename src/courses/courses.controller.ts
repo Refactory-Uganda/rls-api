@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.controller.ts
-import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Put, Patch } from '@nestjs/common';
+import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Put, Patch, Query } from '@nestjs/common';
 import {  CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -40,11 +40,12 @@ export class CourseController {
   ) {
       return this.courseService.patchCourse(id, partialUpdateDto);
   }
-  @Get() 
-  @ApiOperation({summary: 'Get all Courses'})
-  async findAll() {
-    return await this.courseService.findAll(); 
+  @Get()
+  @ApiOperation({ summary: 'Get all Courses' })
+  async findAll(@Query() courseDto: CreateCourseDto) {
+    return await this.courseService.findAll(courseDto);
   }
+
 
   @Get(':id') 
   @ApiOperation({summary: 'Get a Course by ID'})

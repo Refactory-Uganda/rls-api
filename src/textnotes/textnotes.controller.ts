@@ -4,7 +4,7 @@
 import { Controller, Post, Body, Get, Param, Delete, Patch, Put } from '@nestjs/common';
 import { NoteService } from './textnotes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateTextnotesDto } from './dto/update-textnotes.dto';
 
 @Controller('notes')
@@ -30,6 +30,7 @@ export class NoteController {
 
   @Patch(':textnotes_id')
   @ApiOperation({ summary: 'Partially Update Textnotes' })
+  @ApiBody({ type: UpdateTextnotesDto })
   async patch(
     @Param('textnotes_id') textnotes_id: string,
     @Body() partialUpdateDto: Partial<UpdateTextnotesDto>,

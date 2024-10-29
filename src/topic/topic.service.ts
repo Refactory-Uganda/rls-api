@@ -55,7 +55,7 @@ export class TopicService {
   //   }
   // }
 
-  async patchTopic(id: string, partialUpdateDto: Partial<UpdateTopicDto>) {
+  async patchTopic(id: string, partialUpdateDto: UpdateTopicDto) {
     try {
       const updateData: Prisma.TopicUpdateInput = {
         Title: { set: partialUpdateDto.Title },

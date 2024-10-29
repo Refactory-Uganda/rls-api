@@ -14,11 +14,10 @@ export class OptionService {
     });
   }
 
-  async patchOption(id: string, partialUpdateDto: Partial<UpdateOptionDto>) {
+  async patchOption(id: string, partialUpdateDto: UpdateOptionDto) {
     try {
-      // Only include properties that are defined in partialUpdateDto
       const updateData = {
-        ...partialUpdateDto, // Spread the properties from partialUpdateDto
+        ...partialUpdateDto,
       };
   
       // Remove undefined properties from the updateData

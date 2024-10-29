@@ -58,7 +58,7 @@ export class LessonService {
     //     }
     //   }
     
-    async patchLesson(id: string, partialUpdateDto: Partial<UpdateLessonDto>) {
+    async patchLesson(id: string, partialUpdateDto: UpdateLessonDto) {
       try {
         const updateData: Prisma.LessonUpdateInput = {
           title: partialUpdateDto.title,

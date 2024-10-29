@@ -24,7 +24,7 @@ export class QuizService {
     });
   }
 
-  async patchQuiz(id: string, partialUpdateDto: Partial<UpdateQuizDto>) {
+  async patchQuiz(id: string, partialUpdateDto: UpdateQuizDto) {
     try {
       const { questions, ...quizData } = partialUpdateDto;
   

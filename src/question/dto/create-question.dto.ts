@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsString, IsNumber, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
 import { CreateOptionDto } from '../../option/dto/option.dto';  
 import { ApiProperty } from '@nestjs/swagger';
@@ -22,14 +23,16 @@ export class CreateQuestionDto {
   @ApiProperty()
   explanation?: string;
 
-  @IsArray()
-  @IsOptional()
-  // @ApiProperty()
-  options?: CreateOptionDto[];
-
   @IsString()
   @ApiProperty()
   quizId: string;
-  id: any;
+  id: string;
+
+  @IsArray()
+  @IsOptional()
+  @ApiProperty({type:[CreateOptionDto]})
+  options?: CreateOptionDto[];
+
+
 }
 

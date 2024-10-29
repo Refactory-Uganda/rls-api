@@ -10,9 +10,9 @@ import { UpdateQuizDto } from './dto/update-quiz.dto';
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
-  @Post()
+  @Post(':lesson_id')
   @ApiOperation({summary: 'Create a new quiz'})
-  create(@Body() createQuizDto: CreateQuizDto) {
+  create(@Param('lesson_id') lesson_id:string, @Body() createQuizDto: CreateQuizDto) {
     return this.quizService.create(createQuizDto);
   }
 

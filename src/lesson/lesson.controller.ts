@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   Post,
-  Put,
   Param,
   Patch,
   Get,
@@ -34,14 +33,14 @@ export class LessonController {
   //   return this.topicService.create({ ...body, courseId: course_id });
   // }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Update Lesson' })
-  async update(
-    @Param('id') id: string,
-    @Body() updateLessonDto: UpdateLessonDto,
-  ) {
-    return this.lessonService.updateLesson(id, updateLessonDto);
-  }
+  // @Put(':id')
+  // @ApiOperation({ summary: 'Update Lesson' })
+  // async update(
+  //   @Param('id') id: string,
+  //   @Body() updateLessonDto: UpdateLessonDto,
+  // ) {
+  //   return this.lessonService.updateLesson(id, updateLessonDto);
+  // }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Partially Update Lesson' })

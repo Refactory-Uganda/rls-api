@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { CreateLessonDto } from './dto/create-lesson.dto';
+import { Prisma } from '@prisma/client';
 // import { Lesson } from '@prisma/client';
 
 @Injectable()
@@ -35,50 +36,44 @@ export class LessonService {
       return lesson;
     }
 
-    async updateLesson(id: string, updateLessonDto: UpdateLessonDto) {
-        try {
-          return await this.prisma.lesson.update({
-            where: { id },
-            data: 
-            {
-              title: updateLessonDto.title,
-              text: updateLessonDto.text,
-              topicId: updateLessonDto.topicId,
-              // content: {
-              //   update: {
-              //     where: { id: string},
+    // async updateLesson(id: string, updateLessonDto: UpdateLessonDto) {
+    //     try {
+    //       return await this.prisma.lesson.update({
+    //         where: { id },
+    //         data: 
+    //         {
+    //           title: updateLessonDto.title,
+    //           text: updateLessonDto.text,
+    //           topicId: updateLessonDto.topicId,
+    //           // content: {
+    //           //   update: {
+    //           //     where: { id: string},
                   
-              //   },
-              // },
-            },
-          });
-        } catch (error) {
-          throw new Error(`Error updating lesson with ID ${id}: ${error.message}`);
-        }
-      }
+    //           //   },
+    //           // },
+    //         },
+    //       });
+    //     } catch (error) {
+    //       throw new Error(`Error updating lesson with ID ${id}: ${error.message}`);
+    //     }
+    //   }
     
     async patchLesson(id: string, partialUpdateDto: Partial<UpdateLessonDto>) {
-        try {
-          return await this.prisma.lesson.update({
-            where: { id },
-            data: 
-            {
-              title: partialUpdateDto.title,
-              topicId: partialUpdateDto.topicId,
-              // content: {
-              //   update: {
-              //     where: { id: string},
-                  
-              //   },
-              // },
-            },
-          });
-        } catch (error) {
-          throw new Error(
-            `Error partially updating lesson with ID ${id}: ${error.message}`,
-          );
-        }
+      try {
+        const updateData: Prisma.LessonUpdateInput = {
+          title: partialUpdateDto.title,
+          text: partialUpdateDto.text,
+        };
+    
+        return await this.prisma.lesson.update({
+          where: { id },
+          data: updateData,
+        });
+      } catch (error) {
+        throw new Error(`Error partially updating lesson with ID ${id}: ${error.message}`);
       }
+    }
+    
 
 
     async deleteLesson(id:string) {

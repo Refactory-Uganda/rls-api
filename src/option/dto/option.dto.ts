@@ -18,6 +18,7 @@ export class CreateOptionDto {
   @IsString()
   @ApiProperty()
   questionId: string;
+  id: any;
 }
 
 export class UpdateOptionDto {

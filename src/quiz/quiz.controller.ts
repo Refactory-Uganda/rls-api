@@ -3,6 +3,7 @@ import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/commo
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UpdateQuizDto } from './dto/update-quiz.dto';
 
 @Controller('quizzes')
 @ApiTags('quizzes')
@@ -13,6 +14,15 @@ export class QuizController {
   @ApiOperation({summary: 'Create a new quiz'})
   create(@Body() createQuizDto: CreateQuizDto) {
     return this.quizService.create(createQuizDto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Partially Update Quiz' })
+  async patch(
+    @Param('id') id: string,
+    @Body() partialUpdateDto: Partial<UpdateQuizDto>,
+  ) {
+    return this.quizService.patchQuiz(id, partialUpdateDto);
   }
 
   @Delete(':id')

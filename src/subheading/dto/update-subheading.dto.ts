@@ -1,16 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { PartialType } from "@nestjs/swagger";
+import { CreateSubHeadingDto } from "./create-sub-heading.dto";
 
-export class UpdateSubheadingDto {
-    @IsOptional()
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty()
-    subText?: string;
-
-    @IsOptional()
-    @IsString()
-    @ApiProperty()
-    textContentId?: any;
-}
+export class UpdateSubheadingDto extends PartialType(CreateSubHeadingDto) {}

@@ -6,6 +6,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Topic } from '@prisma/client';
 // import { CreateTopicDto } from './dto/create-topic.dto'; // adjust path as needed
 import { UpdateTopicDto } from './dto/update-topic.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class TopicService {
@@ -40,32 +41,37 @@ export class TopicService {
   //   });
   // }
 
-  async updateTopic(id: string, updateTopicDto: UpdateTopicDto) {
-    try {
-      return await this.prisma.topic.update({
-        where: { id },
-        data: {
-          Title: updateTopicDto.Title,
-          Description: updateTopicDto.Description,
-        },
-      });
-    } catch (error) {
-      throw new Error(`Error updating topic with ID ${id}: ${error.message}`);
-    }
-  }
+  // async updateTopic(id: string, updateTopicDto: UpdateTopicDto) {
+  //   try {
+  //     return await this.prisma.topic.update({
+  //       where: { id },
+  //       data: {
+  //         Title: updateTopicDto.Title,
+  //         Description: updateTopicDto.Description,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     throw new Error(`Error updating topic with ID ${id}: ${error.message}`);
+  //   }
+  // }
 
   async patchTopic(id: string, partialUpdateDto: Partial<UpdateTopicDto>) {
     try {
+      const updateData: Prisma.TopicUpdateInput = {
+        Title: { set: partialUpdateDto.Title },
+        Description: { set: partialUpdateDto.Description },
+      };
+  
       return await this.prisma.topic.update({
         where: { id },
-        data: partialUpdateDto,
+        data: updateData,
       });
     } catch (error) {
-      throw new Error(
-        `Error partially updating topic with ID ${id}: ${error.message}`,
-      );
+      throw new Error(`Error partially updating topic with ID ${id}: ${error.message}`);
     }
   }
+  
+  
 
   deleteTopic(id: string) {
     return this.prisma.topic.delete({

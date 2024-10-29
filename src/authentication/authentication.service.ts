@@ -11,8 +11,8 @@ import { RefeshTokendto } from './dto/refresh-token.dto';
 export class AuthenticationService {
     private readonly loginEndpoints = {
         admin: "https://rims-api-xufp.onrender.com/accounts/admin/login",
-        // staff: "https://rims-api-xufp.onrender.com/accounts/staff/login",
-        // student: "https://rims-api-xufp.onrender.com/accounts/student/login",
+        staff: "https://rims-api-xufp.onrender.com/accounts/staff/login",
+        student: "https://rims-api-xufp.onrender.com/accounts/student/login",
         // user: "https://rims-api-xufp.onrender.com/accounts/users/login",
     };
 
@@ -22,7 +22,7 @@ export class AuthenticationService {
         private readonly httpService: HttpService,
     ) { }
 
-    urlAdmin = "https://rims-api-xufp.onrender.com/accounts/admin/login"
+    urlAdmin = "https://rims-api-xufp.onrender.com/accounts/staff/login"
 
 
     async login(dto: LoginDto) {

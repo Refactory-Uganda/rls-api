@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.controller.ts
-import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Put, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Put, Patch, UseGuards, Query } from '@nestjs/common';
 import {  CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -45,10 +45,13 @@ export class CourseController {
   }
   @Get() 
   @UseGuards(JwtAuthGaurd, RolesGaurd)
-  @Roles('Administrator')
+  @Roles('Staff')
   @ApiOperation({summary: 'Get all Courses'})
-  async findAll() {
-    return await this.courseService.findAll(); 
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 2
+  ) {
+    return await this.courseService.findAll(Number(page),Number(limit)); 
   }
 
   @Get(':id') 

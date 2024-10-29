@@ -1,6 +1,10 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.service.ts
+<<<<<<< HEAD
 import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+=======
+import { Injectable, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
+>>>>>>> 79465aca0c4fefcb1d14a7a4dff921d483bf5609
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -28,6 +32,7 @@ export class CourseService {
       },
     })
   }
+
 
   async publishCourse(id: string) {
     // check for topis
@@ -172,6 +177,7 @@ export class CourseService {
   //   }
   // }
 
+<<<<<<< HEAD
 
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
@@ -277,6 +283,8 @@ export class CourseService {
     }
   }
 
+=======
+>>>>>>> 79465aca0c4fefcb1d14a7a4dff921d483bf5609
 
   // async findCourseTopics() {
   //   try {
@@ -296,6 +304,143 @@ export class CourseService {
   //     );}
   // }
 
+
+  async updateCourse(courseId: string, updateData: UpdateCourseDto) {
+    // Verify course exists
+    const existingCourse = await this.prisma.course.findUnique({
+      where: { id: courseId },
+      include: {
+        topics: {
+          include: {
+            Lesson: true,
+          },
+        },
+      },
+    });
+  
+    if (!existingCourse) {
+      throw new NotFoundException(`Course with ID ${courseId} not found`);
+    }
+  
+    // If we're trying to update topics and lessons
+    if (updateData.topics && Array.isArray(updateData.topics)) {
+      // Get existing topic IDs for this course
+      const existingTopics = await this.prisma.topic.findMany({
+        where: {
+          courseId: courseId,
+        },
+        select: {
+          id: true,
+          Lesson: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+  
+      const existingTopicIds = existingTopics.map(topic => topic.id);
+  
+      // Validate and prepare topics update with lessons
+      const topicsUpdate = await Promise.all(updateData.topics.map(async (topic) => {
+        if (!topic.id) {
+          throw new BadRequestException('Topic ID is required for update');
+        }
+  
+        if (!existingTopicIds.includes(topic.id)) {
+          throw new BadRequestException(`Topic with ID ${topic.id} does not belong to this course`);
+        }
+  
+        // Find existing lesson for this topic
+        const existingTopic = existingTopics.find(et => et.id === topic.id);
+        const lessonData = topic.Lesson;
+  
+        // Prepare the topic update data
+        const topicUpdateData: any = {
+          where: {
+            id: topic.id,
+          },
+          data: {},
+        };
+  
+        if (topic.Title) {
+          topicUpdateData.data.Title = topic.Title;
+        }
+        if (topic.Description) {
+          topicUpdateData.data.Description = topic.Description;
+        }
+  
+        // If lesson data exists and there's an existing lesson
+        if (lessonData && existingTopic?.Lesson?.[0]?.id) {
+          topicUpdateData.data.Lesson = {
+            update: {
+              where: {
+                id: existingTopic.Lesson[0].id,
+              },
+              data: {
+                ...(lessonData.title && { title: lessonData.title }),
+                ...(lessonData.text && { text: lessonData.text }),
+              },
+            },
+          };
+        }
+  
+        return topicUpdateData;
+      }));
+  
+      // Perform the update
+      try {
+        return await this.prisma.course.update({
+          where: {
+            id: courseId,
+          },
+          data: {
+            ...(updateData.Title && { Title: updateData.Title }),
+            ...(updateData.Description && { Description: updateData.Description }),
+            ...(updateData.Duration && { Duration: updateData.Duration }),
+            ...(updateData.status && { status: updateData.status }),
+            topics: {
+              update: topicsUpdate,
+            },
+          },
+          include: {
+            topics: {
+              include: {
+                Lesson: true,
+              },
+            },
+          },
+        });
+      } catch (error) {
+        console.error('Update error:', error);
+        if (error.code === 'P2025') {
+          throw new NotFoundException('One or more topics or lessons not found');
+        }
+        throw error;
+      }
+    }
+  
+    // If no topics to update, just update the course details
+    return await this.prisma.course.update({
+      where: {
+        id: courseId,
+      },
+      data: {
+        ...(updateData.Title && { Title: updateData.Title }),
+        ...(updateData.Description && { Description: updateData.Description }),
+        ...(updateData.Duration && { Duration: updateData.Duration }),
+        ...(updateData.status && { status: updateData.status }),
+      },
+      include: {
+        topics: {
+          include: {
+            Lesson: true,
+          },
+        },
+      },
+    });
+  }
+  
 
   async findAll() {
     try {

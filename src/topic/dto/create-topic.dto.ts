@@ -7,7 +7,7 @@ import { CreateLessonDto } from 'src/lesson/dto/create-lesson.dto';
 export class CreateTopicDto {
 
   @IsString()
-  id: string
+  id: string;
 
   @IsNotEmpty()
   @IsString()

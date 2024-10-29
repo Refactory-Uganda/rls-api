@@ -3,7 +3,7 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { OptionService } from './option.service';
 import { CreateOptionDto } from './dto/option.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateOptionDto } from './dto/update-option.dto';
 
 
@@ -19,6 +19,8 @@ export class OptionController {
   }
 
   @Patch(':id')
+  @ApiOperation({summary: 'Update option'})
+  @ApiBody({type: UpdateOptionDto})
   async patchOption(
     @Param('id') id: string,
     @Body() partialUpdateDto: Partial<UpdateOptionDto>,

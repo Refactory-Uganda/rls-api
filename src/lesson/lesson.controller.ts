@@ -8,7 +8,7 @@ import {
   Patch,
   Get,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBody } from '@nestjs/swagger';
 import { LessonService } from './lesson.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from '../lesson/dto/update-lesson.dto';
@@ -44,9 +44,10 @@ export class LessonController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Partially Update Lesson' })
+  @ApiBody({ type: UpdateLessonDto }) // Use the new DTO here
   async patch(
     @Param('id') id: string,
-    @Body() partialUpdateDto: Partial<UpdateLessonDto>,
+    @Body() partialUpdateDto: UpdateLessonDto,
   ) {
     return this.lessonService.patchLesson(id, partialUpdateDto);
   }

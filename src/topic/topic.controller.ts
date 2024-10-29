@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Post, Param, Delete, Patch, Get} from '@nestjs/common';
 import { TopicService } from './topic.service'; 
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateTopicDto } from './dto/create-topic.dto';
 import { UpdateTopicDto } from './dto/update-topic.dto';
 
@@ -30,6 +30,7 @@ export class TopicController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Partially Update Topic' })
+  @ApiBody({ type: UpdateTopicDto })
   async patch(
     @Param('id') id: string,
     @Body() partialUpdateDto: Partial<UpdateTopicDto>,

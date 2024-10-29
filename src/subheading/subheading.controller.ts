@@ -4,7 +4,7 @@
 import { Controller, Post, Body, Get, Param, Delete, Patch, Put } from '@nestjs/common';
 import { SubHeadingService } from './subheading.service';
 import { CreateSubHeadingDto } from './dto/create-sub-heading.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateSubheadingDto } from './dto/update-subheading.dto';
 
 @Controller('sub-headings')
@@ -21,12 +21,14 @@ export class SubHeadingController {
 
   @Put(':subheading_id')
   @ApiOperation({ summary: 'Update subheading' })
+  @ApiBody({ type: UpdateSubheadingDto })
   async update(@Body() updateSubheadingDto: UpdateSubheadingDto, @Param('subheading_id') subheading_id: string) {
     return this.subHeadingService.updateSubheading(subheading_id, updateSubheadingDto);
   }
 
   @Patch(':subheading_id')
   @ApiOperation({ summary: 'Patch subheading' })
+  @ApiBody({ type: UpdateSubheadingDto })
   async patch(
     @Param('subheading_id') subheading_id: string,
     @Body() partialUpdateDto: Partial<UpdateSubheadingDto>,

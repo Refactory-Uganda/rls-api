@@ -57,14 +57,14 @@ export class TopicService {
 
   async patchTopic(id: string, partialUpdateDto: UpdateTopicDto) {
     try {
-      const updateData: Prisma.TopicUpdateInput = {
-        Title: { set: partialUpdateDto.Title },
-        Description: { set: partialUpdateDto.Description },
-      };
+      // const updateData: Prisma.TopicUpdateInput = {
+      //   Title: { set: partialUpdateDto.Title },
+      //   Description: { set: partialUpdateDto.Description },
+      // };
   
       return await this.prisma.topic.update({
         where: { id },
-        data: updateData,
+        data: partialUpdateDto,
       });
     } catch (error) {
       throw new Error(`Error partially updating topic with ID ${id}: ${error.message}`);

@@ -80,7 +80,7 @@ export class LessonService {
         const lesson = await this.prisma.lesson.delete(
             {
                 where: {
-                    id: id
+                    id
                 }
             }
         )

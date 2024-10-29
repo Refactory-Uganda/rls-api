@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UpdateQuestionDto } from './dto/update-question.dto';
 
 
 
@@ -14,6 +16,16 @@ export class QuestionController {
   @ApiOperation({summary: 'Create a new question'})
   create(@Body() createQuestionDto: CreateQuestionDto) {
     return this.questionService.create(createQuestionDto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Partially Update Questions' })
+  @ApiBody({ type: UpdateQuestionDto })
+  async patch(
+    @Param('id') id: string,
+    @Body() partialUpdateDto: Partial<UpdateQuestionDto>,
+  ) {
+    return this.questionService.patchQuestion(id, partialUpdateDto);
   }
 
   @Delete(':id')

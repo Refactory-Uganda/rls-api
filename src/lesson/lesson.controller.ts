@@ -4,12 +4,11 @@ import {
   Controller,
   Delete,
   Post,
-  Put,
   Param,
   Patch,
   Get,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBody } from '@nestjs/swagger';
 import { LessonService } from './lesson.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from '../lesson/dto/update-lesson.dto';
@@ -34,27 +33,28 @@ export class LessonController {
   //   return this.topicService.create({ ...body, courseId: course_id });
   // }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Update Lesson' })
-  async update(
-    @Param('id') id: string,
-    @Body() updateLessonDto: UpdateLessonDto,
-  ) {
-    return this.lessonService.updateLesson(id, updateLessonDto);
-  }
+  // @Put(':id')
+  // @ApiOperation({ summary: 'Update Lesson' })
+  // async update(
+  //   @Param('id') id: string,
+  //   @Body() updateLessonDto: UpdateLessonDto,
+  // ) {
+  //   return this.lessonService.updateLesson(id, updateLessonDto);
+  // }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Partially Update Lesson' })
+  @ApiBody({ type: UpdateLessonDto }) // Use the new DTO here
   async patch(
     @Param('id') id: string,
-    @Body() partialUpdateDto: Partial<UpdateLessonDto>,
+    @Body() partialUpdateDto: UpdateLessonDto,
   ) {
     return this.lessonService.patchLesson(id, partialUpdateDto);
   }
 
   @Delete(':lesson_id')
   @ApiOperation({ summary: 'Delete a Lesson' })
-  async deleteLesson(lesson_id: string) {
+  async deleteLesson(@Param("lesson_id") lesson_id: string) {
     return this.lessonService.deleteLesson(lesson_id);
   }
   @Get()

@@ -41,7 +41,7 @@ export class NoteService {
     }
   }
 
-  async patchTextnotes(id: string, partialUpdateDto: Partial<UpdateTextnotesDto>) {
+  async patchTextnotes(id: string, partialUpdateDto: UpdateTextnotesDto) {
     try {
       const partialUpdateData: {
         notesText?: string;

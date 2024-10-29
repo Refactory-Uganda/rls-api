@@ -30,5 +30,6 @@ export class CreateQuestionDto {
   @IsString()
   @ApiProperty()
   quizId: string;
+  id: any;
 }
 

@@ -37,7 +37,7 @@ export class SubHeadingService {
     }
   }
 
-  async patchTextContent(id: string, partialUpdateDto: Partial<UpdateSubheadingDto>) {
+  async patchSubheading(id: string, partialUpdateDto: UpdateSubheadingDto) {
     try {
       const updateData = {
         subText: partialUpdateDto.subText,

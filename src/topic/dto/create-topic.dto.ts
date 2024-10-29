@@ -20,7 +20,7 @@ export class CreateTopicDto {
   Description?: string;
 
   @ApiProperty({ type: [CreateLessonDto] })
-  lessons: CreateLessonDto[]
+  lessons: CreateLessonDto[];
 
   // @IsNotEmpty()
   // @IsString()

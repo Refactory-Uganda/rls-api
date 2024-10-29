@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { OptionService } from './option.service';
 import { CreateOptionDto } from './dto/option.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UpdateOptionDto } from './dto/update-option.dto';
 
 
 @Controller('options')
@@ -15,6 +18,15 @@ export class OptionController {
     return this.optionService.create(createOptionDto);
   }
 
+  @Patch(':id')
+  @ApiOperation({summary: 'Update option'})
+  @ApiBody({type: UpdateOptionDto})
+  async patchOption(
+    @Param('id') id: string,
+    @Body() partialUpdateDto: Partial<UpdateOptionDto>,
+  ) {
+    return await this.optionService.patchOption(id, partialUpdateDto);
+  }
 
   @Delete(':id')
   @ApiOperation({summary: 'Delete option'})

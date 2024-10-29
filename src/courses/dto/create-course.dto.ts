@@ -3,9 +3,14 @@ import { ApiProperty } from "@nestjs/swagger";
 import { CourseStatus } from "@prisma/client";
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
+// import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
 
 // export class CreateTopicDto {
+
+//   @IsString()
+//   id: string
+
 //     @IsString()
 //     @IsNotEmpty()
 //     @ApiProperty()
@@ -14,6 +19,10 @@ import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
 //     @IsString()
 //     @IsOptional()
 //     @ApiProperty()
+//     Description?: string;
+
+//     @ApiProperty({ type: [CreateLessonDto], required: false })
+//     @IsOptional()
 //     Description: string;
 
 //     @ApiProperty({ type: [CreateLessonDto] })

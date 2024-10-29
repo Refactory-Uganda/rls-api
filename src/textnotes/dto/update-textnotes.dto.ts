@@ -1,26 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsOptional } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { PartialType } from "@nestjs/swagger";
+import { CreateNoteDto } from "./create-note.dto";
 
-export class UpdateTextnotesDto {
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  notesText?: string;
-
-  @IsOptional()
-  @IsString()
-  @ApiProperty()
-  textContentId?: string;
-
-  @IsOptional()
-  textContent?: any;
-
-  @IsOptional()
-  @ApiProperty()
-  createdAt?: Date;
-
-  @IsOptional()
-  @ApiProperty()
-  updatedAt?: Date;
-}
+export class UpdateTextnotesDto extends PartialType(CreateNoteDto) {}

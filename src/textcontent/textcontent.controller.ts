@@ -4,7 +4,7 @@
 import { Body, Controller, Get, Post, Put, Param, Patch } from '@nestjs/common';
 import { TextContentService } from './textcontent.service';
 import { CreateTextContentDto } from './dto/create-text-content.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateTextContentDto } from './dto/update-textcontent.dto';
 
 @Controller('text_content')
@@ -26,6 +26,7 @@ export class TextContentController {
 
   @Patch(':textcontent_id')
   @ApiOperation({ summary: 'Patch textcontent' })
+  @ApiBody({ type: UpdateTextContentDto })
   async patch(
     @Param('textcontent_id') textcontent_id: string,
     @Body() partialUpdateDto: Partial<UpdateTextContentDto>,

@@ -4,7 +4,7 @@ import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Patch
 import {  CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('courses')
 @ApiTags('Course')
@@ -24,14 +24,15 @@ export class CourseController {
         return await this.courseService.deleteCourse(id);
     }
 
-    // @Patch(':id')
-    // @ApiOperation({ summary: 'Partially update a Course' })
-    // async update(
-    // @Param('id') id: string,
-    // @Body() updateCourseDto: UpdateCourseDto,
-    // ) {
-    // return this.courseService.updateCourse(id, updateCourseDto);
-    // }
+    @Patch(':id')
+    @ApiOperation({ summary: 'Partially update a Course' })
+    @ApiBody({ type: UpdateCourseDto })
+    async update(
+    @Param('id') id: string,
+    @Body() updateCourseDto: UpdateCourseDto,
+    ) {
+    return this.courseService.updateCourse(id, updateCourseDto);
+    }
 
   @Get()
   @ApiOperation({ summary: 'Get all Courses' })

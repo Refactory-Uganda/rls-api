@@ -54,7 +54,7 @@ export class LessonController {
 
   @Delete(':lesson_id')
   @ApiOperation({ summary: 'Delete a Lesson' })
-  async deleteLesson(lesson_id: string) {
+  async deleteLesson(@Param('id') lesson_id: string) {
     return this.lessonService.deleteLesson(lesson_id);
   }
   @Get()

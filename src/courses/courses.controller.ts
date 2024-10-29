@@ -24,24 +24,6 @@ export class CourseController {
         return await this.courseService.deleteCourse(id);
     }
 
-<<<<<<< HEAD
-  @Put(':id')
-  @ApiOperation({summary: 'Update a Course'})
-  async update(
-      @Param('id') id: string,
-      @Body() updateCourseDto: UpdateCourseDto,
-  ) {
-      return this.courseService.update(id, updateCourseDto);
-  }
-  @Patch(':id')
-  @ApiOperation({summary: 'Partially update a Course'})
-  async patch(
-      @Param('id') id: string,
-      @Body() partialUpdateDto: Partial<UpdateCourseDto>,
-  ) {
-      return this.courseService.patchCourse(id, partialUpdateDto);
-  }
-=======
     @Patch(':id')
     @ApiOperation({ summary: 'Partially update a Course' })
     async update(
@@ -51,7 +33,6 @@ export class CourseController {
     return this.courseService.updateCourse(id, updateCourseDto);
     }
 
->>>>>>> 79465aca0c4fefcb1d14a7a4dff921d483bf5609
   @Get() 
   @ApiOperation({summary: 'Get all Courses'})
   async findAll() {

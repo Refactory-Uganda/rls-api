@@ -47,11 +47,7 @@ export class CreateNoteDto {
   export class CreateLessonDto {
 
     @IsString()
-<<<<<<< HEAD
-    id: string
-=======
     id: string;
->>>>>>> 79465aca0c4fefcb1d14a7a4dff921d483bf5609
 
     @ApiProperty()
     @IsString()

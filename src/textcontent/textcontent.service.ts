@@ -33,7 +33,7 @@ export class TextContentService {
     }
   }
 
-  async patchTextContent(id: string, partialUpdateDto: Partial<UpdateTextContentDto>) {
+  async patchTextContent(id: string, partialUpdateDto: UpdateTextContentDto) {
     try {
       const updateData = {
         heading: partialUpdateDto.heading,

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Post, Param, Delete, Patch, Put, Get} from '@nestjs/common';
+import { Body, Controller, Post, Param, Delete, Patch, Get} from '@nestjs/common';
 import { TopicService } from './topic.service'; 
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateTopicDto } from './dto/create-topic.dto';
@@ -19,14 +19,14 @@ export class TopicController {
     return this.topicService.create({ ...body, courseId: course_id });
   }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Update Topic' })
-  async update(
-    @Param('id') id: string,
-    @Body() updateTopicDto: UpdateTopicDto,
-  ) {
-    return this.topicService.updateTopic(id, updateTopicDto);
-  }
+  // @Put(':id')
+  // @ApiOperation({ summary: 'Update Topic' })
+  // async update(
+  //   @Param('id') id: string,
+  //   @Body() updateTopicDto: UpdateTopicDto,
+  // ) {
+  //   return this.topicService.updateTopic(id, updateTopicDto);
+  // }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Partially Update Topic' })

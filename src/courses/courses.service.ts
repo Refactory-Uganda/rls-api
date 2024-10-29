@@ -1,10 +1,6 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.service.ts
-<<<<<<< HEAD
-import { Injectable, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
-=======
 import { Injectable, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
->>>>>>> 79465aca0c4fefcb1d14a7a4dff921d483bf5609
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -177,7 +173,6 @@ export class CourseService {
   //   }
   // }
 
-<<<<<<< HEAD
 
 
   async update(id: string, updateCourseDto: UpdateCourseDto) {
@@ -283,8 +278,6 @@ export class CourseService {
     }
   }
 
-=======
->>>>>>> 79465aca0c4fefcb1d14a7a4dff921d483bf5609
 
   // async findCourseTopics() {
   //   try {
@@ -353,7 +346,7 @@ export class CourseService {
   
         // Find existing lesson for this topic
         const existingTopic = existingTopics.find(et => et.id === topic.id);
-        const lessonData = topic.Lesson;
+        const lessonData = topic.lessons;
   
         // Prepare the topic update data
         const topicUpdateData: any = {
@@ -378,8 +371,15 @@ export class CourseService {
                 id: existingTopic.Lesson[0].id,
               },
               data: {
-                ...(lessonData.title && { title: lessonData.title }),
-                ...(lessonData.text && { text: lessonData.text }),
+                Lesson: {
+                  update: lessonData.map(lesson => ({
+                    where: { id: lesson.id },
+                    data: {
+                      ...(lesson.title && { title: lesson.title }),
+                      ...(lesson.text && { text: lesson.text }),
+                    },
+                  })),
+                },
               },
             },
           };

@@ -22,7 +22,11 @@ export class TopicService {
         Description: data.Description,
         courseId: data.courseId,
       },
-      include: { Course: true },
+      include: { 
+        Course: true,
+        Lesson: true
+
+      },
     });
   }
 
@@ -72,15 +76,15 @@ export class TopicService {
     });
   }
 
-  async findAllTopicsByCourse(courseId: string) {
+  async findAllTopicsByCourse() {
     return this.prisma.topic.findMany({
-      where: { courseId },
+      include: { Lesson: true },
     });
   }
   async findOneTopic(id: string) {
     return this.prisma.topic.findUnique({
       where: { id },
-      include: { Course: true },
+      include: { Lesson: true },
     });
   }
 }

@@ -42,6 +42,7 @@ export class LessonService {
             data: 
             {
               title: updateLessonDto.title,
+              text: updateLessonDto.text,
               topicId: updateLessonDto.topicId,
               // content: {
               //   update: {
@@ -100,6 +101,17 @@ export class LessonService {
         where: {
           id: lessonId,
         
+        },
+      });
+    }
+
+    async findContentByLessonId(lessonId: string) {
+      return this.prisma.lesson.findUnique({
+        where: {
+          id: lessonId,
+        },
+        select: {
+          content: true, 
         },
       });
     }

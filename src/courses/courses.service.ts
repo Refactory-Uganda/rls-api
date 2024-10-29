@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.service.ts
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
+// import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Injectable()
 export class CourseService {
@@ -11,10 +11,10 @@ export class CourseService {
 
   async createCourseDraft(dto: CreateCourseDto) {
     // check for topics
-    const hasTopics = dto.topics && dto.topics.length>0;
+    const hasTopics = dto.topics && dto.topics.length > 0;
 
     // set to draft if no topics
-    const status = hasTopics?dto.status?? `DRAFT`:`DRAFT`;
+    const status = hasTopics ? dto.status ?? `DRAFT` : `DRAFT`;
 
     return await this.prisma.course.create({
       data: {
@@ -29,14 +29,15 @@ export class CourseService {
     })
   }
 
-  async publishCourse(id:string) {
+
+  async publishCourse(id: string) {
     // check for topis
-    const course = await this.prisma.course.findUnique({ 
+    const course = await this.prisma.course.findUnique({
       where: { id },
-      include: { topics:true }
+      include: { topics: true }
     });
 
-    if(!course.topics || course.topics.length === 0) {
+    if (!course.topics || course.topics.length === 0) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -54,7 +55,7 @@ export class CourseService {
     });
   }
 
-  async draftCourse(id:string) {
+  async draftCourse(id: string) {
     return await this.prisma.course.update({
       where: { id },
       data: {
@@ -87,6 +88,7 @@ export class CourseService {
         ? dto.topics.map((topic) => ({
           Title: topic.Title,
           Description: topic.Description,
+          lessons: topic.lessons
         }))
         : []; // Default to an empty array if no topics are provided
 
@@ -125,69 +127,7 @@ export class CourseService {
       );
     }
   }
-  async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
-    try {
-      return await this.prisma.course.update({
-        where: { id },
-        data: {
-          Title: updateCourseDto.Title,
-          Description: updateCourseDto.Description,
-          Duration: updateCourseDto.Duration,
-          topics: {
-            update: updateCourseDto.topics?.map((topic) => ({
-              where: { id: topic.id },
-              data: {
-                Title: topic.Title,
-                Description: topic.Description,
-              },
-            })),
-          },
-        },
-      });
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'Failed to update course',
-          error: error.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
 
-
-
-  async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
-    try {
-      return await this.prisma.course.update({
-        where: { id },
-        data: {
-          Title: partialUpdateDto.Title,
-          Description: partialUpdateDto.Description,
-          Duration: partialUpdateDto.Duration,
-          topics: {
-            update: partialUpdateDto.topics?.map((topic) => ({
-              where: { id: topic.id },
-              data: {
-                Title: topic.Title,
-                Description: topic.Description,
-              },
-            })),
-          },
-        },
-      });
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'Failed to partially update course',
-          error: error.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
 
 
   // async findCourseTopics() {
@@ -242,7 +182,9 @@ export class CourseService {
     try {
       return await this.prisma.course.findUnique({
         where: { id: id },
-        include: { topics: true }
+        include: { topics: {
+          include: {Lesson:true}
+        } }
 
       });
     } catch (error) {

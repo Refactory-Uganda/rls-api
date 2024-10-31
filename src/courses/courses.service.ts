@@ -425,32 +425,51 @@ export class CourseService {
   
 
   // Find all courses with pagination
-  async findAll(page: number = 1, limit: number = 6) {
+  // async findAll(page: number = 1, limit: number = 6) {
 
+  //   try {
+  //     const skip = (page - 1) * limit;
+  //     const courses = await this.prisma.course.findMany({
+  //       skip,
+  //       take: limit,
+  //       include: {
+  //         topics: { 
+  //           include: { Lesson: true } 
+  //         }
+  //       }
+  //     });
+
+  //     const totalCourses = await this.prisma.course.count();
+
+  //     return {
+  //       data: courses,
+  //       total: totalCourses,
+  //       page,
+  //       lastPage: Math.ceil(totalCourses / limit),
+  //     };
+  //   } catch (error) {
+  //     throw new Error(`Error fetching courses: ${error.message}`);
+  //   }
+  // }
+
+
+
+  async findAll() {
     try {
-      const skip = (page - 1) * limit;
-      const courses = await this.prisma.course.findMany({
-        skip,
-        take: limit,
-        include: {
-          topics: { 
-            include: { Lesson: true } 
-          }
+      return await this.prisma.course.findMany({
+        include: { 
+          topics: {
+          include: { Lesson: true }
         }
+      }
       });
-
-      const totalCourses = await this.prisma.course.count();
-
-      return {
-        data: courses,
-        total: totalCourses,
-        page,
-        lastPage: Math.ceil(totalCourses / limit),
-      };
     } catch (error) {
       throw new Error(`Error fetching courses: ${error.message}`);
     }
   }
+
+  
+
 
   // Method to fetch a single course by ID
   async findOne(id: string) {

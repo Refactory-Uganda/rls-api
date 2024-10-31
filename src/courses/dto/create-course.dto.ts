@@ -54,8 +54,8 @@ import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
 
     @ApiProperty({ type: [CreateTopicDto] })
     topics: CreateTopicDto[];
-    page: number;
-    limit: number;
+    // page: number;
+    // limit: number;
 
     // @IsOptional()
     // @IsNumber()

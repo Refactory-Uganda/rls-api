@@ -12,13 +12,16 @@ export class QuizService {
   constructor(private prisma: PrismaService) {}
 
   async create(createQuizDto: CreateQuizDto) {
-    const { questions, ...quizData } = createQuizDto;
+    // const { questions, ...quizData } = createQuizDto;
 
     return this.prisma.quiz.create({
       data: {
-        ...quizData,
+        title: createQuizDto.title,
+        description: createQuizDto.description,
+        lesson: {
+          connect: { id: createQuizDto.lessonId },
+        }
       },
-      // include: { questions: true },
     });
   }
 

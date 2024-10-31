@@ -20,7 +20,7 @@ export class CreateQuizDto {
 
   @IsArray()
   @IsOptional()
-  @ApiProperty({type:[CreateQuestionDto]})
+  // @ApiProperty({type:[CreateQuestionDto]})
   questions?: CreateQuestionDto[];
 
 

@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-<<<<<<< HEAD
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourseService } from './courses.service';
 import { PrismaService } from 'src/prisma/prisma.service';

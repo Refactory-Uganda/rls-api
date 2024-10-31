@@ -16,24 +16,8 @@ export class QuizService {
     return this.prisma.quiz.create({
       data: {
         ...quizData,
-        questions: {
-          create: questions.map((question, index) => ({
-            text: question.text,
-            answer: question.answer,
-            order: index + 1, // Assuming order is based on the index
-            Option: {
-              create: question.options.map((option, optionIndex) => ({
-                optionText: option.optionText,
-                iscorrect: option.iscorrect || false, // Assuming a default value if not provided
-                order: optionIndex + 1, // Assuming order is based on the index
-              })),
-            },
-          })),
-        },
       },
-      include: { questions: {
-        include: { Option: true },
-      } },
+      include: { questions: true },
     });
   }
 

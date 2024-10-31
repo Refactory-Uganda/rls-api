@@ -4,7 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, Question } from '@prisma/client';
+import { CreateQuestionDto } from "src/question/dto/create-question.dto";
 
 @Injectable()
 export class QuizService {
@@ -47,9 +48,6 @@ export class QuizService {
       throw new Error(`Error partially updating quiz with ID ${id}: ${error.message}`);
     }
   }
-  
-  
-
 
   async remove(id: string) {
     return this.prisma.quiz.delete({
@@ -63,15 +61,33 @@ export class QuizService {
         id: quizId,
       },
       include: {
-        questions: true,  
+        questions: {
+          include: {
+            Option: true
+          }
+        },
       },
     });
   }
   async findQuizzes() {
     return this.prisma.quiz.findMany({
       include: {
-        questions: true, 
+        questions: {
+          include: {
+            Option: true
+          }
+        }
+      },
+    });
+  }
+
+  async findByQuizId(quizId: string): Promise<Question[]> {
+    return this.prisma.question.findMany({
+      where: { quizId },
+      include: {
+        Option: true,
       },
     });
   }
 }
+

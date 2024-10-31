@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsArray, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsArray } from "class-validator";
 import { CreateQuestionDto } from "src/question/dto/create-question.dto";  // Add this import
 import { ApiProperty } from '@nestjs/swagger';
 

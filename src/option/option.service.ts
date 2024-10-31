@@ -38,6 +38,24 @@ export class OptionService {
     }
   }
   
+  async findOptionById(optionId: string) {
+    return this.prisma.option.findUnique({
+      where: {
+        id: optionId,
+      },
+      include: {
+        question: true,
+      }
+    });
+  }
+
+  async findAll() {
+    return this.prisma.option.findMany({
+      include: {
+        question: true,
+      }
+    });
+  }
   
   async remove(id: string) {
     return this.prisma.option.delete({

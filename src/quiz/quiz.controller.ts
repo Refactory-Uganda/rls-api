@@ -38,7 +38,7 @@ export class QuizController {
 async findQuizAndQuestions(
   @Param('quizId') quizId: string
 ) {
-  return await this.quizService.findQuizById(quizId);
+  return await this.quizService.findByQuizId(quizId);
 }
 
  @Get()

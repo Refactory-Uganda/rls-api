@@ -18,7 +18,7 @@ export class QuizService {
       data: {
         ...quizData,
       },
-      include: { questions: true },
+      // include: { questions: true },
     });
   }
 

@@ -7,28 +7,60 @@ import { LoginDto } from './dto/create-login.dto';
 import axios from 'axios';
 import { RefeshTokendto } from './dto/refresh-token.dto';
 
+    interface ApiEndpoints {
+        admin: string;
+        staff: string;
+        student: string;
+        user: string;
+    }
 @Injectable()
 export class AuthenticationService {
-    private readonly loginEndpoints = {
-        admin: "https://rims-api-xufp.onrender.com/accounts/admin/login",
-        staff: "https://rims-api-xufp.onrender.com/accounts/staff/login",
-        student: "https://rims-api-xufp.onrender.com/accounts/student/login",
-        // user: "https://rims-api-xufp.onrender.com/accounts/users/login",
-    };
-
     constructor(
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
         private readonly httpService: HttpService,
-    ) { }
+    ) {}
 
-    urlAdmin = "https://rims-api-xufp.onrender.com/accounts/staff/login"
+    urlAdmin = "https://rims-api-xufp.onrender.com/accounts/admin/login"
+    urlStaff = "https://rims-api-xufp.onrender.com/accounts/staff/login"
+    urlStudent = "https://rims-api-xufp.onrender.com/accounts/student/login"
+    urlUser = "https://rims-api-xufp.onrender.com/accounts/users/login"
 
 
     async login(dto: LoginDto) {
+        const endpoints: ApiEndpoints = {
+            admin: "https://rims-api-xufp.onrender.com/accounts/admin/login",
+            staff: "https://rims-api-xufp.onrender.com/accounts/staff/login",
+            student: "https://rims-api-xufp.onrender.com/accounts/student/login",
+            user: "https://rims-api-xufp.onrender.com/accounts/users/login"
+        }
+
         try {
             console.log('Starting')
-            const response = await axios.post(this.urlAdmin, {
+            console.log(`starting ${dto.userGroup} login`);
+            console.log('Login DTO:', dto);
+
+            //  Select endpoint based on usertype
+            let targetUrl: string;
+            switch (dto.userGroup) {
+                case 'Administrator':
+                    targetUrl = endpoints.admin;
+                    break;
+                case 'Staff':
+                    targetUrl = endpoints.staff;
+                    break;
+                case 'Student':
+                    targetUrl = endpoints.student;
+                    break;
+                case 'User':
+                    targetUrl = endpoints.user;
+                    break;
+                default:
+                    throw new HttpException('Invalid user group', HttpStatus.BAD_REQUEST);
+            }
+
+
+            const response = await axios.post(targetUrl, {
                 email: dto.email,
                 password: dto.password
             });
@@ -39,25 +71,29 @@ export class AuthenticationService {
             }
             console.log('Received response from API:', externalUser);
 
-            // find user 
+
+            // find user
             let user = await this.prisma.user.findUnique({
                 where: {
                     email: externalUser.email.email
                 }
             });
+
+            const userData = {
+                externalId: externalUser.id,
+                email: externalUser.email.email,
+                firstName: externalUser.firstName,
+                lastName: externalUser.lastName,
+                userGroup: dto.userGroup,
+                nationality: externalUser.nationality,
+                residence: externalUser.residence,
+                refresh_token: externalUser.refresh_token
+            }
+
             if (!user) {
                 console.log('creating new user')
                 user = await this.prisma.user.create({
-                    data: {
-                        externalId: externalUser.id,
-                        email: externalUser.email.email,
-                        firstName: externalUser.firstName,
-                        lastName: externalUser.lastName,
-                        userGroup: externalUser.userGroup,
-                        nationality: externalUser.nationality,
-                        residence: externalUser.residence,
-                        refresh_token: externalUser.refresh_token
-                    },
+                    data: userData,
                 });
             } else {
                 console.log('updating existing user')
@@ -66,23 +102,17 @@ export class AuthenticationService {
                     where: {
                         id: user.id
                     },
-                    data: {
-                        firstName: externalUser.firstName,
-                        lastName: externalUser.lastName,
-                        userGroup: externalUser.userGroup,
-                        nationality: externalUser.nationality,
-                        residence: externalUser.residence,
-                        refresh_token: externalUser.refresh_token
-                    },
+                    data: userData,
                 });
             }
+
             // Generate Jwt Token
             const payload = {
                 sub: user.id,
                 email: user.email,
                 userGroup: user.userGroup
             };
-            // console.log('Recieved response: ', response.data)
+            // console.log('Received response: ', response.data)
             return {
                 message: 'Login Successfully to RLS',
                 success: true,

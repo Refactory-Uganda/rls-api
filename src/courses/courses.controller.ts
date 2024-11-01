@@ -45,7 +45,7 @@ export class CourseController {
   }
   @Get() 
   @UseGuards(JwtAuthGaurd, RolesGaurd)
-  @Roles('Staff')
+  @Roles('Staff', 'Administrator')
   @ApiOperation({summary: 'Get all Courses'})
   async findAll(
     @Query('page') page: number = 1,

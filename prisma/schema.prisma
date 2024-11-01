@@ -106,7 +106,7 @@ model User {
   email     String   @unique
   firstName String
   lastName String
-  userGroup     String
+  userGroup     Groups
   nationality String?
   residence String?
   refresh_token String?
@@ -125,6 +125,13 @@ enum Role {
 enum CourseStatus {
   DRAFT
   PUBLISHED
+}
+
+enum Groups {
+  Administrator
+  Staff 
+  Student 
+  User 
 }
 
 model TextContent {

@@ -1,14 +1,22 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsString } from "class-validator";
+import { IsEmail, IsEnum, IsString } from "class-validator";
 
 export class LoginDto {
-    @ApiProperty()
+    @ApiProperty({ description: 'example@email.com'})
     @IsEmail()
     email: string;
 
-    @ApiProperty()
+    @ApiProperty({ description: ' Add your Password '})
     @IsString()
     password: string;
+
+    @IsEnum(['Administrator','Staff','Student','User'])
+    @ApiProperty({
+        description: 'The Different users who can access these accounts',
+        enum: ['Administrator','Staff','Student','User'],
+        enumName: 'User Roles'
+    })
+    userGroup: 'Administrator' | 'Staff' | 'Student' | 'User'; 
 
 }

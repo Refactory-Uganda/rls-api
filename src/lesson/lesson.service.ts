@@ -10,18 +10,6 @@ import { Prisma } from '@prisma/client';
 export class LessonService {
     constructor(private prisma: PrismaService) {}
 
-    // async create(data: CreateLessonDto): Promise<Lesson> {
-    //   const lesson = await this.prisma.topic.create({
-    //     data: {
-    //       title: data.title,
-    //       text: data.text,
-    //       topicId: data.topicId,
-    //     },
-    //     include: { topic: true },
-    //   });
-    //   return lesson;
-    // }
-
     async createNew(createLessonDto: CreateLessonDto) {
       const lesson = await this.prisma.lesson.create({
         data: {
@@ -36,28 +24,6 @@ export class LessonService {
       return lesson;
     }
 
-    // async updateLesson(id: string, updateLessonDto: UpdateLessonDto) {
-    //     try {
-    //       return await this.prisma.lesson.update({
-    //         where: { id },
-    //         data: 
-    //         {
-    //           title: updateLessonDto.title,
-    //           text: updateLessonDto.text,
-    //           topicId: updateLessonDto.topicId,
-    //           // content: {
-    //           //   update: {
-    //           //     where: { id: string},
-                  
-    //           //   },
-    //           // },
-    //         },
-    //       });
-    //     } catch (error) {
-    //       throw new Error(`Error updating lesson with ID ${id}: ${error.message}`);
-    //     }
-    //   }
-    
     async patchLesson(id: string, partialUpdateDto: UpdateLessonDto) {
       try {
         const updateData: Prisma.LessonUpdateInput = {
@@ -74,8 +40,6 @@ export class LessonService {
       }
     }
     
-
-
     async deleteLesson(id:string) {
         const lesson = await this.prisma.lesson.delete(
             {
@@ -88,15 +52,17 @@ export class LessonService {
     }
     async findAllLessons() {
       return this.prisma.lesson.findMany({
-      
+      include: { quiz: true }
     });
     }
     async findLessonById(lessonId: string) {
       return this.prisma.lesson.findUnique({
         where: {
           id: lessonId,
-        
         },
+        include: {
+            quiz: true
+          }
       });
     }
 

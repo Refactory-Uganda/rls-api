@@ -7,6 +7,9 @@ import { UpdateTextnotesDto } from './dto/update-textnotes.dto';
 
 @Injectable()
 export class NoteService {
+  update(id: string, updateNoteDto: UpdateTextnotesDto) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private prisma: PrismaService) {}
 
   async create(createNoteDto: CreateNoteDto) {

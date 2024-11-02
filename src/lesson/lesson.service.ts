@@ -63,16 +63,20 @@ export class LessonService {
         const updateData: Prisma.LessonUpdateInput = {
           title: partialUpdateDto.title,
           text: partialUpdateDto.text,
+          topic: partialUpdateDto.topicId ? { connect: { id: partialUpdateDto.topicId } } : undefined,
         };
     
         return await this.prisma.lesson.update({
           where: { id },
           data: updateData,
+          include: { topic: true },
         });
       } catch (error) {
         throw new Error(`Error partially updating lesson with ID ${id}: ${error.message}`);
       }
     }
+    
+    
     
 
 

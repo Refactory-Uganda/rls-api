@@ -1,10 +1,13 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.controller.ts
-import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Patch, Query } from '@nestjs/common';
+import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Patch, UseGuards, Query } from '@nestjs/common';
 import {  CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGaurd } from 'src/authentication/guards/jwt-auth.guard';
+import { RolesGaurd } from 'src/authentication/guards/roles.guard';
+import { Roles } from 'src/authentication/decorators/roles.decorator';
 
 @Controller('courses')
 @ApiTags('Course')
@@ -44,9 +47,14 @@ export class CourseController {
   // }
 
   @Get() 
+  @UseGuards(JwtAuthGaurd, RolesGaurd)
+  @Roles('Staff', 'Administrator')
   @ApiOperation({summary: 'Get all Courses'})
-  async findAll() {
-    return await this.courseService.findAll(); 
+  async findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 2
+  ) {
+    return await this.courseService.findAll(Number(page),Number(limit)); 
   }
 
 

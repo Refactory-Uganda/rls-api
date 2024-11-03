@@ -41,7 +41,7 @@ describe('CoursesService', () => {
             ],
         };
 
-        const result = await service.update('671a5e6efd0249d6ee204579', updateDto);
+        const result: any = await service.update('671a5e6efd0249d6ee204579', updateDto);
         expect(result).toBeDefined();
         expect(result.Title).toEqual('Updated Course Title');
         expect(result.topics[0].Lesson[0].title).toEqual('Updated Lesson');

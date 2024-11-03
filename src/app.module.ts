@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { PrismaModule } from './prisma/prisma.module';
 import { FacilitatorModule } from './facilitator/facilitator.module';
-import { AuthModule } from './auth/auth.module'; // AuthModule includes AuthService
+// import { AuthModule } from './auth/auth.module'; // AuthModule includes AuthService
 import { MailModule } from './mail/mail.module';
 import { CohortModule } from './cohort/cohort.module';
 import { LearnerModule } from './learner/learner.module';
@@ -19,6 +19,7 @@ import { SubheadingModule } from './subheading/subheading.module';
 import { QuizModule } from './quiz/quiz.module';
 import { QuestionModule } from './question/question.module';
 import { OptionModule } from './option/option.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { OptionModule } from './option/option.module';
     PrismaModule,
     ModulesModule,
     FacilitatorModule,
-    AuthModule,
+    // AuthModule,
     MailModule,
     CohortModule,
     LearnerModule,
@@ -40,7 +41,8 @@ import { OptionModule } from './option/option.module';
     SubheadingModule,
     QuizModule,
     QuestionModule,
-    OptionModule, 
+    OptionModule,
+    AuthenticationModule, 
   ],
   controllers: [], 
   providers: [], 

@@ -234,12 +234,14 @@ export class CourseService {
 	}
 
 
-	async findAll(page: number = 1, limit: number = 2) {
+	async findAll(
+		// page: number = 1, limit: number = 2
+	) {
 		try {
-			const skip = (page - 1) * limit;
+			// const skip = (page - 1) * limit;
 			const courses = await this.prisma.course.findMany({
-				skip,
-				take: Number(limit),
+				// skip,
+				// take: Number(limit),
 				include: {
 					topics: {
 						include: { Lesson: true }
@@ -247,14 +249,14 @@ export class CourseService {
 				}
 			});
 
-			const totalCourses = await this.prisma.course.count();
+			// const totalCourses = await this.prisma.course.count();
 
 			return {
 				data: courses,
-				total: totalCourses,
-				page,
-				limit,
-				totalPages: Math.ceil(totalCourses / limit),
+				// total: totalCourses,
+				// page,
+				// limit,
+				// totalPages: Math.ceil(totalCourses / limit),
 			};
 		} catch (error) {
 			throw new Error(`Error fetching courses: ${error.message}`);

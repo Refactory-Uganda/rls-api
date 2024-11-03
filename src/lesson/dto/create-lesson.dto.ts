@@ -46,15 +46,24 @@ export class CreateNoteDto {
   
   export class CreateLessonDto {
 
-    @ApiProperty()
+    @ApiProperty({
+      description: 'The title of the lesson',
+      example: 'Introduction to JavaScript Datatypes',
+    })
     @IsString()
     title: string;
 
-    @ApiProperty()
+    @ApiProperty({
+      description: 'The content of the lesson',
+      example: 'This lesson is an introduction to JavaScript datatypes....'
+    })
     @IsString()
     text?: string;
 
-    @ApiProperty()
+    @ApiProperty({
+      description: 'The topicId of the lesson',
+      example: '60b3f7c4f2f5f40015'
+    })
     @IsString()
     topicId?: string;
 

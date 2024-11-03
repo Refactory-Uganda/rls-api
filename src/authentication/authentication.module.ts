@@ -8,14 +8,19 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { HttpModule } from '@nestjs/axios';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RolesGaurd } from './guards/roles.guard';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     PassportModule,
     PrismaModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '15m' },
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { issuer: 'rls-api' },
+      }),
+      inject: [ConfigService],
     }),
     HttpModule,
   ],

@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { HttpService } from '@nestjs/axios';
 import { LoginDto } from './dto/create-login.dto';
 import axios from 'axios';
-import { RefeshTokendto } from './dto/refresh-token.dto';
+import { RefreshTokendto } from './dto/refresh-token.dto';
 
     interface ApiEndpoints {
         admin: string;
@@ -20,6 +20,7 @@ export class AuthenticationService {
         private readonly jwtService: JwtService,
         private readonly httpService: HttpService,
     ) {}
+    
 
     urlAdmin = "https://rims-api-xufp.onrender.com/accounts/admin/login"
     urlStaff = "https://rims-api-xufp.onrender.com/accounts/staff/login"
@@ -87,7 +88,7 @@ export class AuthenticationService {
                 userGroup: dto.userGroup,
                 nationality: externalUser.nationality,
                 residence: externalUser.residence,
-                refresh_token: externalUser.refresh_token
+                // refresh_token: tokens.refresh_token
             }
 
             if (!user) {
@@ -112,6 +113,20 @@ export class AuthenticationService {
                 email: user.email,
                 userGroup: user.userGroup
             };
+
+            const access_token = this.jwtService.sign(payload, {
+                expiresIn: '15m'
+            });
+
+            const refresh_token = this.jwtService.sign(payload, {
+                expiresIn: '7d'
+            });
+
+            await this.prisma.user.update({
+                where: { id: user.id},
+                data: { refresh_token }
+            })
+
             // console.log('Received response: ', response.data)
             return {
                 message: 'Login Successfully to RLS',
@@ -124,8 +139,8 @@ export class AuthenticationService {
                     userGroup: user.userGroup,
                 },
                 tokens: {
-                    access_token: this.jwtService.sign(payload),
-                    refresh_token: tokens.refresh_token
+                    access_token,
+                    refresh_token
                 }
             };
 
@@ -140,8 +155,9 @@ export class AuthenticationService {
         }
     }
 
-    async refreshToken(refreshToken: RefeshTokendto) {
+    async refreshToken(refreshToken: RefreshTokendto) {
         try {
+            // find user with refresh token
             const user = await this.prisma.user.findFirst({
                 where: { refresh_token: refreshToken.refresh_token },
             });
@@ -149,32 +165,48 @@ export class AuthenticationService {
                 throw new UnauthorizedException('Invalid refresh token');
             }
 
+    
+
             // verify refresh token with rims
-            const response = await axios.post(this.urlAdmin, {
-                refresh_token: refreshToken.refresh_token
-            });
+            try {
+                const decoded = this.jwtService.verify(refreshToken.refresh_token);
+                console.log('Decoded refresh token:', decoded);
 
-            const { tokens } = response.data;
+                
 
-            // update user
-            await this.prisma.user.update({
-                where: {
-                    id: user.id
-                },
-                data: {
-                    refresh_token: tokens.refresh_token
-                }
-            });
+            } catch(error) {
+                await this.prisma.user.update({
+                    where: { id: user.id },
+                    data: { refresh_token: null }
+                });
+                console.error(error)
+                throw new UnauthorizedException('Expired refresh token');
+            }
 
+            // generate new tokens
             const payload = {
                 sub: user.id,
                 email: user.email,
                 userGroup: user.userGroup
             };
 
+            const access_token = this.jwtService.sign(payload, {
+                expiresIn: '15m'
+            });
+            const new_refresh_token = this.jwtService.sign(payload, {
+                expiresIn: '7d'
+            });
+
+            // update user with new refresh token
+            await this.prisma.user.update({
+                where: { id: user.id },
+                data: { refresh_token: new_refresh_token }
+            });
+            
+
             return {
-                access_token: this.jwtService.sign(payload),
-                refresh_token: tokens.refresh_token
+                access_token,
+                refresh_token: new_refresh_token
             };
         } catch (error) {
             if (axios.isAxiosError(error)) {

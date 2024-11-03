@@ -252,7 +252,7 @@ export class CourseService {
 			// const totalCourses = await this.prisma.course.count();
 
 			return {
-				data: courses,
+				courses,
 				// total: totalCourses,
 				// page,
 				// limit,

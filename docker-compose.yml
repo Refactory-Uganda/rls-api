@@ -4,7 +4,7 @@ services:
     build: .                
     image: rls-api:v1.0    
     ports:
-      - "3000:3000"
+      - "5000:5000"
     environment:
       - DATABASE_URL=mongodb+srv://ikalumba221:Fb3LUGsfNAkK1ag2@rls.lm131.mongodb.net/RLS
     depends_on:

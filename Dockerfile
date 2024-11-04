@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:16 AS builder
+FROM node:20.14.0 AS builder
 
 WORKDIR /app
 
@@ -26,7 +26,7 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 
 # Expose the application port
-EXPOSE 3000
+EXPOSE 5000
 
 # Command to run the application
 CMD ["node", "dist/main.js"]

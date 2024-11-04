@@ -88,7 +88,11 @@ export class QuizService {
     return this.prisma.question.findMany({
       where: { quizId },
       include: {
-        Option: true,
+        quiz: {
+          include: { questions: {
+            include: { Option: true }
+          } },
+        },
       },
     });
   }

@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
-import { Prisma, Question } from '@prisma/client';
+import { Prisma, Question, Quiz } from '@prisma/client';
 import { CreateQuestionDto } from "src/question/dto/create-question.dto";
 
 @Injectable()
@@ -84,17 +84,19 @@ export class QuizService {
     });
   }
 
-  async findByQuizId(quizId: string): Promise<Question[]> {
-    return this.prisma.question.findMany({
-      where: { quizId },
-      include: {
-        quiz: {
-          include: { questions: {
-            include: { Option: true }
-          } },
-        },
+  async findByQuizId(quizId: string){
+    return this.prisma.quiz.findUnique({
+      where: {
+        id: quizId
       },
-    });
+      include: {
+        questions: {
+          include: {
+            Option: true
+          }
+        }
+      }
+    })
   }
 }
 

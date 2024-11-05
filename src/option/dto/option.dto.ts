@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsBoolean, IsNumber, IsNotEmpty, IsOptional } from 'class-validator';
 

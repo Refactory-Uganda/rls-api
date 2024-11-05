@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
@@ -11,7 +12,7 @@ export class QuestionService {
   constructor(private prisma: PrismaService) {}
 
   async create(createQuestionDto: CreateQuestionDto) {
-    const { options, ...questionData } = createQuestionDto;
+    const { Option, ...questionData } = createQuestionDto;
 
     const question = await this.prisma.question.create({
       data: {
@@ -27,7 +28,7 @@ export class QuestionService {
   }
 
   async patchQuestion(id: string, updateQuestionDto: UpdateQuestionDto) {
-    const { options, ...questionData } = updateQuestionDto;
+    const { Option, ...questionData } = updateQuestionDto;
   
     // Step 1: Update the question
     const updatedQuestion = await this.prisma.question.update({
@@ -39,7 +40,7 @@ export class QuestionService {
         explanation: questionData.explanation,
         quizId: questionData.quizId,
         Option: {
-          upsert: options?.map(option => ({
+          upsert: Option?.map(option => ({
             where: { id: option.id },
             create: {
               optionText: option.optionText,
@@ -72,7 +73,21 @@ export class QuestionService {
 
   async findQuestions() {
     return this.prisma.question.findMany({
+      include: {
+        Option: true,
+      }
     });
   }
-  
+
+  async findQuestionById(id:string) {
+    return this.prisma.question.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        Option: true,
+  }
+})
+
+}
 }

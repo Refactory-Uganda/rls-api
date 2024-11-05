@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsArray, IsNotEmpty, IsOptional } from 'class-validator';
-import { CreateQuestionDto } from '../../question/dto/create-question.dto';  // Add this import
+import { IsString, IsNotEmpty, IsOptional, IsArray } from "class-validator";
+import { CreateQuestionDto } from "src/question/dto/create-question.dto";  // Add this import
 import { ApiProperty } from '@nestjs/swagger';
 
 
@@ -15,12 +15,12 @@ export class CreateQuizDto {
   description: string;
 
   @IsString()
-  // @ApiProperty()
+  @ApiProperty()
   lessonId: string;
 
   @IsArray()
   @IsOptional()
-  @ApiProperty({type:[CreateQuestionDto]})
+  // @ApiProperty({type:[CreateQuestionDto]})
   questions?: CreateQuestionDto[];
 
 

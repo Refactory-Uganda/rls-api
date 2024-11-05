@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
@@ -16,6 +17,18 @@ export class OptionController {
   @ApiOperation({summary: 'Create option'})
   create(@Body() createOptionDto: CreateOptionDto) {
     return this.optionService.create(createOptionDto);
+  }
+
+  @Get()
+  @ApiOperation({summary: 'Get all options'})
+  findAll() {
+    return this.optionService.findAll();
+  }
+
+  @Get(':option_id')
+  @ApiOperation({summary: 'Get option by id'})
+  findOne(@Param('option_id') optionId: string) {
+    return this.optionService.findOptionById(optionId);
   }
 
   @Patch(':id')

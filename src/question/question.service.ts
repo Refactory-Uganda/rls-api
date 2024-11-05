@@ -21,7 +21,7 @@ export class QuestionService {
         //   create: options || [],
         // },
       },
-      include: { Option: true },
+      include: { option: true },
     });
 
     return {'Question': question}
@@ -39,7 +39,7 @@ export class QuestionService {
         order: questionData.order,
         explanation: questionData.explanation,
         quizId: questionData.quizId,
-        Option: {
+        option: {
           upsert: Option?.map(option => ({
             where: { id: option.id },
             create: {
@@ -56,7 +56,7 @@ export class QuestionService {
         },
       },
       include: {
-        Option: true,
+        option: true,
       },
     });
   
@@ -74,7 +74,7 @@ export class QuestionService {
   async findQuestions() {
     return this.prisma.question.findMany({
       include: {
-        Option: true,
+        option: true,
       }
     });
   }
@@ -85,7 +85,7 @@ export class QuestionService {
         id: id,
       },
       include: {
-        Option: true,
+        option: true,
   }
 })
 

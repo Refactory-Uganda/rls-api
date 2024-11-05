@@ -1,15 +1,13 @@
-name: Backend CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main
-      - staging
       - development
+      - staging
+      - main
   pull_request:
     branches:
-      - main
-      - staging
       - development
 
 jobs:
@@ -24,6 +22,11 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
+        options: > 
+          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=5
 
     steps:
       - name: Checkout repository
@@ -32,7 +35,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: ${{ matrix.node-version }}
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -62,11 +65,30 @@ jobs:
       - name: Run tests (including API tests)
         run: npm run test:e2e
 
-  deploy:
+  deploy-staging:
+    if: github.ref == 'refs/heads/staging'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to staging environment
+        run: |
+          echo "Deploying to staging environment..."
+          # staging deployment commands here
+          # an SSH command, or an API call to the staging server
+
+  deploy-production:
     if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to production (main branch)
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to production
         run: |
           echo "Deploying to production..."
+          # Production deployment commands
+          # An SSH command, or an API call to the production server

@@ -22,7 +22,7 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-        options: --health-cmd="mongo --eval 'db.runCommand({ ping:1 })'" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd="mongo --eval 'db.runCommand({ ping:1 })'" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout repository
@@ -42,7 +42,7 @@ jobs:
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci  # Using npm ci for CI environments
 
       - name: Cache Cypress binary
         uses: actions/cache@v3
@@ -54,6 +54,18 @@ jobs:
 
       - name: Install Cypress (if not cached)
         run: npx cypress install
+
+      - name: Wait for MongoDB
+        run: |
+          echo "Waiting for MongoDB to be ready..."
+          for i in {1..30}; do
+            if mongo --eval 'db.runCommand({ ping: 1 })'; then
+              echo "MongoDB is ready."
+              break
+            fi
+            echo "Waiting for MongoDB to start..."
+            sleep 2
+          done
 
       - name: Build NestJS API
         run: npm run build
@@ -75,7 +87,10 @@ jobs:
           SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
         run: |
           echo "Deploying to staging environment..."
-          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$STAGING_SERVER "bash deploy-staging.sh"
+          if ! ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$STAGING_SERVER "bash deploy-staging.sh"; then
+            echo "Deployment to staging failed!" >&2
+            exit 1
+          fi
 
   deploy-production:
     if: github.ref == 'refs/heads/main'
@@ -91,4 +106,7 @@ jobs:
           SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
         run: |
           echo "Deploying to production..."
-          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$PRODUCTION_SERVER "bash deploy-production.sh"
+          if ! ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$PRODUCTION_SERVER "bash deploy-production.sh"; then
+            echo "Deployment to production failed!" >&2
+            exit 1
+          fi

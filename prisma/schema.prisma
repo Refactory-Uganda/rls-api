@@ -46,25 +46,6 @@ model Lesson {
   updatedAt DateTime @updatedAt
 }
 
-// model notes {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   notestext   String
-//   textContent textContent? @relation(fields: [textContentId], references: [id])
-//   textContentId String?    @db.ObjectId
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
-
-// model subTitle {
-//   id          String       @id @default(auto()) @map("_id") @db.ObjectId
-//   subTitle    String
-//   textContent textContent? @relation(fields: [textContentId], references: [id])
-//   textContentId String?    @db.ObjectId
-//   createdAt   DateTime     @default(now())
-//   updatedAt   DateTime     @updatedAt
-// }
-
-
 model Quiz {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   title     String

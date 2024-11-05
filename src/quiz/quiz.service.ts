@@ -84,7 +84,7 @@ export class QuizService {
     });
   }
 
-  async findByQuizId(quizId: string){
+  async findByQuizId(quizId: string): Promise<Quiz> {
     return this.prisma.quiz.findUnique({
       where: {
         id: quizId

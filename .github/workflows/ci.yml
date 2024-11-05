@@ -19,12 +19,15 @@ jobs:
 
     services:
       mongo:
-        image: mongo:latest
+        image: mongo:5.0 
         ports:
-          - 27017:27017
+          - 27018:27017
         options: --health-cmd="mongo --eval 'db.runCommand({ ping:1 })'" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
+      - name: Check Docker version
+        run: docker --version
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -42,7 +45,7 @@ jobs:
             ${{ runner.os }}-node_modules-
 
       - name: Install dependencies
-        run: npm ci  # Using npm ci for CI environments
+        run: npm ci
 
       - name: Cache Cypress binary
         uses: actions/cache@v3
@@ -72,6 +75,9 @@ jobs:
 
       - name: Run tests (including API tests)
         run: npm run test:e2e
+
+      - name: Check MongoDB logs
+        run: docker logs mongo
 
   deploy-staging:
     if: github.ref == 'refs/heads/staging'

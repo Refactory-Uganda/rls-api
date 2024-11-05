@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json', 'package.json') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/Cypress
-          key: ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json', 'package.json') }}
           restore-keys: |
             ${{ runner.os }}-cypress-
 
@@ -74,10 +74,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Deploy to staging environment
+        env:
+          STAGING_SERVER: ${{ secrets.STAGING_SERVER }}
+          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
         run: |
           echo "Deploying to staging environment..."
-          # staging deployment commands here
-          # an SSH command, or an API call to the staging server
+          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$STAGING_SERVER "bash deploy-staging.sh"
 
   deploy-production:
     if: github.ref == 'refs/heads/main'
@@ -88,7 +90,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Deploy to production
+        env:
+          PRODUCTION_SERVER: ${{ secrets.PRODUCTION_SERVER }}
+          SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
         run: |
           echo "Deploying to production..."
-          # Production deployment commands
-          # An SSH command, or an API call to the production server
+          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$PRODUCTION_SERVER "bash deploy-production.sh"

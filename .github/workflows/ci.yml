@@ -23,7 +23,7 @@ jobs:
         ports:
           - 27018:27017  # Ensure your app connects to the right port
         options: 
-          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'" 
+          --health-cmd="mongo --eval 'db.runCommand({ ping:1 })'" 
           --health-interval=10s 
           --health-timeout=5s 
           --health-retries=3

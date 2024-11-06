@@ -19,10 +19,14 @@ jobs:
 
     services:
       mongo:
-        image: mongo:5.0 
+        image: mongo:5.0
         ports:
           - 27018:27017
-        options: --health-cmd="mongo --eval 'db.runCommand({ ping:1 })'" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >
+          --health-cmd="mongo --eval \"db.runCommand({ ping: 1 })\""
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
       - name: Check Docker version
@@ -30,6 +34,8 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          node-version: '20'
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -43,6 +49,7 @@ jobs:
           key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json', 'package.json') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
+          node-version: '20'
 
       - name: Install dependencies
         run: npm ci
@@ -54,6 +61,7 @@ jobs:
           key: ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json', 'package.json') }}
           restore-keys: |
             ${{ runner.os }}-cypress-
+          node-version: '20'
 
       - name: Install Cypress (if not cached)
         run: npx cypress install
@@ -87,6 +95,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          node-version: '20'
 
       - name: Deploy to staging environment
         env:
@@ -107,6 +117,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          node-version: '20'
 
       - name: Deploy to production
         env:

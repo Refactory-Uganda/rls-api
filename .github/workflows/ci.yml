@@ -22,10 +22,10 @@ jobs:
         image: mongo:5.0 
         ports:
           - 27018:27017
-        options: 
-          --health-cmd="mongo --eval 'db.runCommand({ ping:1 })'" 
-          --health-interval=10s 
-          --health-timeout=5s 
+        options: >
+          --health-cmd="mongo --eval 'db.runCommand({ ping:1 })'"
+          --health-interval=10s
+          --health-timeout=5s
           --health-retries=3
 
     steps:
@@ -62,23 +62,17 @@ jobs:
       - name: Install Cypress (if not cached)
         run: npx cypress install
 
-      - name: List Docker containers
-        run: docker ps -a
-
-      - name: Wait for MongoDB
+      - name: Wait for MongoDB to be ready
         run: |
           echo "Waiting for MongoDB to be ready..."
           for i in {1..30}; do
-            if docker ps -q -f name=mongo; then
-              if mongo --eval 'db.runCommand({ ping:1 })'; then
-                echo "MongoDB is ready."
-                break
-              fi
+            if docker inspect --format="{{json .State.Health.Status}}" mongo | grep '"healthy"'; then
+              echo "MongoDB is ready."
+              break
             else
-              echo "MongoDB container is not running yet."
+              echo "Waiting for MongoDB..."
+              sleep 2
             fi
-            echo "Waiting for MongoDB to start..."
-            sleep 2
           done
 
       - name: Build NestJS API
@@ -88,14 +82,10 @@ jobs:
         run: npm run test:e2e
 
       - name: Check MongoDB logs
-        run: |
-          if ! docker logs mongo; then
-            echo "No MongoDB logs available. The container may not have started."
-            docker ps -a
-          fi
+        run: docker logs mongo || echo "No MongoDB logs available."
 
   deploy-staging:
-    if: github.ref == 'refs/heads/staging' && secrets.STAGING_SERVER != '' && secrets.STAGING_SSH_KEY != ''
+    if: github.ref == 'refs/heads/staging'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -107,14 +97,15 @@ jobs:
           STAGING_SERVER: ${{ secrets.STAGING_SERVER }}
           SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
         run: |
-          echo "Deploying to staging environment..."
-          if ! ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$STAGING_SERVER "bash deploy-staging.sh"; then
-            echo "Deployment to staging failed!" >&2
+          if [ -z "${{ secrets.STAGING_SERVER }}" ] || [ -z "${{ secrets.STAGING_SSH_KEY }}" ]; then
+            echo "Staging secrets are missing!" >&2
             exit 1
           fi
+          echo "Deploying to staging environment..."
+          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$STAGING_SERVER "bash deploy-staging.sh"
 
   deploy-production:
-    if: github.ref == 'refs/heads/main' && secrets.PRODUCTION_SERVER != '' && secrets.PRODUCTION_SSH_KEY != ''
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -126,8 +117,9 @@ jobs:
           PRODUCTION_SERVER: ${{ secrets.PRODUCTION_SERVER }}
           SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
         run: |
-          echo "Deploying to production..."
-          if ! ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$PRODUCTION_SERVER "bash deploy-production.sh"; then
-            echo "Deployment to production failed!" >&2
+          if [ -z "${{ secrets.PRODUCTION_SERVER }}" ] || [ -z "${{ secrets.PRODUCTION_SSH_KEY }}" ]; then
+            echo "Production secrets are missing!" >&2
             exit 1
           fi
+          echo "Deploying to production..."
+          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$PRODUCTION_SERVER "bash deploy-production.sh"

@@ -1,4 +1,5 @@
 // src/note/textnotes.service.spec.ts
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { NoteService } from './textnotes.service';
 import { PrismaService } from '../prisma/prisma.service'; // Assuming this is the correct path

@@ -1,4 +1,5 @@
 // src/text-content/text-content.service.spec.ts
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { TextContentService } from './textcontent.service';
 import { PrismaService } from '../prisma/prisma.service';

@@ -1,4 +1,5 @@
 // src/question/question.controller.spec.ts
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { QuestionController } from './question.controller';
 import { QuestionService } from './question.service';

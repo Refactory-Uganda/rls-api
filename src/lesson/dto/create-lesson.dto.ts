@@ -2,20 +2,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty } from 'class-validator';
 
-// export class CreateLessonDto {
-//     @IsString()
-//     @IsNotEmpty()
-//     @ApiProperty()
-//     title: string;
-
-//     @ApiProperty()
-//     content?: TextContent[];
-
-//     @IsString()
-//     @ApiProperty()
-//     topicId?: string;
-// }
-// dto/create-lesson.dto.ts
 export class CreateNoteDto {
 
     @ApiProperty() 
@@ -49,15 +35,24 @@ export class CreateNoteDto {
     @IsString()
     id: string;
 
-    @ApiProperty()
+    @ApiProperty({
+      description: 'The title of the lesson',
+      example: 'Introduction to JavaScript Datatypes',
+    })
     @IsString()
     title: string;
 
-    @ApiProperty()
+    @ApiProperty({
+      description: 'The content of the lesson',
+      example: 'This lesson is an introduction to JavaScript datatypes....'
+    })
     @IsString()
     text?: string;
 
-    @ApiProperty()
+    @ApiProperty({
+      description: 'The topicId of the lesson',
+      example: '60b3f7c4f2f5f40015'
+    })
     @IsString()
     topicId?: string;
 

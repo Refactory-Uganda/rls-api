@@ -1,4 +1,5 @@
 // src/text-content/text-content.controller.spec.ts
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { TextContentController } from './textcontent.controller';
 import { TextContentService } from './textcontent.service';

@@ -1,4 +1,5 @@
 // src/sub-heading/sub-heading.service.spec.ts
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { SubHeadingService } from './subheading.service';
 import { PrismaService } from '../prisma/prisma.service'; // Update with correct import path

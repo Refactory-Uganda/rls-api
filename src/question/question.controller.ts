@@ -39,4 +39,11 @@ export class QuestionController {
   findAll() {
     return this.questionService.findQuestions();
   }
+
+  @Get(':question_id')
+  @ApiOperation({summary: 'Get question by id'})
+  findOne(@Param('question_id') question_id: string) {
+    return this.questionService.findQuestionById(question_id);
+  }
+
 }

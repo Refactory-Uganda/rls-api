@@ -4,36 +4,24 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
-import { Prisma } from '@prisma/client';
+import { Prisma, Question } from '@prisma/client';
+import { CreateQuestionDto } from "src/question/dto/create-question.dto";
 
 @Injectable()
 export class QuizService {
   constructor(private prisma: PrismaService) {}
 
   async create(createQuizDto: CreateQuizDto) {
-    const { questions, ...quizData } = createQuizDto;
+    // const { questions, ...quizData } = createQuizDto;
 
     return this.prisma.quiz.create({
       data: {
-        ...quizData,
-        questions: {
-          create: questions.map((question, index) => ({
-            text: question.text,
-            answer: question.answer,
-            order: index + 1, // Assuming order is based on the index
-            Option: {
-              create: question.options.map((option, optionIndex) => ({
-                optionText: option.optionText,
-                iscorrect: option.iscorrect || false, // Assuming a default value if not provided
-                order: optionIndex + 1, // Assuming order is based on the index
-              })),
-            },
-          })),
-        },
+        title: createQuizDto.title,
+        description: createQuizDto.description,
+        lesson: {
+          connect: { id: createQuizDto.lessonId },
+        }
       },
-      include: { questions: {
-        include: { Option: true },
-      } },
     });
   }
 
@@ -63,9 +51,6 @@ export class QuizService {
       throw new Error(`Error partially updating quiz with ID ${id}: ${error.message}`);
     }
   }
-  
-  
-
 
   async remove(id: string) {
     return this.prisma.quiz.delete({
@@ -79,15 +64,33 @@ export class QuizService {
         id: quizId,
       },
       include: {
-        questions: true,  
+        questions: {
+          include: {
+            Option: true
+          }
+        },
       },
     });
   }
   async findQuizzes() {
     return this.prisma.quiz.findMany({
       include: {
-        questions: true, 
+        questions: {
+          include: {
+            Option: true
+          }
+        }
+      },
+    });
+  }
+
+  async findByQuizId(quizId: string): Promise<Question[]> {
+    return this.prisma.question.findMany({
+      where: { quizId },
+      include: {
+        Option: true,
       },
     });
   }
 }
+

@@ -101,10 +101,38 @@ model Option {
   question Question? @relation(fields: [questionId], references: [id])
 }
 
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  externalId String @unique // ID from RIMS
+  email     String   @unique
+  firstName String
+  lastName String
+  userGroup     Groups
+  nationality String?
+  residence String?
+  refresh_token String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+  STAFF
+  STUDENT
+}
+
 
 enum CourseStatus {
   DRAFT
   PUBLISHED
+}
+
+enum Groups {
+  Administrator
+  Staff 
+  Student 
+  User 
 }
 
 model TextContent {

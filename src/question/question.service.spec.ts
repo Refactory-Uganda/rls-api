@@ -1,4 +1,5 @@
 // src/question/question.service.spec.ts
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { QuestionService } from './question.service';
 import { PrismaService } from '../prisma/prisma.service';

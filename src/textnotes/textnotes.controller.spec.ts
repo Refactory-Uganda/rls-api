@@ -1,4 +1,5 @@
 // src/note/note.controller.spec.ts
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { NoteController } from './textnotes.controller';
 import { NoteService } from './textnotes.service';

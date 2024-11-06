@@ -1,4 +1,5 @@
 // src/sub-heading/sub-heading.controller.spec.ts
+/* eslint-disable prettier/prettier */
 import { Test, TestingModule } from '@nestjs/testing';
 import { SubHeadingController } from './subheading.controller';
 import { SubHeadingService } from './subheading.service';

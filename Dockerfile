@@ -1,32 +1,35 @@
 # Stage 1: Build the application
-FROM node:20.14.0 AS builder
+FROM node:20.14.0 
 
-WORKDIR /app
+WORKDIR /rls-api
 
+# Set environment variable for port
+ENV PORT=3000
+
+# Copy package files
 COPY package*.json ./
-RUN npm install
 
-# Copy the Prisma schema and generate the client
-COPY prisma ./prisma
-RUN npx prisma generate
-
-# Copy the rest of the application code
+# Copy the rest of the application code, including the src/mail/templates directory
 COPY . .
+
+# Copy Prisma schema and config files
+COPY prisma ./prisma/
+COPY tsconfig*.json ./
+
+# Install dependencies with legacy peer deps to handle conflicts
+RUN npm install -g npm@10.8.3 && \
+    npm install --legacy-peer-deps
+
+# Generate Prisma client
+RUN npx prisma generate
 
 # Build the application
 RUN npm run build
 
-# Stage 2: Run the application
-FROM node:16-alpine AS production
+# Expose the port from environment variable
+EXPOSE ${PORT}
 
-WORKDIR /app
+RUN npm -v && which npm
 
-# Copy the build output and node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-
-# Expose the application port
-EXPOSE 3000
-
-# Command to run the application
-CMD ["node", "dist/main.js"]
+# Start the application
+CMD ["npm", "run", "start:prod"]

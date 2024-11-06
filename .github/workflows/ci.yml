@@ -118,4 +118,11 @@ jobs:
             exit 1
           fi
           echo "Deploying to production..."
-          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$PRODUCTION_SERVER "bash deploy-production.sh"
+          echo "Using server: $PRODUCTION_SERVER"
+          ssh -o StrictHostKeyChecking=no -i $SSH_KEY -v user@$PRODUCTION_SERVER "bash deploy-production.sh"
+          if [ $? -ne 0 ]; then
+            echo "Deployment to production failed!" >&2
+            exit 1
+          else
+            echo "Deployment to production succeeded."
+          fi

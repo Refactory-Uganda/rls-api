@@ -113,13 +113,19 @@ jobs:
           PRODUCTION_SERVER: ${{ secrets.PRODUCTION_SERVER }}
           SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
         run: |
+          echo "Checking if production secrets are set..."
           if [ -z "${{ secrets.PRODUCTION_SERVER }}" ] || [ -z "${{ secrets.PRODUCTION_SSH_KEY }}" ]; then
             echo "Production secrets are missing!" >&2
             exit 1
           fi
-          echo "Deploying to production..."
-          echo "Using server: $PRODUCTION_SERVER"
+          echo "Secrets are set. Proceeding with deployment..."
+
+          # Debugging output
+          echo "Deploying to production on server: $PRODUCTION_SERVER"
+
+          # SSH Command with verbose logging
           ssh -o StrictHostKeyChecking=no -i $SSH_KEY -v user@$PRODUCTION_SERVER "bash deploy-production.sh"
+          
           if [ $? -ne 0 ]; then
             echo "Deployment to production failed!" >&2
             exit 1

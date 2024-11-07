@@ -31,7 +31,7 @@ export class CreateQuestionDto {
   @IsArray()
   @IsOptional()
   @ApiProperty({type:[CreateOptionDto]})
-  Option?: CreateOptionDto[];
+  option?: CreateOptionDto[];
 
 
 }

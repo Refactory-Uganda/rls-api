@@ -12,7 +12,7 @@ export class QuestionService {
   constructor(private prisma: PrismaService) {}
 
   async create(createQuestionDto: CreateQuestionDto) {
-    const { Option, ...questionData } = createQuestionDto;
+    const { option, ...questionData } = createQuestionDto;
 
     const question = await this.prisma.question.create({
       data: {
@@ -28,7 +28,7 @@ export class QuestionService {
   }
 
   async patchQuestion(id: string, updateQuestionDto: UpdateQuestionDto) {
-    const { Option, ...questionData } = updateQuestionDto;
+    const { option, ...questionData } = updateQuestionDto;
   
     // Step 1: Update the question
     const updatedQuestion = await this.prisma.question.update({
@@ -40,7 +40,7 @@ export class QuestionService {
         explanation: questionData.explanation,
         quizId: questionData.quizId,
         option: {
-          upsert: Option?.map(option => ({
+          upsert: option?.map(option => ({
             where: { id: option.id },
             create: {
               optionText: option.optionText,

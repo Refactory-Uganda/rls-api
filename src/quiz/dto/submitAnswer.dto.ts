@@ -5,23 +5,23 @@ import { IsBoolean, IsString } from "class-validator";
 
 export class SubmitAnswerDto {
 
-    @ApiProperty({})
+    // @ApiProperty()
     @IsString()
     id: string;
 
-    @ApiProperty({})
+    @ApiProperty()
     @IsString()
     attemptId: string;
 
-    @ApiProperty({})
+    @ApiProperty()
     @IsString()
     questionId: string;
 
-    @ApiProperty({})
+    @ApiProperty()
     @IsString()
     optionId: string;
 
-    @ApiProperty({})
+    @ApiProperty()
     @IsBoolean()
     isCorrect: boolean;
 }

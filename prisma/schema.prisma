@@ -122,11 +122,14 @@ model QuizAttempt {
   completedAt DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([quizId])
 }
 model UserAnswer {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   question  Question @relation(fields: [questionId], references: [id])
   questionId String @db.ObjectId
+  
   quizAttemptId String @db.ObjectId
   quizAttempt   QuizAttempt @relation(fields: [quizAttemptId], references: [id])
   selectedOption    Option @relation(fields: [selectedOptionId], references: [id], name: "OptionUserAnswers")
@@ -136,6 +139,10 @@ model UserAnswer {
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([questionId])
+  @@index([quizAttemptId])
+  @@index([selectedOptionId])
 }
 
 enum AttemptStatus {

@@ -2,10 +2,11 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete} from '@nestjs/common';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
-import { ApiOperation, ApiTags, ApiBody } from '@nestjs/swagger';
+import { ApiOperation, ApiTags, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { SubmitAnswerDto } from './dto/submitAnswer.dto';
 import { StartQuizDto } from './dto/startquiz.dto';
+import { SubmitQuizDto } from './dto/submitQuiz.dto';
 // import { User } from 'src/decorators/user.decorator';
 // import { JwtAuthGaurd } from 'src/authentication/jwt-auth.guard';
 
@@ -89,6 +90,21 @@ export class QuizController {
 		@Param('attemptId') attemptId: string,
 	) {
 		return this.quizService.getQuizResults( attemptId);
+	}
+
+	@Post(':attemptId/submitQuiz')
+	@ApiOperation({ summary: 'Submit an entire Quiz' })
+	@ApiResponse({ status: 201, description: 'Quiz submitted successfully' })
+	async submitQuiz(
+		@Param('attemptId') attemptId: string,
+		@Body() submitQuizDto: SubmitQuizDto,
+	) {
+		const result = await this.quizService.submitQuiz(attemptId,submitQuizDto);
+		return {
+			status: 'success',
+			message: 'Quiz submitted successfully',
+			data: result
+		}
 	}
 
 

@@ -7,6 +7,7 @@ import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { Prisma, Question, Quiz } from '@prisma/client';
 import { CreateQuestionDto } from "src/question/dto/create-question.dto";
 import { SubmitAnswerDto } from './dto/submitAnswer.dto';
+import { SubmitQuizDto } from './dto/submitQuiz.dto';
 
 @Injectable()
 export class QuizService {
@@ -283,6 +284,97 @@ export class QuizService {
         correctOption: attempt.quiz.questions.find(q => q.id === answer.questionId)?.option.find(opt => opt.iscorrect)?.optionText,
       }))
     }
+  }
+
+  // submit a complete quiz
+  async submitQuiz(attemptId: string, submitQuizDto: SubmitQuizDto) {
+    const { quizId, answers } = submitQuizDto;
+
+    // Check if the quiz exists
+    const quiz = await this.prisma.quiz.findUnique({
+      where: { id: quizId },
+      include: {
+        questions: {
+          include: {
+            option: true,
+          },
+        },
+      },
+    });
+
+    if (!quiz) {
+      throw new NotFoundException('Quiz not found');
+    }
+
+    // Check if all questions have been answered
+    if (answers.length !== quiz.questions.length) {
+      throw new BadRequestException('All questions must be answered');
+    }
+
+    // Calculate the score
+
+    const userAnswerData =[];
+
+    let score = 0;
+    let maxScore = 0;
+    for (const { questionId, optionId } of answers) {
+      const question = quiz.questions.find((q) => q.id === questionId);
+      if (!question) {
+        throw new BadRequestException('Invalid questionId');
+      }
+
+      const selectedOption = question.option.find((o) => o.id === optionId);
+      if (!selectedOption) {
+        throw new BadRequestException('Invalid optionId');
+      }
+
+      if (selectedOption.iscorrect) {
+        score += 1;
+      }
+      maxScore += 1;
+    
+    // Add the quiz attempt an array in the database
+    userAnswerData.push({
+      questionId,
+      quizAttemptId: submitQuizDto.attemptId,
+      optionId,
+      isCorrect: selectedOption.iscorrect,
+    }) 
+  }
+
+    // Create the quiz attempt
+    const quizAttempt = await this.prisma.quizAttempt.create({
+      data: {
+        // userId,
+        quizId,
+        answers: {
+          create: answers.map(({ questionId, optionId }) => ({
+            questionId,
+            selectedOptionId: optionId,
+            isCorrect: quiz.questions
+              .find((q) => q.id === questionId)
+              .option.find((o) => o.id === optionId).iscorrect,
+          })),
+        },
+        score,
+        maxScore,
+        status: 'COMPLETED',
+      },
+      include: {
+        answers: {
+          include: {
+            question: {
+              include: {
+                option: true,
+              },
+            },
+            selectedOption: true,
+          },
+        },
+      },
+    });
+
+    return quizAttempt;
   }
 
 }

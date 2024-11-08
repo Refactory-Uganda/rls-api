@@ -21,6 +21,7 @@ model Course {
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
+  image       String?
 }
 
 model Topic {

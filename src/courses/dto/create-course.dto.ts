@@ -34,7 +34,12 @@ export class CreateTopicDto {
   export class CreateCourseDto {
 
     @IsString() 
-    id: string
+    @IsOptional()  // Make id optional
+    @ApiProperty({
+      description: 'Course ID (optional)',
+      required: false
+    })
+    id?: string
 
     @IsString()
     @IsNotEmpty()
@@ -83,5 +88,9 @@ export class CreateTopicDto {
     // @IsNumber()
     // @ApiProperty({ description: "Number of items per page", example: 6 })
     // limit?: number;
+
+    @IsOptional()
+    @ApiProperty({ type: 'string', format: 'binary' })
+    image?: string;
 
   }

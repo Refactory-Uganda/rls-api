@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.service.ts
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -31,16 +31,27 @@ export class CourseService {
 				});
 			}
 
+			if (!dto.Title || dto.Title.trim( ) === '') {
+				throw new BadRequestException('Course title is required');
+			}
+			console.log('creatiing course data:', JSON.stringify(dto, null, 2));
+
+
+			const imageUrl = dto.image ? `/uploads/courses/${dto.image}` : null;
+
 			return await this.prisma.course.create({
 				data: {
 					Title: dto.Title,
 					Description: dto.Description,
 					Duration: dto.Duration,
 					status,
+					image: imageUrl,
 					topics: {
 						create: dto.topics,
-					},
+					}, 
+					
 				},
+				// console.log('Final course data:', JSON.stringify(data, null, 2))
 			})
 		} catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {

@@ -1,13 +1,15 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.controller.ts
-import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Patch } from '@nestjs/common';
+import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Patch, UploadedFile, UseInterceptors } from '@nestjs/common';
 import {  CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
-import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 // import { JwtAuthGaurd } from 'src/authentication/guards/jwt-auth.guard';
 // import { RolesGaurd } from 'src/authentication/guards/roles.guard';
-// import { Roles } from 'src/authentication/decorators/roles.decorator';
+// import { Roles } from 'src/authentication/decorators/roles.decorator'; 
 
 @Controller('courses')
 @ApiTags('Course')
@@ -74,9 +76,37 @@ export class CourseController {
   // }
 
   @Post()
+  @UseInterceptors(FileInterceptor('image', {
+    storage: diskStorage({
+      destination: './uploads/courses',
+      filename: (req, file, callback) => {
+        // generate a unique name for the file
+        const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        callback(null, `${uniqueName}${file.originalname}`);
+      }
+    }),
+    fileFilter: (req, file, callback) => {
+      // validate the file type to only image files
+      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        return callback(new Error('Only image files are allowed!'), false);
+      }
+      callback(null, true);
+    }
+  }))
+
   @ApiOperation({ summary: 'Create a Course draft'})
+  @ApiConsumes('multipart/form-data')
   @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
-  async createCourseP_D(@Body() createCourseDto: CreateCourseDto) {
+
+  async createCourseP_D(
+    @Body() createCourseDto: CreateCourseDto, 
+    @UploadedFile() image?: Express.Multer.File
+  ) {
+    console.log('Recieved DTO:', createCourseDto); // Debugging
+    console.log('Recieved Image:', image); // Debugging
+    if(image) {
+      createCourseDto.image = image.filename;
+    }
     return this.courseService.createCourseDraft(createCourseDto);
   }
 

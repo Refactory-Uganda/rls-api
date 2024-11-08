@@ -96,6 +96,44 @@ export class CourseController {
 
   @ApiOperation({ summary: 'Create a Course draft'})
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['Title'],
+    properties: {
+      Title: {
+        type: 'string',
+        minLength: 3,
+        maxLength: 100,
+        description: 'Title of the course/lesson'
+      },
+      Description: {
+        type: 'string',
+        minLength: 10,
+        maxLength: 1000,
+        description: 'Detailed description of the content'
+      },
+      Duration: {
+        type: 'string',
+        pattern: '^(0?[1-9]|1[0-2])$',
+        description: 'Duration in format: 1 month, 3 months or 6 months, etc.'
+      },
+      status: {
+        type: 'string',
+        enum: ['DRAFT', 'PUBLISHED', 'DELETED'],
+        default: 'DRAFT',
+        description: 'Current status of the content'
+      },
+        // topics: { type: 'array', items: { type: 'object' } },
+        image: {
+          type: 'string',
+          format: 'binary',
+          description: 'Cover image file (supported formats: jpg, png)',
+          // maxSize: '5MB'
+        }
+      }
+    }
+  })
   @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
 
   async createCourseP_D(

@@ -20,12 +20,12 @@ model Course {
   Description String?
   Duration    String
   courseOutline    String[]    
-  requirements     String?  
+  requirements     String[]  
   assessmentMode   AssessmentMode? 
   facilitatorId    String? @db.ObjectId
   facilitator      User?   @relation(fields: [facilitatorId],references: [id])
   Award            String?           
-  courseObjective  String?      
+  courseObjective  String[]      
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")

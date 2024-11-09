@@ -20,6 +20,7 @@ import { QuizModule } from './quiz/quiz.module';
 import { QuestionModule } from './question/question.module';
 import { OptionModule } from './option/option.module';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { SlideModule } from './slide/slide.module';
 
 @Module({
   imports: [
@@ -42,7 +43,8 @@ import { AuthenticationModule } from './authentication/authentication.module';
     QuizModule,
     QuestionModule,
     OptionModule,
-    AuthenticationModule, 
+    AuthenticationModule,
+    SlideModule, 
   ],
   controllers: [], 
   providers: [], 

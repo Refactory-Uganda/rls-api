@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 // src/topics/topics.service.ts
 import { Injectable } from '@nestjs/common';

@@ -19,10 +19,18 @@ model Course {
   Title       String   @unique
   Description String?
   Duration    String
+  courseOutline    String[]    
+  requirements     String?  
+  assessmentMode   AssessmentMode? 
+  facilitatorId    String? @db.ObjectId
+  facilitator      User?   @relation(fields: [facilitatorId],references: [id])
+  Award            String?           
+  courseObjective  String?      
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
 }
+
 
 model Topic {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -65,6 +73,11 @@ model Slide {
 enum slideContentType {
   TEXT
   IMAGE 
+}
+
+enum AssessmentMode {
+  QUIZ
+  ASSIGNMENT
 }
 
 // model notes {
@@ -133,6 +146,8 @@ model User {
   refresh_token String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Course Course[]
 }
 
 enum Role {

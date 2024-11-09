@@ -81,7 +81,7 @@ export class CourseService {
 		}
 	}
 
-
+// publish course
 	async publishCourse(id: string) {
 		// check for topis
 		const course = await this.prisma.course.findUnique({
@@ -107,7 +107,7 @@ export class CourseService {
 		});
 	}
 
-
+// make a course draft
 	async draftCourse(id: string) {
 		return await this.prisma.course.update({
 			where: { id },
@@ -117,79 +117,81 @@ export class CourseService {
 		});
 	}
 
-	async createCourse(dto: CreateCourseDto) {
-		try {
-			// Check if a course with the same title already exists
-			const existingCourse = await this.prisma.course.findUnique({
-				where: {
-					Title: dto.Title,
-				},
-			});
+	// async createCourse(dto: CreateCourseDto) {
+	// 	try {
+	// 		// Check if a course with the same title already exists
+	// 		const existingCourse = await this.prisma.course.findUnique({
+	// 			where: {
+	// 				Title: dto.Title,
+	// 			},
+	// 		});
 
-			if (existingCourse) {
-				throw new HttpException(
-					{
-						status: HttpStatus.BAD_REQUEST,
-						message: 'A course with this title already exists',
-					},
-					HttpStatus.BAD_REQUEST,
-				);
-			}
+	// 		if (existingCourse) {
+	// 			throw new HttpException(
+	// 				{
+	// 					status: HttpStatus.BAD_REQUEST,
+	// 					message: 'A course with this title already exists',
+	// 				},
+	// 				HttpStatus.BAD_REQUEST,
+	// 			);
+	// 		}
 
-			// Handle topics creation if topics are provided
-			const topicsData = dto.topics && Array.isArray(dto.topics)
-				? dto.topics.map((topic) => ({
-					Title: topic.Title,
-					Description: topic.Description,
-					lessons: topic.lessons
-				}))
-				: []; // Default to an empty array if no topics are provided
+	// 		// Handle topics creation if topics are provided
+	// 		const topicsData = dto.topics && Array.isArray(dto.topics)
+	// 			? dto.topics.map((topic) => ({
+	// 				Title: topic.Title,
+	// 				Description: topic.Description,
+	// 				lessons: topic.lessons
+	// 			}))
+	// 			: []; // Default to an empty array if no topics are provided
 
 
-			// Create a new course in the database
-			const course = await this.prisma.course.create({
-				data: {
-					Title: dto.Title,
-					Description: dto.Description,
-					Duration: dto.Duration,
-					topics: {
-						create: topicsData, // Use the processed topics data
-					},
-				},
-				include: {
-					topics: true,
-				}
-			});
+	// 		// Create a new course in the database
+	// 		const course = await this.prisma.course.create({
+	// 			data: {
+	// 				Title: dto.Title,
+	// 				Description: dto.Description,
+	// 				Duration: dto.Duration,
+	// 				topics: {
+	// 					create: topicsData, // Use the processed topics data
+	// 				},
+	// 			},
+	// 			include: {
+	// 				topics: true,
+	// 			}
+	// 		});
 
-			// Return a successful response with the created course data
-			return {
-				status: HttpStatus.CREATED,
-				message: `Course ${dto.Title} created successfully`,
-				data: course,  // Return the newly created course object
-			};
+	// 		// Return a successful response with the created course data
+	// 		return {
+	// 			status: HttpStatus.CREATED,
+	// 			message: `Course ${dto.Title} created successfully`,
+	// 			data: course,  // Return the newly created course object
+	// 		};
 
-		} catch (error) {
-			// Handle and throw the error
-			throw new HttpException(
-				{
-					status: HttpStatus.BAD_REQUEST,
-					message: 'Failed to create course',
-					error: error.message,  // Include the error message for debugging
-				},
-				HttpStatus.BAD_REQUEST,
-			);
-		}
-	}
+	// 	} catch (error) {
+	// 		// Handle and throw the error
+	// 		throw new HttpException(
+	// 			{
+	// 				status: HttpStatus.BAD_REQUEST,
+	// 				message: 'Failed to create course',
+	// 				error: error.message,  // Include the error message for debugging
+	// 			},
+	// 			HttpStatus.BAD_REQUEST,
+	// 		);
+	// 	}
+	// }
 
 
 	async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
 		try {
+			const imageUrl = updateCourseDto.image ? `/uploads/courses/${updateCourseDto.image}` : null;
 			return await this.prisma.course.update({
 				where: { id },
 				data: {
 					Title: updateCourseDto.Title,
 					Description: updateCourseDto.Description,
 					Duration: updateCourseDto.Duration,
+					image: imageUrl,
 					topics: {
 						update: updateCourseDto.topics?.map((topic) => ({
 							where: { id: topic.id },

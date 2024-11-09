@@ -100,6 +100,10 @@ export class UpdateCourseDto {
     @ApiProperty()
     status?: CourseStatus
 
+    @ApiProperty()
+    // @IsString()
+    image: string
+
     @IsArray()
     @ValidateNested({ each: true })
     @Type(() => UpdateTopicDto)

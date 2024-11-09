@@ -30,12 +30,71 @@ export class CourseController {
     }
 
     @Patch(':id')
+    @UseInterceptors(FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads/courses',
+        filename: (req, file, callback) => {
+          // generate a unique name for the file
+          const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+          callback(null, `${uniqueName}${file.originalname}`);
+        }
+      }),
+      fileFilter: (req, file, callback) => {
+        // validate the file type to only image files
+        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+          return callback(new Error('Only image files are allowed!'), false);
+        }
+        callback(null, true);
+      }
+    }))
     @ApiOperation({ summary: 'Partially update a Course' })
-    @ApiBody({ type: UpdateCourseDto })
+    @ApiBody({
+      schema: {
+        type: 'object',
+        // required: ['Title'],
+      properties: { 
+        Title: {
+          type: 'string',
+          minLength: 3,
+          maxLength: 100,
+          description: 'Update Title of the course/lesson'
+        },
+        Description: {
+          type: 'string',
+          minLength: 10,
+          maxLength: 1000,
+          description: 'Update Detailed description of the content'
+        },
+        Duration: {
+          type: 'string',
+          pattern: '^(0?[1-9]|1[0-2])$',
+          description: 'Update Duration in format: 1 month, 3 months or 6 months, etc.'
+        },
+        status: {
+          type: 'string',
+          enum: ['DRAFT', 'PUBLISHED', 'DELETED'],
+          default: 'DRAFT',
+          description: 'Update Current status of the content'
+        },
+          // topics: { type: 'array', items: { type: 'object' } },
+          image: {
+            type: 'string',
+            format: 'binary',
+            description: 'Update Cover image file (supported formats: jpg, png)',
+            // maxSize: '5MB'
+          }
+        }
+      }
+    })
+    @ApiConsumes('multipart/form-data')
     async update(
     @Param('id') id: string,
     @Body() updateCourseDto: UpdateCourseDto,
+    @UploadedFile() image?: Express.Multer.File
     ) {
+      if(image) {
+        updateCourseDto.image = image.filename;
+      }
     return this.courseService.updateCourse(id, updateCourseDto);
     }
 
@@ -93,7 +152,6 @@ export class CourseController {
       callback(null, true);
     }
   }))
-
   @ApiOperation({ summary: 'Create a Course draft'})
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -135,7 +193,6 @@ export class CourseController {
     }
   })
   @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
-
   async createCourseP_D(
     @Body() createCourseDto: CreateCourseDto, 
     @UploadedFile() image?: Express.Multer.File

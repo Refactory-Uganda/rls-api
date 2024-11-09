@@ -7,7 +7,8 @@ import { CreateLessonDto } from 'src/lesson/dto/create-lesson.dto';
 export class CreateTopicDto {
 
   @IsString()
-  id: string;
+  @IsOptional()
+  id?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -17,18 +18,29 @@ export class CreateTopicDto {
   })
   Title: string;
 
-  @IsOptional()
+  
   @IsString()
+  @IsOptional()
   @ApiProperty({
     description: 'The description of the topic',
     example: 'This topic is an introduction to JavaScript'
   })
   Description?: string;
 
-  @ApiProperty({ type: [CreateLessonDto],
-    description: 'The lessons of the topic',
-    example: 'Lesson 1: DataTypes'
-   })
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  image?: string
+
+  @ApiProperty()
+  @IsString()
+  courseId: string
+
+  // @ApiProperty({
+  //   type: [CreateLessonDto],
+  //   description: 'The lessons of the topic',
+  //   example: '[Lesson 1: DataTypes]'
+  // })
   lessons: CreateLessonDto[]
 
   // @IsNotEmpty()

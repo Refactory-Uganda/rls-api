@@ -7,6 +7,7 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+// import { AssessmentMode } from '@prisma/client';
 // import { JwtAuthGaurd } from 'src/authentication/guards/jwt-auth.guard';
 // import { RolesGaurd } from 'src/authentication/guards/roles.guard';
 // import { Roles } from 'src/authentication/decorators/roles.decorator'; 
@@ -181,6 +182,24 @@ export class CourseController {
         enum: ['DRAFT', 'PUBLISHED', 'DELETED'],
         default: 'DRAFT',
         description: 'Current status of the content'
+      },
+      courseOutline: {
+        type: 'string'
+      },
+      facilitator: {
+        type: 'string'
+      },
+      requirements: {
+        type: 'string'
+      },
+      assessmentMode: {
+        type: 'string'
+      },
+      award: {
+        type: 'string'
+      },
+      courseObjective: {
+        type: 'string'
       },
         // topics: { type: 'array', items: { type: 'object' } },
         image: {

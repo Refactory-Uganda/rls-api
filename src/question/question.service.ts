@@ -12,7 +12,7 @@ export class QuestionService {
   constructor(private prisma: PrismaService) {}
 
   async create(createQuestionDto: CreateQuestionDto) {
-    const { Option, ...questionData } = createQuestionDto;
+    const { option, ...questionData } = createQuestionDto;
 
     const question = await this.prisma.question.create({
       data: {
@@ -21,14 +21,14 @@ export class QuestionService {
         //   create: options || [],
         // },
       },
-      include: { Option: true },
+      include: { option: true },
     });
 
     return {'Question': question}
   }
 
   async patchQuestion(id: string, updateQuestionDto: UpdateQuestionDto) {
-    const { Option, ...questionData } = updateQuestionDto;
+    const { option, ...questionData } = updateQuestionDto;
   
     // Step 1: Update the question
     const updatedQuestion = await this.prisma.question.update({
@@ -39,8 +39,8 @@ export class QuestionService {
         order: questionData.order,
         explanation: questionData.explanation,
         quizId: questionData.quizId,
-        Option: {
-          upsert: Option?.map(option => ({
+        option: {
+          upsert: option?.map(option => ({
             where: { id: option.id },
             create: {
               optionText: option.optionText,
@@ -56,7 +56,7 @@ export class QuestionService {
         },
       },
       include: {
-        Option: true,
+        option: true,
       },
     });
   
@@ -74,7 +74,7 @@ export class QuestionService {
   async findQuestions() {
     return this.prisma.question.findMany({
       include: {
-        Option: true,
+        option: true,
       }
     });
   }
@@ -85,7 +85,7 @@ export class QuestionService {
         id: id,
       },
       include: {
-        Option: true,
+        option: true,
   }
 })
 

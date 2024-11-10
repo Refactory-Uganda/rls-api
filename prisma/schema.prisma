@@ -68,7 +68,7 @@ model Question {
   quizId    String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Option Option[]
+  option Option[]
 }
 
 

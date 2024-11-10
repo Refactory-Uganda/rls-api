@@ -66,7 +66,7 @@ export class QuizService {
       include: {
         questions: {
           include: {
-            Option: true
+            option: true
           }
         },
       },
@@ -77,7 +77,7 @@ export class QuizService {
       include: {
         questions: {
           include: {
-            Option: true
+            option: true
           }
         }
       },
@@ -92,7 +92,7 @@ export class QuizService {
       include: {
         questions: {
           include: {
-            Option: true
+            option: true
           }
         }
       }

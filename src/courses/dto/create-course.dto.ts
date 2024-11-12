@@ -75,7 +75,7 @@ export class CreateTopicDto {
     description: 'The course outline as an array of strings',
     example: ['Introduction', 'Basic Concepts', 'Advanced Topics'],
   })
-  courseOutline: string[];
+  courseOutline?: string[];
 
   @IsString({each: true})
   @IsArray()

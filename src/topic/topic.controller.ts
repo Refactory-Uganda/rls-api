@@ -36,7 +36,7 @@ export class TopicController {
   @ApiBody({
     schema: {
       type: 'object',
-      required: ['Title', 'courseId'],
+      required: ['Title'],
       properties: {
         Title: {
           type: 'string',

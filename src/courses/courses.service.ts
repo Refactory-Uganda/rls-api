@@ -162,7 +162,10 @@ export class CourseService {
 					userGroup: 'Staff',
 				},
 				select: {
-					id: true
+					id: true,
+					firstName: true,
+					lastName: true,
+					email: true,
 				},
 			});
 
@@ -296,4 +299,23 @@ export class CourseService {
 			throw new Error(`Error deleting course with ID ${id}: ${error.message}`);
 		}
 	}
+
+
+	async staffFacilitator (){ 
+		
+		const staff = await this.prisma.user.findMany({
+		where: {
+			userGroup: 'Staff',
+		},
+		select: {
+			id: true,
+			firstName: true,
+			lastName: true,
+			email: true,
+		},
+	});
+
+	return staff
+}
+
 }

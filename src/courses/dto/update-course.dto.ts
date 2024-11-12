@@ -98,11 +98,11 @@ export class UpdateCourseDto {
 
     @IsEnum(CourseStatus)
     @ApiProperty()
-    status?: CourseStatus
+    status?: CourseStatus;
 
     @ApiProperty()
     // @IsString()
-    image?: string
+    image?: string;
 
     @ApiProperty()
     courseOutline: string[];

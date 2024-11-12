@@ -15,6 +15,23 @@ export class CourseService {
 
 	async createCourseDraft(dto: CreateCourseDto) {
 		try {
+
+			const staffFacilitator = await this.prisma.user.findMany({
+				where: {
+					userGroup: 'Staff',
+				},
+				select: {
+					id: true,
+					firstName: true,
+					lastName: true,
+					email: true,
+				},
+			});
+
+			if (dto.facilitator && !staffFacilitator.some((user) => user.id === dto.facilitator)) {
+				throw new BadRequestException('Invalid facilitator ID');
+			}
+
 			// check for topics
 			const hasTopics = dto.topics && dto.topics.length > 0;
 
@@ -39,19 +56,39 @@ export class CourseService {
 
 			const imageUrl = dto.image ? `/uploads/courses/${dto.image}` : null;
 
+			if (!Array.isArray(dto.courseOutline)) {
+				console.log('courseOutline:', dto.courseOutline);
+				throw new BadRequestException('courseOutline must be an array');
+			}
+			
+			if (!Array.isArray(dto.requirements)) {
+				console.log('requirements:', dto.requirements);
+				throw new BadRequestException('requirements must be an array');
+			}
+			
+			if (!Array.isArray(dto.courseObjective)) {
+				console.log('courseObjective:', dto.courseObjective);
+				throw new BadRequestException('courseObjective must be an array');
+			}
+
 			return await this.prisma.course.create({
 				data: {
 					Title: dto.Title,
 					Description: dto.Description,
 					Duration: dto.Duration,
 					status,
+					courseOutline: dto.courseOutline,
+					facilitatorId: dto.facilitator,
+					requirements: dto.requirements,
+					assessmentMode:dto.assessmentMode,
+					award: dto.Award,
+					courseObjective: dto.courseObjective,
 					image: imageUrl,
 					topics: {
 						create: dto.topics,
 					}, 
 					
 				},
-				// console.log('Final course data:', JSON.stringify(data, null, 2))
 			})
 		} catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -117,80 +154,37 @@ export class CourseService {
 		});
 	}
 
-	// async createCourse(dto: CreateCourseDto) {
-	// 	try {
-	// 		// Check if a course with the same title already exists
-	// 		const existingCourse = await this.prisma.course.findUnique({
-	// 			where: {
-	// 				Title: dto.Title,
-	// 			},
-	// 		});
-
-	// 		if (existingCourse) {
-	// 			throw new HttpException(
-	// 				{
-	// 					status: HttpStatus.BAD_REQUEST,
-	// 					message: 'A course with this title already exists',
-	// 				},
-	// 				HttpStatus.BAD_REQUEST,
-	// 			);
-	// 		}
-
-	// 		// Handle topics creation if topics are provided
-	// 		const topicsData = dto.topics && Array.isArray(dto.topics)
-	// 			? dto.topics.map((topic) => ({
-	// 				Title: topic.Title,
-	// 				Description: topic.Description,
-	// 				lessons: topic.lessons
-	// 			}))
-	// 			: []; // Default to an empty array if no topics are provided
-
-
-	// 		// Create a new course in the database
-	// 		const course = await this.prisma.course.create({
-	// 			data: {
-	// 				Title: dto.Title,
-	// 				Description: dto.Description,
-	// 				Duration: dto.Duration,
-	// 				topics: {
-	// 					create: topicsData, // Use the processed topics data
-	// 				},
-	// 			},
-	// 			include: {
-	// 				topics: true,
-	// 			}
-	// 		});
-
-	// 		// Return a successful response with the created course data
-	// 		return {
-	// 			status: HttpStatus.CREATED,
-	// 			message: `Course ${dto.Title} created successfully`,
-	// 			data: course,  // Return the newly created course object
-	// 		};
-
-	// 	} catch (error) {
-	// 		// Handle and throw the error
-	// 		throw new HttpException(
-	// 			{
-	// 				status: HttpStatus.BAD_REQUEST,
-	// 				message: 'Failed to create course',
-	// 				error: error.message,  // Include the error message for debugging
-	// 			},
-	// 			HttpStatus.BAD_REQUEST,
-	// 		);
-	// 	}
-	// }
-
-
 	async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
 		try {
+
+			const staffFacilitator = await this.prisma.user.findMany({
+				where: {
+					userGroup: 'Staff',
+				},
+				select: {
+					id: true
+				},
+			});
+
+			if (updateCourseDto.facilitator && !staffFacilitator.some((user) => user.id === updateCourseDto.facilitator)) {
+				throw new BadRequestException('Invalid facilitator ID');
+			}
+
 			const imageUrl = updateCourseDto.image ? `/uploads/courses/${updateCourseDto.image}` : null;
+			
 			return await this.prisma.course.update({
 				where: { id },
 				data: {
 					Title: updateCourseDto.Title,
 					Description: updateCourseDto.Description,
 					Duration: updateCourseDto.Duration,
+					status: updateCourseDto.status,
+					facilitatorId: updateCourseDto.facilitator,
+					courseOutline: updateCourseDto.courseOutline,
+					courseObjective: updateCourseDto.courseObjective,
+					requirements: updateCourseDto.requirements,
+					award: updateCourseDto.award,
+					assessmentMode: updateCourseDto.assessmentMode,
 					image: imageUrl,
 					topics: {
 						update: updateCourseDto.topics?.map((topic) => ({

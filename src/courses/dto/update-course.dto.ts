@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { IsString, IsOptional, IsArray, ValidateNested, IsEnum, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CourseStatus } from '@prisma/client';
+import { AssessmentMode, CourseStatus } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 // import { CreateLessonDto } from 'src/lesson/dto/create-lesson.dto';
 
@@ -102,7 +102,25 @@ export class UpdateCourseDto {
 
     @ApiProperty()
     // @IsString()
-    image: string
+    image?: string
+
+    @ApiProperty()
+    courseOutline: string[];
+
+    @ApiProperty()
+    facilitator: string;
+
+    @ApiProperty()
+    requirements: string[];
+
+    @ApiProperty()
+    assessmentMode: AssessmentMode;
+
+    @ApiProperty()
+    award: string;
+
+    @ApiProperty()
+    courseObjective: string[];
 
     @IsArray()
     @ValidateNested({ each: true })

@@ -17,12 +17,7 @@ import { diskStorage } from 'multer';
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
-  // @Post()
-  // @ApiOperation({ summary: 'Create a Course'})
-  // @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
-  // async createCourse(@Body() createCourseDto: CreateCourseDto) {
-  //   return this.courseService.createCourse(createCourseDto);
-  // }
+
 
     @Delete(':id')
     @ApiOperation({summary: 'Delete a Course'})
@@ -53,12 +48,12 @@ export class CourseController {
       schema: {
         type: 'object',
         // required: ['Title'],
-      properties: { 
+      properties: {
         Title: {
           type: 'string',
           minLength: 3,
           maxLength: 100,
-          description: 'Update Title of the course/lesson'
+          description: 'Update Title of the course'
         },
         Description: {
           type: 'string',
@@ -68,14 +63,38 @@ export class CourseController {
         },
         Duration: {
           type: 'string',
-          pattern: '^(0?[1-9]|1[0-2])$',
-          description: 'Update Duration in format: 1 month, 3 months or 6 months, etc.'
+          pattern: '^(1[0-2]|[1-9])\week(s)?$',
+          description: 'Update Duration in format: 6 weeks, 12 weeks '
         },
         status: {
           type: 'string',
           enum: ['DRAFT', 'PUBLISHED', 'DELETED'],
           default: 'DRAFT',
           description: 'Update Current status of the content'
+        },
+        courseOutline: {
+          type: 'array',
+          items: {type:'string'},
+          description: 'Update the different outlines of the course'
+        },
+        facilitator: {
+          type: 'string' 
+        },
+        requirements: {
+          type: 'array',
+          items: {type:'string'},
+          description: 'Update what is needed to take this course'
+        },
+        assessmentMode: {
+          type: 'string'
+        },
+        award: {
+          type: 'string'
+        },
+        courseObjective: {
+          type: 'array',
+          items: {type:'string'},
+          description: 'Update the targets of the course'
         },
           // topics: { type: 'array', items: { type: 'object' } },
           image: {
@@ -128,13 +147,6 @@ export class CourseController {
     return await this.courseService.findOne(id); 
   }
 
-  // get topics specific to a course 
-  // @Get(':id/topics')
-  // @ApiOperation({summary: 'Get Topics for a Course'})
-  // async getTopics() {
-  //   return await this.courseService.findCourseTopics();
-  // }
-
   @Post()
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
@@ -174,8 +186,8 @@ export class CourseController {
       },
       Duration: {
         type: 'string',
-        pattern: '^(0?[1-9]|1[0-2])$',
-        description: 'Duration in format: 1 month, 3 months or 6 months, etc.'
+        pattern: '^(1[0-2]|[1-9])\week(s)?$',
+        description: 'Duration in format: 6 weeks, 12 weeks '
       },
       status: {
         type: 'string',
@@ -184,13 +196,17 @@ export class CourseController {
         description: 'Current status of the content'
       },
       courseOutline: {
-        type: 'string'
+        type: 'array',
+        items: {type:'string'},
+        description: 'write the different outlines of the course'
       },
       facilitator: {
-        type: 'string'
+        type: 'string' 
       },
       requirements: {
-        type: 'string'
+        type: 'array',
+        items: {type:'string'},
+        description: 'what is needed to take this course'
       },
       assessmentMode: {
         type: 'string'
@@ -199,7 +215,9 @@ export class CourseController {
         type: 'string'
       },
       courseObjective: {
-        type: 'string'
+        type: 'array',
+        items: {type:'string'},
+        description: 'write the targets of the course'
       },
         // topics: { type: 'array', items: { type: 'object' } },
         image: {

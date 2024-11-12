@@ -24,7 +24,7 @@ model Course {
   assessmentMode   AssessmentMode? 
   facilitatorId    String? @db.ObjectId
   facilitator      User?   @relation(fields: [facilitatorId],references: [id])
-  Award            String?           
+  award            String?           
   courseObjective  String[]      
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())

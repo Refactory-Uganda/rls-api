@@ -10,6 +10,8 @@ import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
 
 export class CreateTopicDto {
+
+
     @IsString()
     @IsNotEmpty()
     @ApiProperty({
@@ -67,6 +69,7 @@ export class CreateTopicDto {
     Duration: string;
 
   @IsArray()
+  @IsString({each:true})
   @ApiProperty({
     type: [String],
     description: 'The course outline as an array of strings',
@@ -74,7 +77,7 @@ export class CreateTopicDto {
   })
   courseOutline: string[];
 
-  @IsString()
+  @IsString({each: true})
   @IsArray()
   @IsOptional()
   @ApiProperty({
@@ -134,15 +137,15 @@ export class CreateTopicDto {
     })
     Award?: string;
   
-    @IsString()
     @IsArray()
+    @IsString({ each: true})
     @IsOptional()
     @ApiProperty({
       type: [String],
     description: 'The course objective as an array of strings',
     example: ['Introduction', 'Basic Concepts', 'Advanced Topics'],
   })
-    courseObjective?: string;
+    courseObjective?: string[];
   
 
     @IsOptional()

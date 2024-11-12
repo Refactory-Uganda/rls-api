@@ -68,7 +68,7 @@ export class CourseController {
         },
         status: {
           type: 'string',
-          enum: ['DRAFT', 'PUBLISHED', 'DELETED'],
+          enum: ['DRAFT', 'PUBLISHED'],
           default: 'DRAFT',
           description: 'Update Current status of the content'
         },
@@ -116,6 +116,11 @@ export class CourseController {
         updateCourseDto.image = image.filename;
       }
     return this.courseService.patchCourse(id, updateCourseDto);
+    }
+
+    @Get('staff')
+    async staffFacilitator() {
+      return await this.courseService.staffFacilitator();
     }
 
   // @Get()

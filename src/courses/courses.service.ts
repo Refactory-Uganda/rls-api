@@ -157,14 +157,17 @@ export class CourseService {
 	// async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
 	// 	try {
 
-	// 		const staffFacilitator = await this.prisma.user.findMany({
-	// 			where: {
-	// 				userGroup: 'Staff',
-	// 			},
-	// 			select: {
-	// 				id: true
-	// 			},
-	// 		});
+			const staffFacilitator = await this.prisma.user.findMany({
+				where: {
+					userGroup: 'Staff',
+				},
+				select: {
+					id: true,
+					firstName: true,
+					lastName: true,
+					email: true,
+				},
+			});
 
 	// 		if (updateCourseDto.facilitator && !staffFacilitator.some((user) => user.id === updateCourseDto.facilitator)) {
 	// 			throw new BadRequestException('Invalid facilitator ID');
@@ -305,4 +308,23 @@ export class CourseService {
 			throw new Error(`Error deleting course with ID ${id}: ${error.message}`);
 		}
 	}
+
+
+	async staffFacilitator (){ 
+		
+		const staff = await this.prisma.user.findMany({
+		where: {
+			userGroup: 'Staff',
+		},
+		select: {
+			id: true,
+			firstName: true,
+			lastName: true,
+			email: true,
+		},
+	});
+
+	return staff
+}
+
 }

@@ -157,17 +157,17 @@ export class CourseService {
 	// async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
 	// 	try {
 
-			const staffFacilitator = await this.prisma.user.findMany({
-				where: {
-					userGroup: 'Staff',
-				},
-				select: {
-					id: true,
-					firstName: true,
-					lastName: true,
-					email: true,
-				},
-			});
+			// const staffFacilitator = await this.prisma.user.findMany({
+			// 	where: {
+			// 		userGroup: 'Staff',
+			// 	},
+			// 	select: {
+			// 		id: true,
+			// 		firstName: true,
+			// 		lastName: true,
+			// 		email: true,
+			// 	},
+			// });
 
 	// 		if (updateCourseDto.facilitator && !staffFacilitator.some((user) => user.id === updateCourseDto.facilitator)) {
 	// 			throw new BadRequestException('Invalid facilitator ID');
@@ -214,6 +214,21 @@ export class CourseService {
 
 	async patchCourse(id: string, partialUpdateDto: UpdateCourseDto) {
 		try {
+			const staffFacilitator = await this.prisma.user.findMany({
+				where: {
+					userGroup: 'Staff',
+				},
+				select: {
+					id: true,
+					firstName: true,
+					lastName: true,
+					email: true,
+				},
+			});
+
+			if (partialUpdateDto.facilitator && !staffFacilitator.some((user) => user.id === partialUpdateDto.facilitator)) {
+				throw new BadRequestException('Invalid facilitator ID');
+			}
 			const imageUrl = partialUpdateDto.image ? `/uploads/courses/${partialUpdateDto.image}` : null;
 			return await this.prisma.course.update({
 				where: { id },

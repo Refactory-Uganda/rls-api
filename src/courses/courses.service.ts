@@ -51,7 +51,7 @@ export class CourseService {
 			if (!dto.Title || dto.Title.trim( ) === '') {
 				throw new BadRequestException('Course title is required');
 			}
-			console.log('creatiing course data:', JSON.stringify(dto, null, 2));
+			console.log('creating course data:', JSON.stringify(dto, null, 2));
 
 
 			const imageUrl = dto.image ? `/uploads/courses/${dto.image}` : null;
@@ -154,69 +154,78 @@ export class CourseService {
 		});
 	}
 
-	async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
-		try {
+	// async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
+	// 	try {
 
-			const staffFacilitator = await this.prisma.user.findMany({
-				where: {
-					userGroup: 'Staff',
-				},
-				select: {
-					id: true
-				},
-			});
+	// 		const staffFacilitator = await this.prisma.user.findMany({
+	// 			where: {
+	// 				userGroup: 'Staff',
+	// 			},
+	// 			select: {
+	// 				id: true
+	// 			},
+	// 		});
 
-			if (updateCourseDto.facilitator && !staffFacilitator.some((user) => user.id === updateCourseDto.facilitator)) {
-				throw new BadRequestException('Invalid facilitator ID');
-			}
+	// 		if (updateCourseDto.facilitator && !staffFacilitator.some((user) => user.id === updateCourseDto.facilitator)) {
+	// 			throw new BadRequestException('Invalid facilitator ID');
+	// 		}
 
-			const imageUrl = updateCourseDto.image ? `/uploads/courses/${updateCourseDto.image}` : null;
+	// 		const imageUrl = updateCourseDto.image ? `/uploads/courses/${updateCourseDto.image}` : null;
 			
-			return await this.prisma.course.update({
-				where: { id },
-				data: {
-					Title: updateCourseDto.Title,
-					Description: updateCourseDto.Description,
-					Duration: updateCourseDto.Duration,
-					status: updateCourseDto.status,
-					facilitatorId: updateCourseDto.facilitator,
-					courseOutline: updateCourseDto.courseOutline,
-					courseObjective: updateCourseDto.courseObjective,
-					requirements: updateCourseDto.requirements,
-					award: updateCourseDto.award,
-					assessmentMode: updateCourseDto.assessmentMode,
-					image: imageUrl,
-					topics: {
-						update: updateCourseDto.topics?.map((topic) => ({
-							where: { id: topic.id },
-							data: {
-								Title: topic.Title,
-								Description: topic.Description,
-							},
-						})),
-					},
-				},
-			});
-		} catch (error) {
-			throw new HttpException(
-				{
-					status: HttpStatus.BAD_REQUEST,
-					message: 'Failed to update course',
-					error: error.message,
-				},
-				HttpStatus.BAD_REQUEST,
-			);
-		}
-	}
+	// 		return await this.prisma.course.update({
+	// 			where: { id },
+	// 			data: {
+	// 				Title: updateCourseDto.Title,
+	// 				Description: updateCourseDto.Description,
+	// 				Duration: updateCourseDto.Duration,
+	// 				status: updateCourseDto.status,
+	// 				facilitatorId: updateCourseDto.facilitator,
+	// 				courseOutline: updateCourseDto.courseOutline,
+	// 				courseObjective: updateCourseDto.courseObjective,
+	// 				requirements: updateCourseDto.requirements,
+	// 				award: updateCourseDto.award,
+	// 				assessmentMode: updateCourseDto.assessmentMode,
+	// 				image: imageUrl,
+	// 				topics: {
+	// 					update: updateCourseDto.topics?.map((topic) => ({
+	// 						where: { id: topic.id },
+	// 						data: {
+	// 							Title: topic.Title,
+	// 							Description: topic.Description,
+	// 						},
+	// 					})),
+	// 				},
+	// 			},
+	// 		});
+	// 	} catch (error) {
+	// 		throw new HttpException(
+	// 			{
+	// 				status: HttpStatus.BAD_REQUEST,
+	// 				message: 'Failed to update course',
+	// 				error: error.message,
+	// 			},
+	// 			HttpStatus.BAD_REQUEST,
+	// 		);
+	// 	}
+	// }
 
-	async patchCourse(id: string, partialUpdateDto: Partial<UpdateCourseDto>) {
+	async patchCourse(id: string, partialUpdateDto: UpdateCourseDto) {
 		try {
+			const imageUrl = partialUpdateDto.image ? `/uploads/courses/${partialUpdateDto.image}` : null;
 			return await this.prisma.course.update({
 				where: { id },
 				data: {
 					Title: partialUpdateDto.Title,
 					Description: partialUpdateDto.Description,
 					Duration: partialUpdateDto.Duration,
+					status: partialUpdateDto.status,
+					image: imageUrl,
+					courseOutline: partialUpdateDto.courseOutline,
+					facilitatorId: partialUpdateDto.facilitator,
+					requirements: partialUpdateDto.requirements,
+				    assessmentMode: partialUpdateDto.assessmentMode,
+					award: partialUpdateDto.Award,
+					courseObjective: partialUpdateDto.courseObjective,
 					topics: {
 						update: partialUpdateDto.topics?.map((topic) => ({
 							where: { id },

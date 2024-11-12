@@ -115,7 +115,7 @@ export class CourseController {
       if(image) {
         updateCourseDto.image = image.filename;
       }
-    return this.courseService.updateCourse(id, updateCourseDto);
+    return this.courseService.patchCourse(id, updateCourseDto);
     }
 
   // @Get()

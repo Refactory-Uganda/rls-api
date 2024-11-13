@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.service.ts
-import { Injectable, HttpException, HttpStatus, BadRequestException } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
@@ -12,7 +12,7 @@ export class CourseService {
 	//     throw new Error('Method not implemented.');
 	// }
 
-	private transformToArray(value:any): string[] {
+	private transformToArray(value: any): string[] {
 		if (Array.isArray(value)) {
 			return value;
 		}
@@ -69,7 +69,7 @@ export class CourseService {
 				});
 			}
 
-			if (!dto.Title || dto.Title.trim( ) === '') {
+			if (!dto.Title || dto.Title.trim() === '') {
 				throw new BadRequestException('Course title is required');
 			}
 			console.log('creating course data:', JSON.stringify(dto, null, 2));
@@ -78,47 +78,47 @@ export class CourseService {
 			const imageUrl = dto.image ? `/uploads/courses/${dto.image}` : null;
 
 			// Transform string Arrays if they come as coma-separated strings
-			
+
 			const courseOutline = this.transformToArray(dto.courseOutline);
 			const courseObjective = this.transformToArray(dto.courseObjective);
-			const requirements = this.transformToArray(dto.requirements );
+			const requirements = this.transformToArray(dto.requirements);
 
 			if (!Array.isArray(courseOutline)) {
 				console.log('courseOutline:', courseOutline);
 				throw new BadRequestException('courseOutline must be an array');
 			}
-			
+
 			if (!Array.isArray(requirements)) {
 				console.log('requirements:', requirements);
 				throw new BadRequestException('requirements must be an array');
 			}
-			
+
 			if (!Array.isArray(courseObjective)) {
 				console.log('courseObjective:', courseObjective);
 				throw new BadRequestException('courseObjective must be an array');
 			}
 
 			const createData = {
-					Title: dto.Title,
-					Description: dto.Description,
-					Duration: dto.Duration,
-					status,
-					courseOutline,
-					requirements,
-					assessmentMode:dto.assessmentMode,
-					award: dto.award,
-					courseObjective,
-					image: imageUrl,
+				Title: dto.Title,
+				Description: dto.Description,
+				Duration: dto.Duration,
+				status,
+				courseOutline,
+				requirements,
+				assessmentMode: dto.assessmentMode,
+				award: dto.award,
+				courseObjective,
+				image: imageUrl,
 			}
 
 			// Add if facilitator is provided
-			if (dto.facilitator && dto.facilitator.trim() !== ''){
+			if (dto.facilitator && dto.facilitator.trim() !== '') {
 				Object.assign(createData, { facilitatorId: dto.facilitator });
 			}
 
 			// Add if any topics exist
 			if (hasTopics) {
-				Object.assign( createData, { topics: { create: dto.topics } });
+				Object.assign(createData, { topics: { create: dto.topics } });
 			}
 
 			return await this.prisma.course.create({
@@ -152,7 +152,7 @@ export class CourseService {
 		}
 	}
 
-// publish course
+	// publish course
 	async publishCourse(id: string) {
 		// check for topis
 		const course = await this.prisma.course.findUnique({
@@ -178,7 +178,7 @@ export class CourseService {
 		});
 	}
 
-// make a course draft
+	// make a course draft
 	async draftCourse(id: string) {
 		return await this.prisma.course.update({
 			where: { id },
@@ -191,24 +191,24 @@ export class CourseService {
 	// async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
 	// 	try {
 
-			// const staffFacilitator = await this.prisma.user.findMany({
-			// 	where: {
-			// 		userGroup: 'Staff',
-			// 	},
-			// 	select: {
-			// 		id: true,
-			// 		firstName: true,
-			// 		lastName: true,
-			// 		email: true,
-			// 	},
-			// });
+	// const staffFacilitator = await this.prisma.user.findMany({
+	// 	where: {
+	// 		userGroup: 'Staff',
+	// 	},
+	// 	select: {
+	// 		id: true,
+	// 		firstName: true,
+	// 		lastName: true,
+	// 		email: true,
+	// 	},
+	// });
 
 	// 		if (updateCourseDto.facilitator && !staffFacilitator.some((user) => user.id === updateCourseDto.facilitator)) {
 	// 			throw new BadRequestException('Invalid facilitator ID');
 	// 		}
 
 	// 		const imageUrl = updateCourseDto.image ? `/uploads/courses/${updateCourseDto.image}` : null;
-			
+
 	// 		return await this.prisma.course.update({
 	// 			where: { id },
 	// 			data: {
@@ -249,11 +249,53 @@ export class CourseService {
 	async patchCourse(id: string, partialUpdateDto: UpdateCourseDto) {
 		try {
 
-			const updateData = { ...partialUpdateDto };
+			const updateData: any = {};
 
-			// facilitator
-			if ('facilitator' in updateData) {
-				if (updateData.facilitator && updateData.facilitator.trim() !== '') {
+			// Handle basic fields with proper casing
+			if ('Title' in partialUpdateDto) {
+				updateData.Title = partialUpdateDto.Title;
+			}
+			if ('Description' in partialUpdateDto) {
+				updateData.Description = partialUpdateDto.Description;
+			}
+			if ('Duration' in partialUpdateDto) {
+				updateData.Duration = partialUpdateDto.Duration;
+			}
+			if ('status' in partialUpdateDto) {
+				updateData.status = partialUpdateDto.status;
+			}
+			if ('award' in partialUpdateDto) {
+				updateData.award = partialUpdateDto.award;
+			}
+			if ('assessmentMode' in partialUpdateDto) {
+				updateData.assessmentMode = partialUpdateDto.assessmentMode;
+			}
+
+			// Handle arrays by converting comma-separated strings if needed
+			if ('courseOutline' in partialUpdateDto) {
+				const outline: string | string[] = partialUpdateDto.courseOutline;
+				updateData.courseOutline = Array.isArray(outline)
+					? outline
+					: (outline as string).split(',').map(item => item.trim());
+			}
+
+			if ('requirements' in partialUpdateDto) {
+				const reqs: string | string[] = partialUpdateDto.requirements;
+				updateData.requirements = Array.isArray(reqs)
+					? reqs
+					: (reqs as string).split(',').map(item => item.trim());
+			}
+
+			if ('courseObjective' in partialUpdateDto) {
+				const objectives: string | string[] = partialUpdateDto.courseObjective;
+				updateData.courseObjective = Array.isArray(objectives)
+					? objectives
+					: (objectives as string).split(',').map(item => item.trim());
+			}
+
+			// Handle facilitator
+			if ('facilitator' in partialUpdateDto) {
+				if (partialUpdateDto.facilitator && partialUpdateDto.facilitator.trim() !== '') {
 					const staffFacilitator = await this.prisma.user.findMany({
 						where: {
 							userGroup: 'Staff',
@@ -262,69 +304,44 @@ export class CourseService {
 							id: true,
 						},
 					});
-	
-					if (!staffFacilitator.some((user) => user.id === updateData.facilitator)) {
+
+					if (!staffFacilitator.some((user) => user.id === partialUpdateDto.facilitator)) {
 						throw new BadRequestException('Invalid facilitator ID');
 					}
-					updateData.facilitator = updateData.facilitator;
+					updateData.facilitatorId = partialUpdateDto.facilitator;
 				} else {
-					// If facilitator is empty or null, set facilitatorId to null
-					updateData.facilitator = null;
+					updateData.facilitatorId = null;
 				}
-				// Remove the facilitator field as we're using facilitatorId
-				delete updateData.facilitator;
 			}
 
-			// Handle image separately
-			if ('image' in updateData && updateData.image) {
-				updateData.image = `/uploads/courses/${updateData.image}`;
+			// Handle image upload
+			if ('image' in partialUpdateDto && partialUpdateDto.image) {
+				const filename =  partialUpdateDto.image;
+				const timestamp = Date.now();
+				const uniqueFilename = `${timestamp}-${Math.floor(Math.random() * 1000000000)}${filename}`;
+				updateData.image = `/uploads/courses/${uniqueFilename}`;
 			}
 
-
-			  // Validate arrays if they exist in the update
-			if ('courseOutline' in updateData && !Array.isArray(updateData.courseOutline)) {
-				throw new BadRequestException('courseOutline must be an array');
-			}
-			
-			if ('requirements' in updateData && !Array.isArray(updateData.requirements)) {
-				throw new BadRequestException('requirements must be an array');
-			}
-			
-			if ('courseObjective' in updateData && !Array.isArray(updateData.courseObjective)) {
-				throw new BadRequestException('courseObjective must be an array');
-			}
-
-			// const updateData: { [key: string]: any } = {
-			// 	Title: partialUpdateDto.Title,
-			// 		Description: partialUpdateDto.Description,
-			// 		Duration: partialUpdateDto.Duration,
-			// 		status: partialUpdateDto.status,
-			// 		image: imageUrl,
-			// 		courseOutline: partialUpdateDto.courseOutline,
-			// 		facilitatorId: partialUpdateDto.facilitator,
-			// 		requirements: partialUpdateDto.requirements,
-			// 	    assessmentMode: partialUpdateDto.assessmentMode,
-			// 		award: partialUpdateDto.award,
-			// 		courseObjective: partialUpdateDto.courseObjective,
-			// 		topics: {
-			// 			update: partialUpdateDto.topics?.map((topic) => ({
-			// 				where: { id },
-			// 				data: {
-			// 					Title: topic.Title,
-			// 					Description: topic.Description,
-			// 				},
-			// 			})),
-			// 		},
-			// };
-
-			
-
-			return await this.prisma.course.update({
+			// Validate the data before update
+			const existingCourse = await this.prisma.course.findUnique({
 				where: { id },
-				data: {
-					
+			});
+
+			if (!existingCourse) {
+				throw new NotFoundException(`Course with ID ${id} not found`);
+			}
+
+			// Perform the update
+			const updatedCourse = await this.prisma.course.update({
+				where: { id },
+				data: updateData,
+				include: {
+					topics: true, // Include related topics if needed
 				},
 			});
+
+			return updatedCourse;
+
 		} catch (error) {
 			throw new HttpException(
 				{
@@ -395,21 +412,21 @@ export class CourseService {
 	}
 
 
-	async staffFacilitator (){ 
-		
-		const staff = await this.prisma.user.findMany({
-		where: {
-			userGroup: 'Staff',
-		},
-		select: {
-			id: true,
-			firstName: true,
-			lastName: true,
-			email: true,
-		},
-	});
+	async staffFacilitator() {
 
-	return staff
-}
+		const staff = await this.prisma.user.findMany({
+			where: {
+				userGroup: 'Staff',
+			},
+			select: {
+				id: true,
+				firstName: true,
+				lastName: true,
+				email: true,
+			},
+		});
+
+		return staff
+	}
 
 }

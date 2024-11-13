@@ -2,6 +2,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { CourseStatus } from "@prisma/client";
 import { AssessmentMode } from "@prisma/client";
+import { Transform } from "class-transformer";
 import { IsArray, IsEnum, IsNotEmpty,  IsOptional, IsString } from "class-validator";
 import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 // import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
@@ -70,6 +71,12 @@ export class CreateTopicDto {
 
   @IsArray()
   @IsString({each:true})
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string'){
+      return value.split(',').map(item => item.trim()).filter(Boolean);
+    }
+  })
   @ApiProperty({
     type: [String],
     description: 'The course outline as an array of strings',
@@ -80,6 +87,12 @@ export class CreateTopicDto {
   @IsString({each: true})
   @IsArray()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string'){
+      return value.split(',').map(item => item.trim()).filter(Boolean);
+    }
+  })
   @ApiProperty({
     type: [String],
     description: 'The requirements as an array of strings',
@@ -135,11 +148,17 @@ export class CreateTopicDto {
       description: 'The award or certification given upon completion',
       example: 'Certificate of Completion',
     })
-    Award?: string;
+    award?: string;
   
     @IsArray()
     @IsString({ each: true})
     @IsOptional()
+    @Transform(({ value }) => {
+      if (Array.isArray(value)) return value;
+      if (typeof value === 'string'){
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+    })
     @ApiProperty({
       type: [String],
     description: 'The course objective as an array of strings',

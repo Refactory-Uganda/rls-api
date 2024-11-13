@@ -11,6 +11,27 @@ export class CourseService {
 	// update(arg0: string, updateDto: { Title: string; Description: string; Duration: string; status: "PUBLISHED"; topics: { id: string; Title: string; Description: string; lessons: { id: string; title: string; text: string; }[]; }[]; }) {
 	//     throw new Error('Method not implemented.');
 	// }
+
+	private transformToArray(value:any): string[] {
+		if (Array.isArray(value)) {
+			return value;
+		}
+		if (typeof value === 'string') {
+			//  handle both form data and comma-separated strings
+			if (value.startsWith('[') && value.endsWith(']')) {
+				try {
+					return JSON.parse(value);
+				} catch (error) {
+					console.error('Error parsing JSON string:', error);
+					// handle invalid JSON string
+					return value.split(',').map((item) => item.trim());
+				}
+			}
+			return value.split(',').map(item => item.trim()).filter(item => item.length > 0);
+		}
+		return [];
+	}
+
 	constructor(private prisma: PrismaService) { }
 
 	async createCourseDraft(dto: CreateCourseDto) {
@@ -56,40 +77,53 @@ export class CourseService {
 
 			const imageUrl = dto.image ? `/uploads/courses/${dto.image}` : null;
 
-			if (!Array.isArray(dto.courseOutline)) {
-				console.log('courseOutline:', dto.courseOutline);
+			// Transform string Arrays if they come as coma-separated strings
+			
+			const courseOutline = this.transformToArray(dto.courseOutline);
+			const courseObjective = this.transformToArray(dto.courseObjective);
+			const requirements = this.transformToArray(dto.requirements );
+
+			if (!Array.isArray(courseOutline)) {
+				console.log('courseOutline:', courseOutline);
 				throw new BadRequestException('courseOutline must be an array');
 			}
 			
-			if (!Array.isArray(dto.requirements)) {
-				console.log('requirements:', dto.requirements);
+			if (!Array.isArray(requirements)) {
+				console.log('requirements:', requirements);
 				throw new BadRequestException('requirements must be an array');
 			}
 			
-			if (!Array.isArray(dto.courseObjective)) {
-				console.log('courseObjective:', dto.courseObjective);
+			if (!Array.isArray(courseObjective)) {
+				console.log('courseObjective:', courseObjective);
 				throw new BadRequestException('courseObjective must be an array');
 			}
 
-			return await this.prisma.course.create({
-				data: {
+			const createData = {
 					Title: dto.Title,
 					Description: dto.Description,
 					Duration: dto.Duration,
 					status,
-					courseOutline: dto.courseOutline,
-					facilitatorId: dto.facilitator,
-					requirements: dto.requirements,
+					courseOutline,
+					requirements,
 					assessmentMode:dto.assessmentMode,
-					award: dto.Award,
-					courseObjective: dto.courseObjective,
+					award: dto.award,
+					courseObjective,
 					image: imageUrl,
-					topics: {
-						create: dto.topics,
-					}, 
-					
-				},
-			})
+			}
+
+			// Add if facilitator is provided
+			if (dto.facilitator && dto.facilitator.trim() !== ''){
+				Object.assign(createData, { facilitatorId: dto.facilitator });
+			}
+
+			// Add if any topics exist
+			if (hasTopics) {
+				Object.assign( createData, { topics: { create: dto.topics } });
+			}
+
+			return await this.prisma.course.create({
+				data: createData,
+			});
 		} catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
 				if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -214,45 +248,81 @@ export class CourseService {
 
 	async patchCourse(id: string, partialUpdateDto: UpdateCourseDto) {
 		try {
-			const staffFacilitator = await this.prisma.user.findMany({
-				where: {
-					userGroup: 'Staff',
-				},
-				select: {
-					id: true,
-					firstName: true,
-					lastName: true,
-					email: true,
-				},
-			});
 
-			if (partialUpdateDto.facilitator && !staffFacilitator.some((user) => user.id === partialUpdateDto.facilitator)) {
-				throw new BadRequestException('Invalid facilitator ID');
+			const updateData = { ...partialUpdateDto };
+
+			// facilitator
+			if ('facilitator' in updateData) {
+				if (updateData.facilitator && updateData.facilitator.trim() !== '') {
+					const staffFacilitator = await this.prisma.user.findMany({
+						where: {
+							userGroup: 'Staff',
+						},
+						select: {
+							id: true,
+						},
+					});
+	
+					if (!staffFacilitator.some((user) => user.id === updateData.facilitator)) {
+						throw new BadRequestException('Invalid facilitator ID');
+					}
+					updateData.facilitator = updateData.facilitator;
+				} else {
+					// If facilitator is empty or null, set facilitatorId to null
+					updateData.facilitator = null;
+				}
+				// Remove the facilitator field as we're using facilitatorId
+				delete updateData.facilitator;
 			}
-			const imageUrl = partialUpdateDto.image ? `/uploads/courses/${partialUpdateDto.image}` : null;
+
+			// Handle image separately
+			if ('image' in updateData && updateData.image) {
+				updateData.image = `/uploads/courses/${updateData.image}`;
+			}
+
+
+			  // Validate arrays if they exist in the update
+			if ('courseOutline' in updateData && !Array.isArray(updateData.courseOutline)) {
+				throw new BadRequestException('courseOutline must be an array');
+			}
+			
+			if ('requirements' in updateData && !Array.isArray(updateData.requirements)) {
+				throw new BadRequestException('requirements must be an array');
+			}
+			
+			if ('courseObjective' in updateData && !Array.isArray(updateData.courseObjective)) {
+				throw new BadRequestException('courseObjective must be an array');
+			}
+
+			// const updateData: { [key: string]: any } = {
+			// 	Title: partialUpdateDto.Title,
+			// 		Description: partialUpdateDto.Description,
+			// 		Duration: partialUpdateDto.Duration,
+			// 		status: partialUpdateDto.status,
+			// 		image: imageUrl,
+			// 		courseOutline: partialUpdateDto.courseOutline,
+			// 		facilitatorId: partialUpdateDto.facilitator,
+			// 		requirements: partialUpdateDto.requirements,
+			// 	    assessmentMode: partialUpdateDto.assessmentMode,
+			// 		award: partialUpdateDto.award,
+			// 		courseObjective: partialUpdateDto.courseObjective,
+			// 		topics: {
+			// 			update: partialUpdateDto.topics?.map((topic) => ({
+			// 				where: { id },
+			// 				data: {
+			// 					Title: topic.Title,
+			// 					Description: topic.Description,
+			// 				},
+			// 			})),
+			// 		},
+			// };
+
+			
+
 			return await this.prisma.course.update({
 				where: { id },
 				data: {
-					Title: partialUpdateDto.Title,
-					Description: partialUpdateDto.Description,
-					Duration: partialUpdateDto.Duration,
-					status: partialUpdateDto.status,
-					image: imageUrl,
-					courseOutline: partialUpdateDto.courseOutline,
-					facilitatorId: partialUpdateDto.facilitator,
-					requirements: partialUpdateDto.requirements,
-				    assessmentMode: partialUpdateDto.assessmentMode,
-					award: partialUpdateDto.Award,
-					courseObjective: partialUpdateDto.courseObjective,
-					topics: {
-						update: partialUpdateDto.topics?.map((topic) => ({
-							where: { id },
-							data: {
-								Title: topic.Title,
-								Description: topic.Description,
-							},
-						})),
-					},
+					
 				},
 			});
 		} catch (error) {

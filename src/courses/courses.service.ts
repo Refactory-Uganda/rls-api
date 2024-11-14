@@ -109,6 +109,7 @@ export class CourseService {
 				award: dto.award,
 				courseObjective,
 				image: imageUrl,
+				topics: { create: dto.topics },
 			}
 
 			// Add if facilitator is provided

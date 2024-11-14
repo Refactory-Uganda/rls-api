@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
 // src/topics/topics.service.ts
 import { Injectable } from '@nestjs/common';
@@ -7,21 +6,21 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Topic } from '@prisma/client';
 // import { CreateTopicDto } from './dto/create-topic.dto'; // adjust path as needed
 import { UpdateTopicDto } from './dto/update-topic.dto';
-import { Prisma } from '@prisma/client';
+// import { Prisma } from '@prisma/client';
+import { CreateTopicDto } from './dto/create-topic.dto';
 
 @Injectable()
 export class TopicService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: {
-    Title: string;
-    Description?: string;
-    courseId: string;
-  }): Promise<Topic> {
+  async create(data: CreateTopicDto): Promise<Topic> {
+    const imageUrl = data.image ? `/uploads/topics/${data.image}` : null;
+
     return this.prisma.topic.create({
       data: {
         Title: data.Title,
         Description: data.Description,
+        image: imageUrl,
         courseId: data.courseId,
       },
       include: { 
@@ -58,14 +57,26 @@ export class TopicService {
 
   async patchTopic(id: string, partialUpdateDto: UpdateTopicDto) {
     try {
-      // const updateData: Prisma.TopicUpdateInput = {
-      //   Title: { set: partialUpdateDto.Title },
-      //   Description: { set: partialUpdateDto.Description },
-      // };
+
+      const sanitizedId = id.trim();
+    if (!/^[a-fA-F0-9]{24}$/.test(sanitizedId)) {
+        throw new Error(`Invalid topic ID format: ${sanitizedId}`);
+    }
+
+      const imageUrl = partialUpdateDto.image ? `/uploads/courses/${partialUpdateDto.image}` : null
+
+      console.log('Updating topic with ID:', sanitizedId);
+    console.log('Image URL:', imageUrl);
+    console.log('Partial update data:', partialUpdateDto);
   
       return await this.prisma.topic.update({
-        where: { id },
-        data: partialUpdateDto,
+        where: { id: sanitizedId },
+        data: {
+          Title: partialUpdateDto.Title,
+          Description: partialUpdateDto.Description,
+          image: imageUrl,
+          courseId: partialUpdateDto.courseId
+        },
       });
     } catch (error) {
       throw new Error(`Error partially updating topic with ID ${id}: ${error.message}`);

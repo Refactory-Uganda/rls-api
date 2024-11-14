@@ -8,6 +8,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -18,10 +19,19 @@ model Course {
   Title       String   @unique
   Description String?
   Duration    String
+  courseOutline    String[]    
+  requirements     String[]  
+  assessmentMode   AssessmentMode? 
+  facilitatorId    String? @db.ObjectId
+  facilitator      User?   @relation(fields: [facilitatorId],references: [id])
+  award            String?           
+  courseObjective  String[]      
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
+  image       String?
 }
+
 
 model Topic {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -30,6 +40,7 @@ model Topic {
   createdAt   DateTime @default(now())
   courseId    String?   @map("_courseId") @db.ObjectId
   Course      Course?   @relation(fields: [courseId], references: [id], name: "CourseTopics", onDelete:Cascade)
+  image   String?
 
   Lesson Lesson[]
 }
@@ -39,12 +50,38 @@ model Lesson {
   title     String
   text      String?
   content   TextContent[]
+  slides    Slide[]     @relation("LessonSlides")
   topic     Topic?    @relation(fields: [topicId], references: [id], onDelete:Cascade)
   topicId   String?   @db.ObjectId
   quiz      Quiz?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+model Slide {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  lesson    Lesson   @relation("LessonSlides", fields: [lessonId], references: [id], onDelete: Cascade)
+  lessonId  String   @db.ObjectId
+  title     String 
+  order     Int      //defines the order of slides within a lesson
+  content   String
+  contentType  slideContentType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+enum slideContentType {
+  TEXT
+  IMAGE 
+}
+
+enum AssessmentMode {
+  QUIZ
+  ASSIGNMENT
+}
+
 
 model Quiz {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
@@ -78,7 +115,7 @@ model Option {
   iscorrect Boolean
   order Int
   questionId String? @db.ObjectId
-  question Question? @relation(fields: [questionId], references: [id],onDelete: Cascade)
+  question Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -93,6 +130,8 @@ model User {
   refresh_token String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Course Course[]
 }
 
 enum Role {
@@ -113,7 +152,7 @@ enum Groups {
   Staff 
   Student 
   User 
-}
+} 
 
 model TextContent {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId

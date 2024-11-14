@@ -1,13 +1,18 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from "@nestjs/swagger";
 import { CourseStatus } from "@prisma/client";
-import { IsEnum, IsNotEmpty,  IsOptional, IsString } from "class-validator";
+import { AssessmentMode } from "@prisma/client";
+import { Transform } from "class-transformer";
+import { IsArray, IsEnum, IsNotEmpty,  IsOptional, IsString } from "class-validator";
 import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 // import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
 // import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
 
+
 export class CreateTopicDto {
+
+
     @IsString()
     @IsNotEmpty()
     @ApiProperty({
@@ -34,7 +39,12 @@ export class CreateTopicDto {
   export class CreateCourseDto {
 
     @IsString() 
-    id: string
+    @IsOptional()  // Make id optional
+    @ApiProperty({
+      description: 'Course ID (optional)',
+      required: false
+    })
+    id?: string
 
     @IsString()
     @IsNotEmpty()
@@ -59,6 +69,55 @@ export class CreateTopicDto {
     })
     Duration: string;
 
+  @IsArray()
+  @IsString({each:true})
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string'){
+      return value.split(',').map(item => item.trim()).filter(Boolean);
+    }
+  })
+  @ApiProperty({
+    type: [String],
+    description: 'The course outline as an array of strings',
+    example: ['Introduction', 'Basic Concepts', 'Advanced Topics'],
+  })
+  courseOutline?: string[];
+
+  @IsString({each: true})
+  @IsArray()
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string'){
+      return value.split(',').map(item => item.trim()).filter(Boolean);
+    }
+  })
+  @ApiProperty({
+    type: [String],
+    description: 'The requirements as an array of strings',
+    example: ['Laptop', 'Headsets', 'notebook'],
+  })
+  requirements?: string[];
+
+    @IsEnum(AssessmentMode)
+    @IsOptional()
+    @ApiProperty({
+      description: 'The assessment mode for the course',
+      enum: AssessmentMode,
+      example: 'QUIZ | ASSIGNMENT',
+    })
+    assessmentMode?: AssessmentMode;
+  
+  
+    @IsOptional()
+    @ApiProperty({
+      description: 'The facilitator (User)',
+      example: 'facilitator',
+    })
+    facilitator?: string;
+
+
     @IsEnum(CourseStatus)
     @ApiProperty({
       description: 'The status of the course',
@@ -66,10 +125,10 @@ export class CreateTopicDto {
     })
     status?: CourseStatus
 
-    @ApiProperty({ type: [CreateTopicDto] ,
-      description: 'The topics of the course',
-      example: '[Here will be an array of topics]'
-    })
+    // @ApiProperty({ type: [CreateTopicDto] ,
+    //   description: 'The topics of the course',
+    //   example: '[Here will be an array of topics]'
+    // })
     topics: CreateTopicDto[];
     // page: number;
     // limit: number;
@@ -83,5 +142,33 @@ export class CreateTopicDto {
     // @IsNumber()
     // @ApiProperty({ description: "Number of items per page", example: 6 })
     // limit?: number;
+    @IsString()
+    @IsOptional()
+    @ApiProperty({
+      description: 'The award or certification given upon completion',
+      example: 'Certificate of Completion',
+    })
+    award?: string;
+  
+    @IsArray()
+    @IsString({ each: true})
+    @IsOptional()
+    @Transform(({ value }) => {
+      if (Array.isArray(value)) return value;
+      if (typeof value === 'string'){
+        return value.split(',').map(item => item.trim()).filter(Boolean);
+      }
+    })
+    @ApiProperty({
+      type: [String],
+    description: 'The course objective as an array of strings',
+    example: ['Introduction', 'Basic Concepts', 'Advanced Topics'],
+  })
+    courseObjective?: string[];
+  
+
+    @IsOptional()
+    @ApiProperty({ type: 'string', format: 'binary' })
+    image?: string;
 
   }

@@ -28,6 +28,7 @@ async function bootstrap() {
     origin: 'http://localhost:5173', // Replace with your React app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // If you need to send cookies or authentication headers
+    allowedHeaders: 'Content-Type, Authorization',
   });
 
   // await app.listen(3000);

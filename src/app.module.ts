@@ -21,9 +21,15 @@ import { QuestionModule } from './question/question.module';
 import { OptionModule } from './option/option.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { SlideModule } from './slide/slide.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
     ConfigModule.forRoot({ isGlobal: true }), // Global configuration
     HttpModule, // For external API calls (e.g., fetching roles)
     PrismaModule,

@@ -32,8 +32,7 @@ export class CreateNoteDto {
   
   export class CreateLessonDto {
 
-    @IsString()
-    id: string;
+  
 
     @ApiProperty({
       description: 'The title of the lesson',

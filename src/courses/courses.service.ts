@@ -1,10 +1,13 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.service.ts
 import { Injectable, HttpException, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
+import { promises as fs } from 'fs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Prisma } from '@prisma/client';
+import { join } from 'path';
+import { ImageService } from './images.service';
 
 @Injectable()
 export class CourseService {
@@ -32,7 +35,11 @@ export class CourseService {
 		return [];
 	}
 
-	constructor(private prisma: PrismaService) { }
+	constructor(
+		private prisma: PrismaService,
+		private imageService:ImageService
+
+	) { }
 
 	async createCourseDraft(dto: CreateCourseDto) {
 		try {
@@ -75,83 +82,103 @@ export class CourseService {
 			console.log('creating course data:', JSON.stringify(dto, null, 2));
 
 
-			const imageUrl = dto.image ? `/uploads/courses/${dto.image}` : null;
+			let imageUrl = null;
+			if (dto.image) {
+
+				const imagePath = join(process.cwd(), 'uploads/courses', dto.image);
+				try {
+					await fs.access(imagePath);
+					imageUrl = `/uploads/courses/${dto.image}`;
+				} catch (error) {
+					console.log('Error accessing image path:', error);
+					throw new BadRequestException('Invalid image file');
+				}
+			}
+		
+
 
 			// Transform string Arrays if they come as coma-separated strings
 
-			const courseOutline = this.transformToArray(dto.courseOutline);
-			const courseObjective = this.transformToArray(dto.courseObjective);
-			const requirements = this.transformToArray(dto.requirements);
+		const courseOutline = this.transformToArray(dto.courseOutline);
+		const courseObjective = this.transformToArray(dto.courseObjective);
+		const requirements = this.transformToArray(dto.requirements);
 
-			if (!Array.isArray(courseOutline)) {
-				console.log('courseOutline:', courseOutline);
-				throw new BadRequestException('courseOutline must be an array');
-			}
+		if (!Array.isArray(courseOutline)) {
+			console.log('courseOutline:', courseOutline);
+			throw new BadRequestException('courseOutline must be an array');
+		}
 
-			if (!Array.isArray(requirements)) {
-				console.log('requirements:', requirements);
-				throw new BadRequestException('requirements must be an array');
-			}
+		if (!Array.isArray(requirements)) {
+			console.log('requirements:', requirements);
+			throw new BadRequestException('requirements must be an array');
+		}
 
-			if (!Array.isArray(courseObjective)) {
-				console.log('courseObjective:', courseObjective);
-				throw new BadRequestException('courseObjective must be an array');
-			}
+		if (!Array.isArray(courseObjective)) {
+			console.log('courseObjective:', courseObjective);
+			throw new BadRequestException('courseObjective must be an array');
+		}
 
-			const createData = {
-				Title: dto.Title,
-				Description: dto.Description,
-				Duration: dto.Duration,
-				status,
-				courseOutline,
-				requirements,
-				assessmentMode: dto.assessmentMode,
-				award: dto.award,
-				courseObjective,
-				image: imageUrl,
-				topics: { create: dto.topics },
-			}
+		const createData = {
+			Title: dto.Title,
+			Description: dto.Description,
+			Duration: dto.Duration,
+			status,
+			courseOutline,
+			requirements,
+			assessmentMode: dto.assessmentMode,
+			award: dto.award,
+			courseObjective,
+			image: imageUrl,
+			topics: { create: dto.topics },
+		}
 
-			// Add if facilitator is provided
-			if (dto.facilitator && dto.facilitator.trim() !== '') {
-				Object.assign(createData, { facilitatorId: dto.facilitator });
-			}
+		// Add if facilitator is provided
+		if (dto.facilitator && dto.facilitator.trim() !== '') {
+			Object.assign(createData, { facilitatorId: dto.facilitator });
+		}
 
-			// Add if any topics exist
-			if (hasTopics) {
-				Object.assign(createData, { topics: { create: dto.topics } });
-			}
+		// Add if any topics exist
+		if (hasTopics) {
+			Object.assign(createData, { topics: { create: dto.topics } });
+		}
 
-			return await this.prisma.course.create({
-				data: createData,
-			});
-		} catch (error) {
+		return await this.prisma.course.create({
+			data: createData,
+		});
+	} catch(error) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {
-				if (error instanceof Prisma.PrismaClientKnownRequestError) {
-					switch (error.code) {
-						case 'P2002':
-							throw new Error('Unique constraint violation: A course with this title already exists.');
-						case 'P2003':
-							throw new Error('Foreign key constraint failed.');
-						case 'P2005':
-							throw new Error('Invalid topics Format.');
-						case 'P2016':
-							throw new Error('Input the correct datatype');
-						case 'P2004':
-							throw new Error('Fill the non nullable fields');
-						case 'P2008':
-							throw new Error('Please connect to a database');
-						case 'P2012':
-							throw new Error('A required value is missing');
-						default:
-							throw new Error(`Database error: ${error.message}`);
-					}
+				switch (error.code) {
+					case 'P2002':
+						throw new Error('Unique constraint violation: A course with this title already exists.');
+					case 'P2003':
+						throw new Error('Foreign key constraint failed.');
+					case 'P2005':
+						throw new Error('Invalid topics Format.');
+					case 'P2016':
+						throw new Error('Input the correct datatype');
+					case 'P2004':
+						throw new Error('Fill the non nullable fields');
+					case 'P2008':
+						throw new Error('Please connect to a database');
+					case 'P2012':
+						throw new Error('A required value is missing');
+					default:
+						throw new Error(`Database error: ${error.message}`);
 				}
 			}
-			// if (error instanceof) {}
-			throw error;
 		}
-	}
+		// if (error instanceof) {}
+		if(dto.image){
+			try{
+				await this.imageService.deleteImage(dto.image);
+			}catch(cleanupError){
+				console.error('Error Cleaning up Image:', cleanupError);
+			}
+		}
+		throw error;
+	}}
+
 
 	// publish course
 	async publishCourse(id: string) {
@@ -317,7 +344,7 @@ export class CourseService {
 
 			// Handle image upload
 			if ('image' in partialUpdateDto && partialUpdateDto.image) {
-				const filename =  partialUpdateDto.image;
+				const filename = partialUpdateDto.image;
 				const timestamp = Date.now();
 				const uniqueFilename = `${timestamp}-${Math.floor(Math.random() * 1000000000)}${filename}`;
 				updateData.image = `/uploads/courses/${uniqueFilename}`;

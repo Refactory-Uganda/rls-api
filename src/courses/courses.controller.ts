@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
 // src/course/course.controller.ts
-import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Patch, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Post, Body, Get, Param, HttpCode, HttpStatus, Patch, UploadedFile, UseInterceptors, ParseFilePipeBuilder } from '@nestjs/common';
 import {  CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ImageService } from './images.service';
 // import { AssessmentMode } from '@prisma/client';
 // import { JwtAuthGaurd } from 'src/authentication/guards/jwt-auth.guard';
 // import { RolesGaurd } from 'src/authentication/guards/roles.guard';
@@ -15,9 +16,43 @@ import { diskStorage } from 'multer';
 @Controller('courses')
 @ApiTags('Course')
 export class CourseController {
-  constructor(private readonly courseService: CourseService) {}
+  constructor(
+    private readonly courseService: CourseService,
+    private readonly imageService: ImageService
+  ) {}
+
+  // from image service
+  @Post('upload-image')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  async uploadImage(
+    @UploadedFile(
+      new ParseFilePipeBuilder().addFileTypeValidator({
+        fileType: /(jpg|jpeg|png)$/,
+      }).addMaxSizeValidator({
+        maxSize: 1024 * 1024 * 5, // 5MB
+      }).build ({
+        errorHttpStatusCode: 422
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    const filename = await this.imageService.saveImage(file);
+    return (filename);
+  }
+
+  
 
 
+
+
+
+
+
+
+
+
+  //  courses and staff
 
     @Delete(':id')
     @ApiOperation({summary: 'Delete a Course'})

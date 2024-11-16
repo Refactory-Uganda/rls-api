@@ -142,9 +142,38 @@ export class CourseService {
 			Object.assign(createData, { topics: { create: dto.topics } });
 		}
 
-		return await this.prisma.course.create({
+		// If facilitator is provided, retrieve their details
+        let facilitatorDetails = null;
+        if (dto.facilitator) {
+            const facilitator = await this.prisma.user.findUnique({
+                where: { id: dto.facilitator },
+                select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                },
+            });
+
+            if (facilitator) {
+                facilitatorDetails = {
+                    id: facilitator.id,
+                    name: `${facilitator.firstName} ${facilitator.lastName}`,
+                    email: facilitator.email,
+                };
+            }
+        }
+
+		const createdCourse = await this.prisma.course.create({
 			data: createData,
 		});
+
+		return {
+			courses: {
+				...createdCourse,
+				facilitator: facilitatorDetails
+		}
+		}
 	} catch(error) {
 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError) {

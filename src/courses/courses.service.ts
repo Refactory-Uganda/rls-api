@@ -457,4 +457,43 @@ export class CourseService {
 		return staff
 	}
 
+	async getStaffById(staffId: string) {
+		// Remove extra quotes and whitespace
+		const cleanedStaffId = staffId.replace(/['" ]/g, '');
+
+		// Check if the cleaned staffId is a valid ObjectID (if using MongoDB or similar)
+		const isValidObjectId = /^[a-fA-F0-9]{24}$/.test(cleanedStaffId);
+
+		if (!isValidObjectId) {
+			throw new BadRequestException('Invalid staff ID format');
+		}
+
+
+		try {
+			return await this.prisma.user.findUnique({
+				where: { id: cleanedStaffId }, // Pass the cleaned staffId
+				select:{
+					id: true,
+					firstName: true,
+					lastName: true,
+					email: true,
+					Course: {
+						select: {
+							Title: true,
+							Description: true
+						}
+					}
+				},
+			});
+		} catch (error) {
+			throw new HttpException(
+				{
+					status: HttpStatus.INTERNAL_SERVER_ERROR,
+					message: `Error finding staff by ID: ${error.message}`,
+				},
+				HttpStatus.INTERNAL_SERVER_ERROR,
+			);
+		}
+	}
+
 }

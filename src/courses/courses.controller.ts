@@ -158,6 +158,11 @@ export class CourseController {
       return await this.courseService.staffFacilitator();
     }
 
+    @Get('staff/:id')
+    async getStaffById(@Param('id') staffId: string) {
+      return await this.courseService.getStaffById(staffId);
+    }
+
   // @Get()
   // @ApiOperation({ summary: 'Get all Courses' })
   // async findAll(

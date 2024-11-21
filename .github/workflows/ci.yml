@@ -1,6 +1,5 @@
-name: CI/CD Pipeline
-
-on:
+name: Backend Actions
+'on':
   push:
     branches:
       - development
@@ -9,55 +8,52 @@ on:
   pull_request:
     branches:
       - development
-
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
-
+        node-version:
+          - 20.x
     services:
       mongo:
-        image: mongo:5.0
+        image: 'mongo:5.0'
         ports:
-          - 27018:27017
-        options: --health-cmd="mongo --eval \"db.runCommand({ ping:1 })\"" --health-interval=10s --health-timeout=5s --health-retries=3
-
+          - '27018:27017'
+        options: >-
+          --health-cmd="mongo --eval \"db.runCommand({ ping:1 })\""
+          --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Check Docker version
         run: docker --version
-
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-
+          node-version: '${{ matrix.node-version }}'
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json', 'package.json') }}
+          key: >-
+            ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json',
+            'package.json') }}
           restore-keys: |
             ${{ runner.os }}-node_modules-
-
       - name: Install dependencies
         run: npm ci
-
       - name: Cache Cypress binary
         uses: actions/cache@v3
         with:
           path: ~/.cache/Cypress
-          key: ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json', 'package.json') }}
+          key: >-
+            ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json',
+            'package.json') }}
           restore-keys: |
             ${{ runner.os }}-cypress-
-
       - name: Install Cypress (if not cached)
         run: npx cypress install
-
       - name: Wait for MongoDB to be ready
         run: |
           echo "Waiting for MongoDB to be ready..."
@@ -70,16 +66,12 @@ jobs:
               sleep 2
             fi
           done
-
       - name: Build NestJS API
         run: npm run build
-
       - name: Run tests (including API tests)
-        run: npm run test:e2e
-
+        run: 'npm run test:e2e'
       - name: Check MongoDB logs
         run: docker logs mongo || echo "No MongoDB logs available."
-
   deploy-staging:
     if: github.ref == 'refs/heads/staging'
     needs: build
@@ -87,19 +79,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Deploy to staging environment
         env:
-          STAGING_SERVER: ${{ secrets.STAGING_SERVER }}
-          SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
-        run: |
-          if [ -z "${{ secrets.STAGING_SERVER }}" ] || [ -z "${{ secrets.STAGING_SSH_KEY }}" ]; then
+          STAGING_SERVER: '${{ secrets.STAGING_SERVER }}'
+          SSH_KEY: '${{ secrets.STAGING_SSH_KEY }}'
+        run: >
+          if [ -z "${{ secrets.STAGING_SERVER }}" ] || [ -z "${{
+          secrets.STAGING_SSH_KEY }}" ]; then
             echo "Staging secrets are missing!" >&2
             exit 1
           fi
-          echo "Deploying to staging environment..."
-          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$STAGING_SERVER "bash deploy-staging.sh"
 
+          echo "Deploying to staging environment..."
+
+          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$STAGING_SERVER "bash
+          deploy-staging.sh"
   deploy-production:
     if: github.ref == 'refs/heads/main'
     needs: build
@@ -107,25 +101,33 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Deploy to production
         env:
-          PRODUCTION_SERVER: ${{ secrets.PRODUCTION_SERVER }}
-          SSH_KEY: ${{ secrets.PRODUCTION_SSH_KEY }}
-        run: |
+          PRODUCTION_SERVER: '${{ secrets.PRODUCTION_SERVER }}'
+          SSH_KEY: '${{ secrets.PRODUCTION_SSH_KEY }}'
+        run: >
           echo "Checking if production secrets are set..."
-          if [ -z "${{ secrets.PRODUCTION_SERVER }}" ] || [ -z "${{ secrets.PRODUCTION_SSH_KEY }}" ]; then
+
+          if [ -z "${{ secrets.PRODUCTION_SERVER }}" ] || [ -z "${{
+          secrets.PRODUCTION_SSH_KEY }}" ]; then
             echo "Production secrets are missing!" >&2
             exit 1
           fi
+
           echo "Secrets are set. Proceeding with deployment..."
 
+
           # Debugging output
+
           echo "Deploying to production on server: $PRODUCTION_SERVER"
 
+
           # SSH Command with verbose logging
-          ssh -o StrictHostKeyChecking=no -i $SSH_KEY -v user@$PRODUCTION_SERVER "bash deploy-production.sh"
-          
+
+          ssh -o StrictHostKeyChecking=no -i $SSH_KEY -v user@$PRODUCTION_SERVER
+          "bash deploy-production.sh"
+
+
           if [ $? -ne 0 ]; then
             echo "Deployment to production failed!" >&2
             exit 1

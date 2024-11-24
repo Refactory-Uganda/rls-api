@@ -425,7 +425,9 @@ export class CourseService {
 				include: {
 					topics: {
 						include: { Lesson: {
-							include: { quiz: true }
+							include: { quiz: {
+								include: { questions: true }
+							} }
 						} }
 					},
 					quiz: true
@@ -454,7 +456,9 @@ export class CourseService {
 				include: {
 					topics: {
 						include: { Lesson: {
-							include: { quiz: true }
+							include: { quiz: {
+								include: { questions: true }
+							} }
 						} }
 					},
 					quiz: true

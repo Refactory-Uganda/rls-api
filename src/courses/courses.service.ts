@@ -130,6 +130,7 @@ export class CourseService {
 			courseObjective,
 			image: imageUrl,
 			topics: { create: dto.topics },
+			quiz: { create: dto.quiz },
 		}
 
 		// Add if facilitator is provided
@@ -364,7 +365,8 @@ export class CourseService {
 				where: { id },
 				data: updateData,
 				include: {
-					topics: true, // Include related topics if needed
+					topics: true,
+					quiz: true
 				},
 			});
 
@@ -393,8 +395,11 @@ export class CourseService {
 				// take: Number(limit),
 				include: {
 					topics: {
-						include: { Lesson: true }
-					}
+						include: { Lesson: {
+							include: { quiz: true }
+						} }
+					},
+					quiz: true
 				}
 			});
 
@@ -419,8 +424,11 @@ export class CourseService {
 				where: { id: id },
 				include: {
 					topics: {
-						include: { Lesson: true }
-					}
+						include: { Lesson: {
+							include: { quiz: true }
+						} }
+					},
+					quiz: true
 				}
 
 			});

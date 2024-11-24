@@ -170,5 +170,6 @@ export class CreateTopicDto {
     @IsOptional()
     @ApiProperty({ type: 'string', format: 'binary' })
     image?: string;
+	  quiz: any;
 
   }

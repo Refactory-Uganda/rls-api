@@ -29,6 +29,7 @@ model Course {
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
+  quiz        Quiz[]   @relation("Quiz")
   image       String?
 }
 
@@ -53,7 +54,7 @@ model Lesson {
   slides    Slide[]     @relation("LessonSlides")
   topic     Topic?    @relation(fields: [topicId], references: [id], onDelete:Cascade)
   topicId   String?   @db.ObjectId
-  quiz      Quiz?
+  quiz      Quiz[]    @relation("Quiz")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -88,9 +89,11 @@ model Quiz {
   title     String
   description String?
   questions Question[]
-  lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete:Cascade)
+  Course      Course?   @relation(fields: [courseId], references: [id], name: "Quiz", onDelete:Cascade)
+  courseId  String?     @unique @db.ObjectId
+  lesson    Lesson?     @relation(fields: [lessonId], references: [id], name: "Quiz", onDelete:Cascade)
   attempts  QuizAttempt[]
-  lessonId  String     @unique @db.ObjectId
+  lessonId  String?     @unique @db.ObjectId
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }

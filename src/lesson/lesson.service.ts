@@ -58,7 +58,17 @@ export class LessonService {
     }
     async findAllLessons() {
       return this.prisma.lesson.findMany({
-      include: { quiz: true }
+      include: { quiz: {
+        include: {
+          questions: {
+            include: {
+              option: true, // Include options within questions
+              userAnswers: true, // Include userAnswers within questions
+            },
+          },
+          attempts: true, // Include quiz attempts
+        },
+      } }
     });
     }
     async findLessonById(lessonId: string) {
@@ -67,9 +77,18 @@ export class LessonService {
           id: lessonId,
         },
         include: {
-            quiz: true
-          }
-      });
+          quiz: {
+						include: {
+						  questions: {
+							include: {
+							  option: true, // Include options within questions
+							  userAnswers: true, // Include userAnswers within questions
+							},
+						  },
+						  attempts: true, // Include quiz attempts
+						},
+					  }},
+				  });
     }
 
     // async findContentByLessonId(lessonId: string) {

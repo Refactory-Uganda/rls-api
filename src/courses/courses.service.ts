@@ -414,61 +414,91 @@ export class CourseService {
 	}
 
 
-	async findAll(
-		// page: number = 1, limit: number = 2
-	) {
+	async findAll() {
 		try {
-			// const skip = (page - 1) * limit;
-			const courses = await this.prisma.course.findMany({
-				// skip,
-				// take: Number(limit),
+		  const courses = await this.prisma.course.findMany({
+			include: {
+			  topics: {
 				include: {
-					topics: {
-						include: { Lesson: {
-							include: { quiz: {
-								include: { questions: true }
-							} }
-						} }
+				  Lesson: {
+					include: {
+					  quiz: {
+						include: {
+						  questions: {
+							include: {
+							  option: true, // Include options within questions
+							  userAnswers: true, // Include userAnswers within questions
+							},
+						  },
+						  attempts: true, // Include quiz attempts
+						},
+					  },
 					},
-					quiz: true
-				}
-			});
-
-			// const totalCourses = await this.prisma.course.count();
-
-			return {
-				courses,
-				// total: totalCourses,
-				// page,
-				// limit,
-				// totalPages: Math.ceil(totalCourses / limit),
-			};
+				  },
+				},
+			  },
+			  quiz: {
+				include: {
+				  questions: {
+					include: {
+					  option: true, // Include options within questions
+					  userAnswers: true, // Include userAnswers within questions
+					},
+				  },
+				  attempts: true, // Include quiz attempts
+				},
+			  },
+			},
+		  });
+	  
+		  return { courses };
 		} catch (error) {
-			throw new Error(`Error fetching courses: ${error.message}`);
+		  throw new Error(`Error fetching courses: ${error.message}`);
 		}
-	}
-
-	// Method to fetch a single course by ID
-	async findOne(id: string) {
+	  }
+	  
+	  async findOne(id: string) {
 		try {
-			return await this.prisma.course.findUnique({
-				where: { id: id },
+		  return await this.prisma.course.findUnique({
+			where: { id },
+			include: {
+			  topics: {
 				include: {
-					topics: {
-						include: { Lesson: {
-							include: { quiz: {
-								include: { questions: true }
-							} }
-						} }
+				  Lesson: {
+					include: {
+					  quiz: {
+						include: {
+						  questions: {
+							include: {
+							  option: true,
+							  userAnswers: true,
+							},
+						  },
+						  attempts: true,
+						},
+					  },
 					},
-					quiz: true
-				}
-
-			});
+				  },
+				},
+			  },
+			  quiz: {
+				include: {
+				  questions: {
+					include: {
+					  option: true,
+					  userAnswers: true,
+					},
+				  },
+				  attempts: true,
+				},
+			  },
+			},
+		  });
 		} catch (error) {
-			throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
+		  throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
 		}
-	}
+	  }
+	  
 
 	async deleteCourse(id: string) {
 		try {

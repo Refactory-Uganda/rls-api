@@ -37,7 +37,7 @@ jobs:
 
   check-conflicts:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -53,7 +53,7 @@ jobs:
           fi
 
   test-and-build:
-    needs: [run-linters, check-conflicts]
+    needs: [run-linters]
     runs-on: ubuntu-latest
 
     services:

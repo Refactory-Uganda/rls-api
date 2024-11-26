@@ -9,7 +9,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { Prisma, Question, Quiz } from '@prisma/client';
-import { CreateQuestionDto } from 'src/question/dto/create-question.dto';
+import { CreateQuestionDto } from '../question/dto/create-question.dto';
 import { SubmitAnswerDto } from './dto/submitAnswer.dto';
 import { SubmitQuizDto } from './dto/submitQuiz.dto';
 

@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsArray,
 } from 'class-validator';
-import { CreateOptionDto } from 'src/option/dto/option.dto';
+import { CreateOptionDto } from '../../option/dto/option.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateQuestionDto {

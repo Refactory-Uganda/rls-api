@@ -23,6 +23,8 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { SlideModule } from './slide/slide.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -52,7 +54,7 @@ import { join } from 'path';
     AuthenticationModule,
     SlideModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

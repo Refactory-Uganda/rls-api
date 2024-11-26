@@ -16,10 +16,8 @@ import { SubmitAnswerDto } from './dto/submitAnswer.dto';
 import { StartQuizDto } from './dto/startquiz.dto';
 import { SubmitQuizDto } from './dto/submitQuiz.dto';
 // import { User } from 'src/decorators/user.decorator';
-// import { JwtAuthGaurd } from 'src/authentication/jwt-auth.guard';
 
 @Controller('quizzes')
-// @UseGuards(JwtAuthGaurd)
 @ApiTags('quizzes')
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}

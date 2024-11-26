@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { CreateCohortModuleDto } from 'src/modules/dto/create-cohortModule.dto';
+import { CreateCohortModuleDto } from '../modules/dto/create-cohortModule.dto';
 
 @Injectable()
 export class CohortService {

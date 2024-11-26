@@ -10,13 +10,14 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { CreateLessonDto } from 'src/lesson/dto/create-lesson.dto';
+import { CreateLessonDto } from '../../lesson/dto/create-lesson.dto';
 // import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
 // import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
 export class CreateTopicDto {
   @IsString()
   @IsNotEmpty()
+  s;
   @ApiProperty({
     description: 'The title of the topic',
     example: 'Introduction to JavaScript',

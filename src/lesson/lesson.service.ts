@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { Prisma } from '@prisma/client';

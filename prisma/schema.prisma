@@ -118,7 +118,7 @@ model Question {
 model Option {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   optionText String
-  isCorrect Boolean
+  isCorrect Boolean?
   order Int
   questionId String? @db.ObjectId
   question Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)

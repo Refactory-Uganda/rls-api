@@ -3,50 +3,24 @@ name: Backend CI/CD Pipeline
 on:
   push:
     branches:
+      - staging
       - development
   pull_request:
     branches:
+      - staging
       - development
 
 env:
   NODE_VERSION: '20.x'
+  CACHE_KEY_PREFIX: v1
 
 jobs:
-  check-conflicts:
+  run-linters:
+    name: Run linters
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          
-      - name: Check for merge conflicts
-        run: |
-          if git merge-tree $(git merge-base HEAD origin/${{ github.base_ref }}) origin/${{ github.base_ref }} HEAD | grep -i '<<<<<<<'; then
-            echo "Merge conflicts found"
-            exit 1
-          else
-            echo "No merge conflicts found"
-          fi
-
-  lint-and-test:
-    needs: check-conflicts
-    runs-on: ubuntu-latest
-    
-    services:
-      mongodb:
-        image: mongo:latest
-        ports:
-          - 27017:27017
-        options: >-
-          --health-cmd mongoose
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
-      - name: Checkout repository
+      - name: Check out Git repository
         uses: actions/checkout@v3
 
       - name: Set up Node.js
@@ -60,15 +34,26 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
-        
-      - name: Run unit tests with coverage
-        run: npm run test:coverage
-        
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
-        
-  e2e-tests:
-    needs: lint-and-test
+
+  check-conflicts:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Check for merge conflicts
+        run: |
+          if git merge-tree $(git merge-base HEAD origin/${{ github.base_ref }}) origin/${{ github.base_ref }} HEAD | grep -i '<<<<<<<'; then
+            echo "Merge conflicts found"
+            exit 1
+          else
+            echo "No merge conflicts found"
+          fi
+
+  test-and-build:
+    needs: [run-linters, check-conflicts]
     runs-on: ubuntu-latest
     
     services:
@@ -76,43 +61,37 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-          
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
           
-      - name: Install dependencies
-        run: npm ci
-        
-      - name: Cache Cypress binary
+      - name: Cache dependencies
         uses: actions/cache@v3
+        id: npm-cache
         with:
-          path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          
-      - name: Run E2E tests
-        run: npm run test:e2e
-        
-  build:
-    needs: [e2e-tests]
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+          path: node_modules
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           
       - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci
+        
+      - name: Run tests with coverage
+        run: npm run test:coverage
+          
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
         
       - name: Build application
         run: npm run build
@@ -122,10 +101,44 @@ jobs:
         with:
           name: dist
           path: dist/
+          retention-days: 1
+
+  e2e-tests:
+    needs: run-linters
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+          
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: node_modules
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          
+      - name: Install dependencies
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npm ci
+          
+      - name: Run E2E tests
+        run: npm run test:e2e
 
   deploy-staging:
     if: github.ref == 'refs/heads/staging'
-    needs: build
+    needs: [test-and-build, e2e-tests]
     runs-on: ubuntu-latest
     environment: staging
     
@@ -138,4 +151,3 @@ jobs:
       - name: Deploy to Render
         run: |
           curl -X POST ${{ secrets.RENDER_DEPLOYMENT_HUK }}
-

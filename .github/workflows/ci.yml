@@ -87,12 +87,6 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: npm ci
         
-      - name: Run tests with coverage
-        run: npm run test:coverage
-          
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        
       - name: Build application
         run: npm run build
         

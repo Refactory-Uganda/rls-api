@@ -5,7 +5,6 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { CreateLessonDto } from 'src/lesson/dto/create-lesson.dto';
 
 export class CreateTopicDto {
-
   @IsString()
   @IsOptional()
   id?: string;
@@ -18,30 +17,29 @@ export class CreateTopicDto {
   })
   Title: string;
 
-  
   @IsString()
   @IsOptional()
   @ApiProperty({
     description: 'The description of the topic',
-    example: 'This topic is an introduction to JavaScript'
+    example: 'This topic is an introduction to JavaScript',
   })
   Description?: string;
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  image?: string
+  image?: string;
 
   @ApiProperty()
   @IsString()
-  courseId: string
+  courseId: string;
 
   // @ApiProperty({
   //   type: [CreateLessonDto],
   //   description: 'The lessons of the topic',
   //   example: '[Lesson 1: DataTypes]'
   // })
-  lessons: CreateLessonDto[]
+  lessons: CreateLessonDto[];
 
   // @IsNotEmpty()
   // @IsString()

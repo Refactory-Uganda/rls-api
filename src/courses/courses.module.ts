@@ -8,6 +8,6 @@ import { ImageService } from './images.service';
 
 @Module({
   controllers: [CourseController],
-  providers: [CourseService, PrismaService,ImageService],
+  providers: [CourseService, PrismaService, ImageService],
 })
 export class CoursesModule {}

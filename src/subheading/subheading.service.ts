@@ -17,7 +17,7 @@ export class SubHeadingService {
         subText,
         textContentId,
       },
-    }); 
+    });
 
     return subHeading;
   }
@@ -26,14 +26,16 @@ export class SubHeadingService {
     try {
       const updateData = {
         subText: updateSubheadingDto.subText,
-      textContentId: updateSubheadingDto.textContentId,
+        textContentId: updateSubheadingDto.textContentId,
       };
       return await this.prisma.subHeading.update({
         where: { id },
         data: updateData,
       });
     } catch (error) {
-      throw new Error(`Error updating subheading with ID ${id}: ${error.message}`);
+      throw new Error(
+        `Error updating subheading with ID ${id}: ${error.message}`,
+      );
     }
   }
 
@@ -53,7 +55,6 @@ export class SubHeadingService {
       );
     }
   }
-
 
   async remove(id: string) {
     return this.prisma.subHeading.delete({

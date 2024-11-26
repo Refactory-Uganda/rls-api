@@ -20,7 +20,10 @@ export class LessonController {
 
   @Post(':topic_id')
   @ApiOperation({ summary: 'Create a Lesson' })
-  async createLesson(@Param('topic_id') topic_id:string, @Body() createLessonDto: CreateLessonDto) {
+  async createLesson(
+    @Param('topic_id') topic_id: string,
+    @Body() createLessonDto: CreateLessonDto,
+  ) {
     return this.lessonService.createNew(createLessonDto);
   }
 
@@ -54,7 +57,7 @@ export class LessonController {
 
   @Delete(':lesson_id')
   @ApiOperation({ summary: 'Delete a Lesson' })
-  async deleteLesson(@Param("lesson_id") lesson_id: string) {
+  async deleteLesson(@Param('lesson_id') lesson_id: string) {
     return this.lessonService.deleteLesson(lesson_id);
   }
   @Get()
@@ -64,18 +67,14 @@ export class LessonController {
   }
 
   @Get(':lessonId')
-@ApiOperation({ summary: 'Get a particular Lesson under a specific Topic' })
+  @ApiOperation({ summary: 'Get a particular Lesson under a specific Topic' })
+  async findLessonById(@Param('lessonId') lessonId: string) {
+    return await this.lessonService.findLessonById(lessonId);
+  }
 
-async findLessonById(
-@Param('lessonId') lessonId: string
-) {
-  return await this.lessonService.findLessonById(lessonId);
-}
-
-// @Get(':lessonId/content')
-// @ApiOperation({ summary: 'Get Content of a Lesson by lessonId' })
-// async getLessonContent(@Param('lessonId') lessonId: string) {
-//   return this.lessonService.findContentByLessonId(lessonId);
-// }
-
+  // @Get(':lessonId/content')
+  // @ApiOperation({ summary: 'Get Content of a Lesson by lessonId' })
+  // async getLessonContent(@Param('lessonId') lessonId: string) {
+  //   return this.lessonService.findContentByLessonId(lessonId);
+  // }
 }

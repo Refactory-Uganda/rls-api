@@ -23,10 +23,9 @@ export class TopicService {
         image: imageUrl,
         courseId: data.courseId,
       },
-      include: { 
+      include: {
         Course: true,
-        Lesson: true
-
+        Lesson: true,
       },
     });
   }
@@ -57,33 +56,34 @@ export class TopicService {
 
   async patchTopic(id: string, partialUpdateDto: UpdateTopicDto) {
     try {
-
       const sanitizedId = id.trim();
-    if (!/^[a-fA-F0-9]{24}$/.test(sanitizedId)) {
+      if (!/^[a-fA-F0-9]{24}$/.test(sanitizedId)) {
         throw new Error(`Invalid topic ID format: ${sanitizedId}`);
-    }
+      }
 
-      const imageUrl = partialUpdateDto.image ? `/uploads/courses/${partialUpdateDto.image}` : null
+      const imageUrl = partialUpdateDto.image
+        ? `/uploads/courses/${partialUpdateDto.image}`
+        : null;
 
       console.log('Updating topic with ID:', sanitizedId);
-    console.log('Image URL:', imageUrl);
-    console.log('Partial update data:', partialUpdateDto);
-  
+      console.log('Image URL:', imageUrl);
+      console.log('Partial update data:', partialUpdateDto);
+
       return await this.prisma.topic.update({
         where: { id: sanitizedId },
         data: {
           Title: partialUpdateDto.Title,
           Description: partialUpdateDto.Description,
           image: imageUrl,
-          courseId: partialUpdateDto.courseId
+          courseId: partialUpdateDto.courseId,
         },
       });
     } catch (error) {
-      throw new Error(`Error partially updating topic with ID ${id}: ${error.message}`);
+      throw new Error(
+        `Error partially updating topic with ID ${id}: ${error.message}`,
+      );
     }
   }
-  
-  
 
   deleteTopic(id: string) {
     return this.prisma.topic.delete({

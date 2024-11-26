@@ -19,10 +19,12 @@ import { SubheadingModule } from './subheading/subheading.module';
 import { QuizModule } from './quiz/quiz.module';
 import { QuestionModule } from './question/question.module';
 import { OptionModule } from './option/option.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { AuthenticationModule } from './authentication/authentication.module';
-import { SlideModule } from './slide/slide.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { SlideModule } from './slide/slide.module';
 
 @Module({
   imports: [
@@ -50,9 +52,9 @@ import { join } from 'path';
     QuestionModule,
     OptionModule,
     AuthenticationModule,
-    SlideModule, 
+    SlideModule,
   ],
-  controllers: [], 
-  providers: [], 
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

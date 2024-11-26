@@ -4,6 +4,6 @@ import { SlideController } from './slide.controller';
 
 @Module({
   providers: [SlideService],
-  controllers: [SlideController]
+  controllers: [SlideController],
 })
 export class SlideModule {}

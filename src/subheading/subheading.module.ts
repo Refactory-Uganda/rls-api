@@ -4,6 +4,6 @@ import { SubHeadingController } from './subheading.controller';
 
 @Module({
   providers: [SubHeadingService],
-  controllers: [SubHeadingController]
+  controllers: [SubHeadingController],
 })
 export class SubheadingModule {}

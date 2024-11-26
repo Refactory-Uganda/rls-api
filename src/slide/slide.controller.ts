@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Param, Body, Put, Delete, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Put,
+  Delete,
+  Patch,
+} from '@nestjs/common';
 import { SlideService } from './slide.service';
 import { CreateSlideDto } from './dto/create-slide.dto';
 import { UpdateSlideDto } from './dto/update-slide.dto';
@@ -33,7 +42,10 @@ export class SlideController {
   // Update a slide (PUT for full update)
   @Put(':id')
   @ApiOperation({ summary: 'Update a slide' })
-  async update(@Param('id') id: string, @Body() updateSlideDto: UpdateSlideDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateSlideDto: UpdateSlideDto,
+  ) {
     return this.slideService.update(id, updateSlideDto);
   }
 

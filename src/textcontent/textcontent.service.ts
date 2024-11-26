@@ -12,13 +12,15 @@ export class TextContentService {
       data: {
         heading: dto.heading,
         lessonId: dto.lessonId,
-        
-      }
+      },
     });
     return text;
   }
 
-  async updateTextContent(id: string, updateTextContentDto: UpdateTextContentDto) {
+  async updateTextContent(
+    id: string,
+    updateTextContentDto: UpdateTextContentDto,
+  ) {
     try {
       const updateData = {
         heading: updateTextContentDto.heading,
@@ -29,7 +31,9 @@ export class TextContentService {
         data: updateData,
       });
     } catch (error) {
-      throw new Error(`Error updating textcontent with ID ${id}: ${error.message}`);
+      throw new Error(
+        `Error updating textcontent with ID ${id}: ${error.message}`,
+      );
     }
   }
 
@@ -50,15 +54,12 @@ export class TextContentService {
     }
   }
 
-async delete( id: string) {
-  const text = await this.prisma.textContent.delete({
-    where: 
-    {
-      id: id,
-    }
-  });
-  return text;
-}
-
-
+  async delete(id: string) {
+    const text = await this.prisma.textContent.delete({
+      where: {
+        id: id,
+      },
+    });
+    return text;
+  }
 }

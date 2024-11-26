@@ -183,8 +183,7 @@ export class CourseController {
   // @UseGuards(JwtAuthGaurd, RolesGaurd)
   // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get all Courses' })
-  async findAll() // @Query('limit') limit: number = 2 // @Query('page') page: number = 1,
-  {
+  async findAll() { // @Query('limit') limit: number = 2 // @Query('page') page: number = 1,
     return await this.courseService
       .findAll
       // Number(page),Number(limit)

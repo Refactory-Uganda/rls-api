@@ -187,7 +187,7 @@ export class QuizService {
         quizAttemptId: attemptId,
         questionId: question.id,
         selectedOptionId: selectedOption.id,
-        isCorrect: selectedOption.iscorrect,
+        isCorrect: selectedOption.isCorrect,
       }
     });
 
@@ -281,7 +281,7 @@ export class QuizService {
         question: answer.question.text,
         selectedAnswer: answer.selectedOption.optionText,
         isCorrect: answer.isCorrect,
-        correctOption: attempt.quiz.questions.find(q => q.id === answer.questionId)?.option.find(opt => opt.iscorrect)?.optionText,
+        correctOption: attempt.quiz.questions.find(q => q.id === answer.questionId)?.option.find(opt => opt.isCorrect)?.optionText,
       }))
     }
   }
@@ -328,7 +328,7 @@ export class QuizService {
         throw new BadRequestException('Invalid optionId');
       }
 
-      if (selectedOption.iscorrect) {
+      if (selectedOption.isCorrect) {
         score += 1;
       }
       maxScore += 1;
@@ -338,7 +338,7 @@ export class QuizService {
       questionId,
       quizAttemptId: submitQuizDto.attemptId,
       optionId,
-      isCorrect: selectedOption.iscorrect,
+      isCorrect: selectedOption.isCorrect,
     }) 
   }
 
@@ -353,7 +353,7 @@ export class QuizService {
             selectedOptionId: optionId,
             isCorrect: quiz.questions
               .find((q) => q.id === questionId)
-              .option.find((o) => o.id === optionId).iscorrect,
+              .option.find((o) => o.id === optionId).isCorrect,
           })),
         },
         score,

@@ -5,6 +5,6 @@ import { CohortController } from './cohort.controller';
 
 @Module({
   providers: [CohortService],
-  controllers: [CohortController]
+  controllers: [CohortController],
 })
 export class CohortModule {}

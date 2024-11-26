@@ -1,11 +1,15 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
 import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { Prisma, Question, Quiz } from '@prisma/client';
-import { CreateQuestionDto } from "src/question/dto/create-question.dto";
+import { CreateQuestionDto } from 'src/question/dto/create-question.dto';
 import { SubmitAnswerDto } from './dto/submitAnswer.dto';
 import { SubmitQuizDto } from './dto/submitQuiz.dto';
 
@@ -24,7 +28,7 @@ export class QuizService {
         description: createQuizDto.description,
         lesson: {
           connect: { id: createQuizDto.lessonId },
-        }
+        },
       },
     });
   }
@@ -32,27 +36,31 @@ export class QuizService {
   async patchQuiz(id: string, partialUpdateDto: UpdateQuizDto) {
     try {
       const { questions, ...quizData } = partialUpdateDto;
-  
+
       const updateData: Prisma.QuizUpdateInput = {
         ...quizData,
-        questions: questions ? {
-          update: questions.map(question => ({
-            where: { id: question.id },
-            data: {
-              text: question.text,
-              answer: question.answer,
+        questions: questions
+          ? {
+              update: questions.map((question) => ({
+                where: { id: question.id },
+                data: {
+                  text: question.text,
+                  answer: question.answer,
+                },
+              })),
             }
-          })),
-        } : undefined,
+          : undefined,
       };
-  
+
       return await this.prisma.quiz.update({
         where: { id },
         data: updateData,
         include: { questions: true },
       });
     } catch (error) {
-      throw new Error(`Error partially updating quiz with ID ${id}: ${error.message}`);
+      throw new Error(
+        `Error partially updating quiz with ID ${id}: ${error.message}`,
+      );
     }
   }
 
@@ -70,8 +78,8 @@ export class QuizService {
       include: {
         questions: {
           include: {
-            option: true
-          }
+            option: true,
+          },
         },
       },
     });
@@ -81,9 +89,9 @@ export class QuizService {
       include: {
         questions: {
           include: {
-            option: true
-          }
-        }
+            option: true,
+          },
+        },
       },
     });
   }
@@ -91,34 +99,33 @@ export class QuizService {
   async findByQuizId(quizId: string): Promise<Quiz> {
     return this.prisma.quiz.findUnique({
       where: {
-        id: quizId
+        id: quizId,
       },
       include: {
         questions: {
           include: {
-            option: true
-          }
-        }
-      }
-    })
+            option: true,
+          },
+        },
+      },
+    });
   }
-
 
   // Quiz with submit
 
   // start quiz
-  async startQuiz( quizId: string) {
+  async startQuiz(quizId: string) {
     // check if quiz exists
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: quizId },
-      include: { questions: true }
+      include: { questions: true },
     });
 
     if (!quiz) {
       throw new NotFoundException('Quiz not found');
     }
 
-    // calculate maxium score 
+    // calculate maxium score
     const maxScore = quiz.questions.length;
 
     // create a quiz attempt
@@ -135,28 +142,28 @@ export class QuizService {
           include: {
             questions: {
               include: {
-                option: true
-              }
-            }
-          }
-        }
-      }
-    })
+                option: true,
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   // submit quiz
-  async submitAnswer( attemptId: string, answerDto: SubmitAnswerDto) {
+  async submitAnswer(attemptId: string, answerDto: SubmitAnswerDto) {
     // check attempt exists and belongs to the user
     const attempt = await this.prisma.quizAttempt.findFirst({
       where: {
         id: attemptId,
         // userId,
         status: 'IN_PROGRESS',
-      }
+      },
     });
 
-    if(!attempt) {
-      throw new NotFoundException('Quiz attempt already completed')
+    if (!attempt) {
+      throw new NotFoundException('Quiz attempt already completed');
     }
 
     // check question belongs to the quiz
@@ -164,20 +171,22 @@ export class QuizService {
       where: {
         id: answerDto.questionId,
         quiz: {
-          id: attempt.quizId
-        }
+          id: attempt.quizId,
+        },
       },
       include: {
-        option: true
-      }
+        option: true,
+      },
     });
-    if(!question) {
+    if (!question) {
       throw new BadRequestException('Invalid question');
     }
 
     // check if option belongs to the question
-    const selectedOption = question.option.find(s_option => s_option.id === answerDto.optionId);
-    if(!selectedOption) {
+    const selectedOption = question.option.find(
+      (s_option) => s_option.id === answerDto.optionId,
+    );
+    if (!selectedOption) {
       throw new BadRequestException('Invalid option');
     }
 
@@ -188,17 +197,16 @@ export class QuizService {
         questionId: question.id,
         selectedOptionId: selectedOption.id,
         isCorrect: selectedOption.iscorrect,
-      }
+      },
     });
 
     return userAnswer;
-
   }
 
   // complete quiz
-  async completeQuiz( attemptId: string) {
+  async completeQuiz(attemptId: string) {
     // check attempt exists and belongs to the user
-    const attempt =  await this.prisma.quizAttempt.findFirst({
+    const attempt = await this.prisma.quizAttempt.findFirst({
       where: {
         id: attemptId,
         // userId,
@@ -208,10 +216,10 @@ export class QuizService {
         answers: true,
         quiz: {
           include: {
-            questions: true
-          }
-        }
-      }
+            questions: true,
+          },
+        },
+      },
     });
 
     if (!attempt) {
@@ -219,8 +227,11 @@ export class QuizService {
     }
 
     // calculate score
-    const correctAnswers = attempt.answers.filter(answer => answer.isCorrect).length;
-    const score = (correctAnswers / attempt.quiz.questions.length) * attempt.maxScore;
+    const correctAnswers = attempt.answers.filter(
+      (answer) => answer.isCorrect,
+    ).length;
+    const score =
+      (correctAnswers / attempt.quiz.questions.length) * attempt.maxScore;
 
     // update attempt with the final score
     return this.prisma.quizAttempt.update({
@@ -234,15 +245,15 @@ export class QuizService {
         answers: {
           include: {
             question: true,
-            selectedOption: true
-          }
-        }
-      }
+            selectedOption: true,
+          },
+        },
+      },
     });
   }
 
   // get user's quiz results
-  async getQuizResults( attemptId: string) {
+  async getQuizResults(attemptId: string) {
     const attempt = await this.prisma.quizAttempt.findFirst({
       where: {
         id: attemptId,
@@ -254,21 +265,21 @@ export class QuizService {
           include: {
             questions: {
               include: {
-                option: true
-              }
-            }
-          }
+                option: true,
+              },
+            },
+          },
         },
         answers: {
           include: {
             question: true,
-            selectedOption: true
-          }
-        }
-      }
+            selectedOption: true,
+          },
+        },
+      },
     });
 
-    if(!attempt) {
+    if (!attempt) {
       throw new NotFoundException('Completed Quiz attempt not found');
     }
 
@@ -277,13 +288,15 @@ export class QuizService {
       maxScore: attempt.maxScore,
       percentage: (attempt.score / attempt.maxScore) * 100,
       completedAt: attempt.completedAt,
-      answers: attempt.answers.map(answer => ({
+      answers: attempt.answers.map((answer) => ({
         question: answer.question.text,
         selectedAnswer: answer.selectedOption.optionText,
         isCorrect: answer.isCorrect,
-        correctOption: attempt.quiz.questions.find(q => q.id === answer.questionId)?.option.find(opt => opt.iscorrect)?.optionText,
-      }))
-    }
+        correctOption: attempt.quiz.questions
+          .find((q) => q.id === answer.questionId)
+          ?.option.find((opt) => opt.iscorrect)?.optionText,
+      })),
+    };
   }
 
   // submit a complete quiz
@@ -313,7 +326,7 @@ export class QuizService {
 
     // Calculate the score
 
-    const userAnswerData =[];
+    const userAnswerData = [];
 
     let score = 0;
     let maxScore = 0;
@@ -332,15 +345,15 @@ export class QuizService {
         score += 1;
       }
       maxScore += 1;
-    
-    // Add the quiz attempt an array in the database
-    userAnswerData.push({
-      questionId,
-      quizAttemptId: submitQuizDto.attemptId,
-      optionId,
-      isCorrect: selectedOption.iscorrect,
-    }) 
-  }
+
+      // Add the quiz attempt an array in the database
+      userAnswerData.push({
+        questionId,
+        quizAttemptId: submitQuizDto.attemptId,
+        optionId,
+        isCorrect: selectedOption.iscorrect,
+      });
+    }
 
     // Create the quiz attempt
     const quizAttempt = await this.prisma.quizAttempt.create({
@@ -376,5 +389,4 @@ export class QuizService {
 
     return quizAttempt;
   }
-
 }

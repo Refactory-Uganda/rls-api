@@ -16,9 +16,9 @@ export class MailService {
     await this.mailerService.sendMail({
       to: recipient,
       subject: subject,
-      template: templatePath, 
+      template: templatePath,
       context: {
-        name: user.email, 
+        name: user.email,
         resetPasswordURL,
       },
     });

@@ -50,9 +50,9 @@ import { join } from 'path';
     QuestionModule,
     OptionModule,
     AuthenticationModule,
-    SlideModule, 
+    SlideModule,
   ],
-  controllers: [], 
-  providers: [], 
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

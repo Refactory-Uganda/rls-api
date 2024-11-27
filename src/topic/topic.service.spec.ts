@@ -62,7 +62,7 @@ describe('TopicsService', () => {
       const topicId = 'non-existent-topic-id';
 
       (prismaService.topic.delete as jest.Mock).mockRejectedValue(
-        new Error('Record to delete does not exist.'),
+        new NotFoundException(`Topic with ID ${topicId} not found`),
       );
 
       await expect(service.deleteTopic(topicId)).rejects.toThrow(

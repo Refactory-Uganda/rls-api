@@ -85,16 +85,18 @@ jobs:
 
   check-conflicts:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ github.head_ref }}
 
       - name: Check for merge conflicts
         run: |
+          git fetch origin ${{ github.base_ref }}
           if git merge-tree $(git merge-base HEAD origin/${{ github.base_ref }}) origin/${{ github.base_ref }} HEAD | grep -i '<<<<<<<'; then
-            echo "Merge conflicts found"
+            echo "::error::Merge conflicts detected. Please resolve conflicts before merging."
             exit 1
           else
             echo "No merge conflicts found"

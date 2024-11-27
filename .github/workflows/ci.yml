@@ -85,6 +85,7 @@ jobs:
 
   check-conflicts:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -96,14 +97,15 @@ jobs:
 
       - name: Check for merge conflicts
         run: |
+          # Create tracking branches if they don't exist
           git branch -r | grep -v '\->' | while read remote; do
-            git branch --track "${remote#origin/}" "$remote"
+            branch="${remote#origin/}"
+            git branch --track "${branch}" "$remote" 2>/dev/null || true
           done
-          
-          conflicts=$(git diff --name-only --diff-filter=U)
-          if [ -n "$conflicts" ]; then
-            echo "::error::Potential merge conflicts detected in the following files:"
-            echo "$conflicts"
+
+          # Check for conflicts between PR branch and target branch
+          if git merge-tree $(git merge-base HEAD origin/${{ github.base_ref }}) origin/${{ github.base_ref }} HEAD | grep -i '<<<<<<<'; then
+            echo "::error::Merge conflicts detected. Please resolve conflicts before merging."
             exit 1
           else
             echo "No merge conflicts detected."

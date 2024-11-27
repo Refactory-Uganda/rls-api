@@ -73,6 +73,9 @@ jobs:
       - name: Run tests
         run: npm run test
 
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
       - name: Build application
         run: npm run build
 
@@ -153,6 +156,20 @@ jobs:
     environment: staging
 
     steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:

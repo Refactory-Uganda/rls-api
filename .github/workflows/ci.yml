@@ -90,16 +90,27 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ github.head_ref }}
+
+      - name: Fetch all branches
+        run: |
+          git fetch --all
+          git checkout -b pr-branch ${{ github.event.pull_request.head.sha }}
 
       - name: Check for merge conflicts
         run: |
-          git fetch origin ${{ github.base_ref }}
-          if git merge-tree $(git merge-base HEAD origin/${{ github.base_ref }}) origin/${{ github.base_ref }} HEAD | grep -i '<<<<<<<'; then
-            echo "::error::Merge conflicts detected. Please resolve conflicts before merging."
+          BASE_BRANCH="${{ github.base_ref }}"
+          PR_BRANCH="pr-branch"
+          
+          git checkout $BASE_BRANCH
+          git checkout $PR_BRANCH
+          
+          MERGE_BASE=$(git merge-base $BASE_BRANCH $PR_BRANCH)
+          
+          if git diff --name-only $MERGE_BASE $PR_BRANCH | xargs git check-attr merge | grep -q "merge: ours\|merge: theirs"; then
+            echo "::error::Potential merge conflicts detected. Please review the changes carefully before merging."
             exit 1
           else
-            echo "No merge conflicts found"
+            echo "No merge conflicts detected."
           fi
 
   e2e-tests:

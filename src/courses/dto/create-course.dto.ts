@@ -5,8 +5,6 @@ import { AssessmentMode } from "@prisma/client";
 import { Transform } from "class-transformer";
 import { IsArray, IsEnum, IsNotEmpty,  IsOptional, IsString } from "class-validator";
 import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
-// import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
-// import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
 
 
@@ -39,7 +37,7 @@ export class CreateTopicDto {
   export class CreateCourseDto {
 
     @IsString() 
-    @IsOptional()  // Make id optional
+    @IsOptional()
     @ApiProperty({
       description: 'Course ID (optional)',
       required: false
@@ -125,12 +123,8 @@ export class CreateTopicDto {
     })
     status?: CourseStatus
 
-    // @ApiProperty({ type: [CreateTopicDto] ,
-    //   description: 'The topics of the course',
-    //   example: '[Here will be an array of topics]'
-    // })
+ 
     topics: CreateTopicDto[];
-    // page: number;
     // limit: number;
 
     // @IsOptional()

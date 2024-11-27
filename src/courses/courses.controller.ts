@@ -9,10 +9,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ImageService } from './images.service';
 import { FacilitatorService } from './faculitator.service';
-// import { AssessmentMode } from '@prisma/client';
-// import { JwtAuthGaurd } from 'src/authentication/guards/jwt-auth.guard';
-// import { RolesGaurd } from 'src/authentication/guards/roles.guard';
-// import { Roles } from 'src/authentication/decorators/roles.decorator'; 
+ 
 
 @Controller('courses')
 @ApiTags('Course')

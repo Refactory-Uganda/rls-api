@@ -7,8 +7,7 @@ import { UpdateQuizDto } from './dto/update-quiz.dto';
 import { SubmitAnswerDto } from './dto/submitAnswer.dto';
 import { StartQuizDto } from './dto/startquiz.dto';
 import { SubmitQuizDto } from './dto/submitQuiz.dto';
-// import { User } from 'src/decorators/user.decorator';
-// import { JwtAuthGaurd } from 'src/authentication/jwt-auth.guard';
+
 
 @Controller('quizzes')
 // @UseGuards(JwtAuthGaurd)
@@ -21,7 +20,6 @@ export class QuizController {
 	create(@Body() createQuizDto: CreateQuizDto) {
 		return this.quizService.create(createQuizDto);
 	}
-
 
 	@Patch(':id')
 	@ApiOperation({ summary: 'Partially Update Quiz' })
@@ -52,7 +50,6 @@ export class QuizController {
 	findAll() {
 		return this.quizService.findQuizzes();
 	}
-
 
 
 	// quiz with submit
@@ -106,6 +103,5 @@ export class QuizController {
 			data: result
 		}
 	}
-
 
 }

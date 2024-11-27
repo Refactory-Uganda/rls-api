@@ -24,24 +24,6 @@ export class LessonController {
     return this.lessonService.createNew(createLessonDto);
   }
 
-  // @Post(':course_id')
-  // @ApiOperation({ summary: 'Create Topic' })
-  // async create(
-  //   @Param('course_id') course_id: string,
-  //   @Body() body: CreateTopicDto,
-  // ) {
-  //   return this.topicService.create({ ...body, courseId: course_id });
-  // }
-
-  // @Put(':id')
-  // @ApiOperation({ summary: 'Update Lesson' })
-  // async update(
-  //   @Param('id') id: string,
-  //   @Body() updateLessonDto: UpdateLessonDto,
-  // ) {
-  //   return this.lessonService.updateLesson(id, updateLessonDto);
-  // }
-
   @Patch(':id')
   @ApiOperation({ summary: 'Partially Update Lesson' })
   @ApiBody({ type: UpdateLessonDto }) // Use the new DTO here
@@ -71,11 +53,5 @@ async findLessonById(
 ) {
   return await this.lessonService.findLessonById(lessonId);
 }
-
-// @Get(':lessonId/content')
-// @ApiOperation({ summary: 'Get Content of a Lesson by lessonId' })
-// async getLessonContent(@Param('lessonId') lessonId: string) {
-//   return this.lessonService.findContentByLessonId(lessonId);
-// }
 
 }

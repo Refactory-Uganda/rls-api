@@ -11,16 +11,11 @@ import { ImageService } from './images.service';
 
 @Injectable()
 export class CourseService {
-	// update(arg0: string, updateDto: { Title: string; Description: string; Duration: string; status: "PUBLISHED"; topics: { id: string; Title: string; Description: string; lessons: { id: string; title: string; text: string; }[]; }[]; }) {
-	//     throw new Error('Method not implemented.');
-	// }
-
 	private transformToArray(value: any): string[] {
 		if (Array.isArray(value)) {
 			return value;
 		}
 		if (typeof value === 'string') {
-			//  handle both form data and comma-separated strings
 			if (value.startsWith('[') && value.endsWith(']')) {
 				try {
 					return JSON.parse(value);
@@ -72,7 +67,6 @@ export class CourseService {
 					if (!topic.Title || typeof topic.Description !== 'string') {
 						throw new Error(`Invalid topic at index ${index}: "name" is required and should be a string.`);
 					}
-					// Add more validation as needed, like checking `description`, etc.
 				});
 			}
 
@@ -94,8 +88,6 @@ export class CourseService {
 					throw new BadRequestException('Invalid image file');
 				}
 			}
-		
-
 
 			// Transform string Arrays if they come as coma-separated strings
 
@@ -246,63 +238,6 @@ export class CourseService {
 		});
 	}
 
-	// async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
-	// 	try {
-
-	// const staffFacilitator = await this.prisma.user.findMany({
-	// 	where: {
-	// 		userGroup: 'Staff',
-	// 	},
-	// 	select: {
-	// 		id: true,
-	// 		firstName: true,
-	// 		lastName: true,
-	// 		email: true,
-	// 	},
-	// });
-
-	// 		if (updateCourseDto.facilitator && !staffFacilitator.some((user) => user.id === updateCourseDto.facilitator)) {
-	// 			throw new BadRequestException('Invalid facilitator ID');
-	// 		}
-
-	// 		const imageUrl = updateCourseDto.image ? `/uploads/courses/${updateCourseDto.image}` : null;
-
-	// 		return await this.prisma.course.update({
-	// 			where: { id },
-	// 			data: {
-	// 				Title: updateCourseDto.Title,
-	// 				Description: updateCourseDto.Description,
-	// 				Duration: updateCourseDto.Duration,
-	// 				status: updateCourseDto.status,
-	// 				facilitatorId: updateCourseDto.facilitator,
-	// 				courseOutline: updateCourseDto.courseOutline,
-	// 				courseObjective: updateCourseDto.courseObjective,
-	// 				requirements: updateCourseDto.requirements,
-	// 				award: updateCourseDto.award,
-	// 				assessmentMode: updateCourseDto.assessmentMode,
-	// 				image: imageUrl,
-	// 				topics: {
-	// 					update: updateCourseDto.topics?.map((topic) => ({
-	// 						where: { id: topic.id },
-	// 						data: {
-	// 							Title: topic.Title,
-	// 							Description: topic.Description,
-	// 						},
-	// 					})),
-	// 				},
-	// 			},
-	// 		});
-	// 	} catch (error) {
-	// 		throw new HttpException(
-	// 			{
-	// 				status: HttpStatus.BAD_REQUEST,
-	// 				message: 'Failed to update course',
-	// 				error: error.message,
-	// 			},
-	// 			HttpStatus.BAD_REQUEST,
-	// 		);
-	// 	}
-	// }
 
 	async patchCourse(id: string, partialUpdateDto: UpdateCourseDto) {
 		try {
@@ -418,6 +353,7 @@ export class CourseService {
 		try {
 		  const courses = await this.prisma.course.findMany({
 			include: {
+			facilitator: true,
 			  topics: {
 				include: {
 				  Lesson: {

@@ -41,10 +41,6 @@ export class LessonService {
         throw new Error(`Error partially updating lesson with ID ${id}: ${error.message}`);
       }
     }
-    
-    
-    
-
 
     async deleteLesson(id:string) {
         const lesson = await this.prisma.lesson.delete(
@@ -90,16 +86,5 @@ export class LessonService {
 					  }},
 				  });
     }
-
-    // async findContentByLessonId(lessonId: string) {
-    //   return this.prisma.lesson.findUnique({
-    //     where: {
-    //       id: lessonId,
-    //     },
-    //     select: {
-    //       content: true, 
-    //     },
-    //   });
-    // }
     
 }

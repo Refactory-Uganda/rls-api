@@ -1,4 +1,4 @@
-import { Course } from '@prisma/client'; 
+import { AssessmentMode, Course } from '@prisma/client'; 
 import { CourseStatus } from '@prisma/client';
 
 export const mockCourseResponse: Course = {
@@ -8,7 +8,14 @@ export const mockCourseResponse: Course = {
     Duration: '10 hours',
     status: CourseStatus.DRAFT,
     createdAt: new Date(),
-    // topics: [],
+    courseOutline: ['gbhbtth', 'byutbg'],
+    requirements: ['tjntjh', 'rhnjh'],
+    assessmentMode: AssessmentMode.QUIZ,
+    facilitatorId: '60c72b2f9b1d4e3a4c8b4567',
+    quizId: 'some-quiz-id',
+    award: '',
+    courseObjective: [],
+    image: ''
 };
 
 export const mockCreateCourseDto = {

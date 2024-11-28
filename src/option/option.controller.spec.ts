@@ -38,8 +38,9 @@ describe('OptionController', () => {
   describe('create', () => {
     it('should create a new option', async () => {
       const createOptionDto: CreateOptionDto = {
+        id: '',
         optionText: 'Paris',
-        iscorrect: true,
+        isCorrect: true,
         order: 1,
         questionId: ''
       };

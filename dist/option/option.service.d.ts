@@ -6,11 +6,6 @@ export declare class OptionService {
     constructor(prisma: PrismaService);
     create(createOptionDto: CreateOptionDto): Promise<{
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;
@@ -18,11 +13,6 @@ export declare class OptionService {
     }>;
     patchOption(id: string, partialUpdateDto: UpdateOptionDto): Promise<{
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;
@@ -41,11 +31,6 @@ export declare class OptionService {
         };
     } & {
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;
@@ -64,11 +49,6 @@ export declare class OptionService {
         };
     } & {
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;
@@ -76,11 +56,6 @@ export declare class OptionService {
     })[]>;
     remove(id: string): Promise<{
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;

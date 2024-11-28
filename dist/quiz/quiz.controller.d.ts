@@ -58,11 +58,6 @@ export declare class QuizController {
         questions: ({
             option: {
                 id: string;
-<<<<<<< HEAD
-                optionText: string;
-                iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
                 order: number;
                 optionText: string;
                 isCorrect: boolean;
@@ -92,11 +87,6 @@ export declare class QuizController {
             questions: ({
                 option: {
                     id: string;
-<<<<<<< HEAD
-                    optionText: string;
-                    iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
                     order: number;
                     optionText: string;
                     isCorrect: boolean;
@@ -136,8 +126,8 @@ export declare class QuizController {
         id: string;
         createdAt: Date;
         updatedAt: Date;
-        questionId: string;
         isCorrect: boolean;
+        questionId: string;
         quizAttemptId: string;
         selectedOptionId: string;
     }>;
@@ -155,11 +145,6 @@ export declare class QuizController {
             };
             selectedOption: {
                 id: string;
-<<<<<<< HEAD
-                optionText: string;
-                iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
                 order: number;
                 optionText: string;
                 isCorrect: boolean;
@@ -169,8 +154,8 @@ export declare class QuizController {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            questionId: string;
             isCorrect: boolean;
+            questionId: string;
             quizAttemptId: string;
             selectedOptionId: string;
         })[];
@@ -205,11 +190,6 @@ export declare class QuizController {
                 question: {
                     option: {
                         id: string;
-<<<<<<< HEAD
-                        optionText: string;
-                        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
                         order: number;
                         optionText: string;
                         isCorrect: boolean;
@@ -227,11 +207,6 @@ export declare class QuizController {
                 };
                 selectedOption: {
                     id: string;
-<<<<<<< HEAD
-                    optionText: string;
-                    iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
                     order: number;
                     optionText: string;
                     isCorrect: boolean;
@@ -241,8 +216,8 @@ export declare class QuizController {
                 id: string;
                 createdAt: Date;
                 updatedAt: Date;
-                questionId: string;
                 isCorrect: boolean;
+                questionId: string;
                 quizAttemptId: string;
                 selectedOptionId: string;
             })[];

@@ -8,11 +8,6 @@ export declare class QuestionController {
         Question: {
             option: {
                 id: string;
-<<<<<<< HEAD
-                optionText: string;
-                iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
                 order: number;
                 optionText: string;
                 isCorrect: boolean;
@@ -32,11 +27,6 @@ export declare class QuestionController {
     patch(id: string, partialUpdateDto: Partial<UpdateQuestionDto>): Promise<{
         option: {
             id: string;
-<<<<<<< HEAD
-            optionText: string;
-            iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
             order: number;
             optionText: string;
             isCorrect: boolean;
@@ -65,11 +55,6 @@ export declare class QuestionController {
     findAll(): Promise<({
         option: {
             id: string;
-<<<<<<< HEAD
-            optionText: string;
-            iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
             order: number;
             optionText: string;
             isCorrect: boolean;
@@ -88,11 +73,6 @@ export declare class QuestionController {
     findOne(question_id: string): Promise<{
         option: {
             id: string;
-<<<<<<< HEAD
-            optionText: string;
-            iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
             order: number;
             optionText: string;
             isCorrect: boolean;

@@ -6,11 +6,6 @@ export declare class OptionController {
     constructor(optionService: OptionService);
     create(createOptionDto: CreateOptionDto): Promise<{
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;
@@ -29,11 +24,6 @@ export declare class OptionController {
         };
     } & {
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;
@@ -52,11 +42,6 @@ export declare class OptionController {
         };
     } & {
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;
@@ -64,11 +49,6 @@ export declare class OptionController {
     }>;
     patchOption(id: string, partialUpdateDto: Partial<UpdateOptionDto>): Promise<{
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;
@@ -76,11 +56,6 @@ export declare class OptionController {
     }>;
     remove(id: string): Promise<{
         id: string;
-<<<<<<< HEAD
-        optionText: string;
-        iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
         order: number;
         optionText: string;
         isCorrect: boolean;

@@ -25,7 +25,7 @@ __decorate([
     (0, class_validator_1.IsBoolean)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Boolean)
-], CreateOptionDto.prototype, "iscorrect", void 0);
+], CreateOptionDto.prototype, "isCorrect", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, swagger_1.ApiProperty)(),

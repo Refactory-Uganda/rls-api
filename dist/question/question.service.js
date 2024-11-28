@@ -41,12 +41,12 @@ let QuestionService = class QuestionService {
                         where: { id: option.id },
                         create: {
                             optionText: option.optionText,
-                            iscorrect: option.iscorrect,
+                            isCorrect: option.isCorrect,
                             order: option.order,
                         },
                         update: {
                             optionText: option.optionText,
-                            iscorrect: option.iscorrect,
+                            iscorrect: option.isCorrect,
                             order: option.order,
                         },
                     })) || [],

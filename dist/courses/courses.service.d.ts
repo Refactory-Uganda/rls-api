@@ -98,28 +98,17 @@ export declare class CourseService {
                 questions: ({
                     option: {
                         id: string;
-<<<<<<< HEAD
-                        optionText: string;
-                        iscorrect: boolean;
-                        order: number;
-=======
                         order: number;
                         optionText: string;
                         isCorrect: boolean;
->>>>>>> 8c70dbe8 (fixed options)
                         questionId: string | null;
                     }[];
                     userAnswers: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-<<<<<<< HEAD
-                        questionId: string;
-                        isCorrect: boolean;
-=======
                         isCorrect: boolean;
                         questionId: string;
->>>>>>> 8c70dbe8 (fixed options)
                         quizAttemptId: string;
                         selectedOptionId: string;
                     }[];
@@ -129,13 +118,8 @@ export declare class CourseService {
                     createdAt: Date;
                     updatedAt: Date;
                     quizId: string;
-<<<<<<< HEAD
-                    order: number;
-                    answer: string;
-=======
                     answer: string;
                     order: number;
->>>>>>> 8c70dbe8 (fixed options)
                     explanation: string | null;
                 })[];
                 attempts: {
@@ -164,28 +148,17 @@ export declare class CourseService {
                         questions: ({
                             option: {
                                 id: string;
-<<<<<<< HEAD
-                                optionText: string;
-                                iscorrect: boolean;
-                                order: number;
-=======
                                 order: number;
                                 optionText: string;
                                 isCorrect: boolean;
->>>>>>> 8c70dbe8 (fixed options)
                                 questionId: string | null;
                             }[];
                             userAnswers: {
                                 id: string;
                                 createdAt: Date;
                                 updatedAt: Date;
-<<<<<<< HEAD
-                                questionId: string;
-                                isCorrect: boolean;
-=======
                                 isCorrect: boolean;
                                 questionId: string;
->>>>>>> 8c70dbe8 (fixed options)
                                 quizAttemptId: string;
                                 selectedOptionId: string;
                             }[];
@@ -195,13 +168,8 @@ export declare class CourseService {
                             createdAt: Date;
                             updatedAt: Date;
                             quizId: string;
-<<<<<<< HEAD
-                            order: number;
-                            answer: string;
-=======
                             answer: string;
                             order: number;
->>>>>>> 8c70dbe8 (fixed options)
                             explanation: string | null;
                         })[];
                         attempts: {
@@ -263,21 +231,17 @@ export declare class CourseService {
             questions: ({
                 option: {
                     id: string;
-                    optionText: string;
-<<<<<<< HEAD
-                    iscorrect: boolean;
                     order: number;
-=======
+                    optionText: string;
                     isCorrect: boolean;
->>>>>>> 8c70dbe8 (fixed options)
                     questionId: string | null;
                 }[];
                 userAnswers: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    questionId: string;
                     isCorrect: boolean;
+                    questionId: string;
                     quizAttemptId: string;
                     selectedOptionId: string;
                 }[];
@@ -287,12 +251,8 @@ export declare class CourseService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-<<<<<<< HEAD
-=======
                 answer: string;
->>>>>>> 8c70dbe8 (fixed options)
                 order: number;
-                answer: string;
                 explanation: string | null;
             })[];
             attempts: {
@@ -321,28 +281,17 @@ export declare class CourseService {
                     questions: ({
                         option: {
                             id: string;
-<<<<<<< HEAD
-                            optionText: string;
-                            iscorrect: boolean;
-                            order: number;
-=======
                             order: number;
                             optionText: string;
                             isCorrect: boolean;
->>>>>>> 8c70dbe8 (fixed options)
                             questionId: string | null;
                         }[];
                         userAnswers: {
                             id: string;
                             createdAt: Date;
                             updatedAt: Date;
-<<<<<<< HEAD
-                            questionId: string;
-                            isCorrect: boolean;
-=======
                             isCorrect: boolean;
                             questionId: string;
->>>>>>> 8c70dbe8 (fixed options)
                             quizAttemptId: string;
                             selectedOptionId: string;
                         }[];
@@ -352,13 +301,8 @@ export declare class CourseService {
                         createdAt: Date;
                         updatedAt: Date;
                         quizId: string;
-<<<<<<< HEAD
-                        order: number;
-                        answer: string;
-=======
                         answer: string;
                         order: number;
->>>>>>> 8c70dbe8 (fixed options)
                         explanation: string | null;
                     })[];
                     attempts: {

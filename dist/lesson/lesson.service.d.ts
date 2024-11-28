@@ -54,11 +54,6 @@ export declare class LessonService {
             questions: ({
                 option: {
                     id: string;
-<<<<<<< HEAD
-                    optionText: string;
-                    iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
                     order: number;
                     optionText: string;
                     isCorrect: boolean;
@@ -68,8 +63,8 @@ export declare class LessonService {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    questionId: string;
                     isCorrect: boolean;
+                    questionId: string;
                     quizAttemptId: string;
                     selectedOptionId: string;
                 }[];
@@ -117,11 +112,6 @@ export declare class LessonService {
             questions: ({
                 option: {
                     id: string;
-<<<<<<< HEAD
-                    optionText: string;
-                    iscorrect: boolean;
-=======
->>>>>>> 8c70dbe8 (fixed options)
                     order: number;
                     optionText: string;
                     isCorrect: boolean;
@@ -131,8 +121,8 @@ export declare class LessonService {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    questionId: string;
                     isCorrect: boolean;
+                    questionId: string;
                     quizAttemptId: string;
                     selectedOptionId: string;
                 }[];

@@ -1,6 +1,6 @@
 export declare class CreateOptionDto {
     optionText: string;
-    iscorrect: boolean;
+    isCorrect: boolean;
     order: number;
     questionId: string;
     id: any;

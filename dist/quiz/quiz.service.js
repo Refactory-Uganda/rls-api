@@ -160,11 +160,7 @@ let QuizService = class QuizService {
                 quizAttemptId: attemptId,
                 questionId: question.id,
                 selectedOptionId: selectedOption.id,
-<<<<<<< HEAD
-                isCorrect: selectedOption.iscorrect,
-=======
                 isCorrect: selectedOption.isCorrect,
->>>>>>> 8c70dbe8 (fixed options)
             },
         });
         return userAnswer;
@@ -244,11 +240,7 @@ let QuizService = class QuizService {
                 isCorrect: answer.isCorrect,
                 correctOption: attempt.quiz.questions
                     .find((q) => q.id === answer.questionId)
-<<<<<<< HEAD
-                    ?.option.find((opt) => opt.iscorrect)?.optionText,
-=======
                     ?.option.find((opt) => opt.isCorrect)?.optionText,
->>>>>>> 8c70dbe8 (fixed options)
             })),
         };
     }
@@ -282,7 +274,7 @@ let QuizService = class QuizService {
             if (!selectedOption) {
                 throw new common_1.BadRequestException('Invalid optionId');
             }
-            if (selectedOption.iscorrect) {
+            if (selectedOption.isCorrect) {
                 score += 1;
             }
             maxScore += 1;
@@ -290,7 +282,7 @@ let QuizService = class QuizService {
                 questionId,
                 quizAttemptId: submitQuizDto.attemptId,
                 optionId,
-                isCorrect: selectedOption.iscorrect,
+                isCorrect: selectedOption.isCorrect,
             });
         }
         const quizAttempt = await this.prisma.quizAttempt.create({
@@ -302,7 +294,7 @@ let QuizService = class QuizService {
                         selectedOptionId: optionId,
                         isCorrect: quiz.questions
                             .find((q) => q.id === questionId)
-                            .option.find((o) => o.id === optionId).iscorrect,
+                            .option.find((o) => o.id === optionId).isCorrect,
                     })),
                 },
                 score,

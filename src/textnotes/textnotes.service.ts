@@ -40,7 +40,9 @@ export class NoteService {
         data: updateData,
       });
     } catch (error) {
-      throw new Error(`Error updating textnotes with ID ${id}: ${error.message}`);
+      throw new Error(
+        `Error updating textnotes with ID ${id}: ${error.message}`,
+      );
     }
   }
 
@@ -63,9 +65,6 @@ export class NoteService {
       );
     }
   }
-
-
-
 
   async remove(id: string) {
     return this.prisma.note.delete({

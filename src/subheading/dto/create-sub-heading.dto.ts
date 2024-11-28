@@ -6,13 +6,11 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class CreateSubHeadingDto {
   @IsNotEmpty()
   @IsString()
-  @ApiProperty() 
-  subText: string; 
+  @ApiProperty()
+  subText: string;
 
   @IsOptional()
   @IsString()
   // @ApiProperty()
-  textContentId?: string; 
+  textContentId?: string;
 }
-
-

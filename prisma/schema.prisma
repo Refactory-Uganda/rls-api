@@ -9,6 +9,7 @@ generator client {
   binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x"]
 }
 
+
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -19,10 +20,21 @@ model Course {
   Title       String   @unique
   Description String?
   Duration    String
+  courseOutline    String[]    
+  requirements     String[]  
+  assessmentMode   AssessmentMode? 
+  facilitatorId    String? @db.ObjectId
+  facilitator      User?   @relation(fields: [facilitatorId],references: [id])
+  award            String?           
+  courseObjective  String[]      
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
+  quiz        Quiz?   @relation(name: "Quiz")
+  quizId     String? @db.ObjectId
+  image       String?
 }
+
 
 model Topic {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -31,6 +43,7 @@ model Topic {
   createdAt   DateTime @default(now())
   courseId    String?   @map("_courseId") @db.ObjectId
   Course      Course?   @relation(fields: [courseId], references: [id], name: "CourseTopics", onDelete:Cascade)
+  image   String?
 
   Lesson Lesson[]
 }
@@ -40,30 +53,38 @@ model Lesson {
   title     String
   text      String?
   content   TextContent[]
+  slides    Slide[]     @relation("LessonSlides")
   topic     Topic?    @relation(fields: [topicId], references: [id], onDelete:Cascade)
   topicId   String?   @db.ObjectId
-  quiz      Quiz?
+  quiz      Quiz?    @relation("Quiz")
+  quizId    String?  @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-// model notes {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   notestext   String
-//   textContent textContent? @relation(fields: [textContentId], references: [id])
-//   textContentId String?    @db.ObjectId
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
 
-// model subTitle {
-//   id          String       @id @default(auto()) @map("_id") @db.ObjectId
-//   subTitle    String
-//   textContent textContent? @relation(fields: [textContentId], references: [id])
-//   textContentId String?    @db.ObjectId
-//   createdAt   DateTime     @default(now())
-//   updatedAt   DateTime     @updatedAt
-// }
+model Slide {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  lesson    Lesson   @relation("LessonSlides", fields: [lessonId], references: [id], onDelete: Cascade)
+  lessonId  String   @db.ObjectId
+  title     String 
+  order     Int      //defines the order of slides within a lesson
+  content   String
+  contentType  slideContentType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+enum slideContentType {
+  TEXT
+  IMAGE 
+}
+
+enum AssessmentMode {
+  QUIZ
+  ASSIGNMENT
+}
 
 
 model Quiz {
@@ -71,8 +92,11 @@ model Quiz {
   title     String
   description String?
   questions Question[]
-  lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete:Cascade)
-  lessonId  String     @unique @db.ObjectId
+  Course      Course?   @relation(name: "Quiz", fields: [courseId], references: [id])
+  courseId  String?     @unique @db.ObjectId
+  lesson    Lesson?     @relation(fields: [lessonId], references: [id], name: "Quiz")
+  attempts  QuizAttempt[]
+  lessonId  String?     @unique @db.ObjectId
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
@@ -80,15 +104,15 @@ model Quiz {
 model Question {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   text      String
-  // options   String[] 
   answer    String
   order     Int
   explanation String?
-  quiz      Quiz     @relation(fields: [quizId], references: [id])
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
   quizId    String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Option Option[]
+  option Option[]
+  userAnswers UserAnswer[]
 }
 
 
@@ -98,7 +122,8 @@ model Option {
   iscorrect Boolean
   order Int
   questionId String? @db.ObjectId
-  question Question? @relation(fields: [questionId], references: [id])
+  question Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  userAnswers UserAnswer[] @relation("OptionUserAnswers")
 }
 
 model User {
@@ -113,6 +138,8 @@ model User {
   refresh_token String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Course Course[]
 }
 
 enum Role {
@@ -122,6 +149,50 @@ enum Role {
   STUDENT
 }
 
+model QuizAttempt {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  // user      User     @relation(fields: [userId], references: [id])
+  // userId    String   @db.ObjectId
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId    String   @db.ObjectId
+
+  answers   UserAnswer[]
+  score     Float
+  maxScore  Float
+  status    AttemptStatus @default(IN_PROGRESS)
+
+  startedAt DateTime @default(now())
+  completedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([quizId])
+}
+model UserAnswer {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  question  Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId String @db.ObjectId
+  
+  quizAttemptId String @db.ObjectId
+  quizAttempt   QuizAttempt @relation(fields: [quizAttemptId], references: [id], onDelete: Cascade)
+  selectedOption    Option @relation(fields: [selectedOptionId], references: [id], name: "OptionUserAnswers", onDelete: Cascade)
+  selectedOptionId          String @db.ObjectId
+
+  isCorrect Boolean
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([questionId])
+  @@index([quizAttemptId])
+  @@index([selectedOptionId])
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED 
+}
 
 enum CourseStatus {
   DRAFT
@@ -133,7 +204,7 @@ enum Groups {
   Staff 
   Student 
   User 
-}
+} 
 
 model TextContent {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId

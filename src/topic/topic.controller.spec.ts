@@ -8,7 +8,7 @@ import { UpdateTopicDto } from './dto/update-topic.dto';
 
 describe('accessing topic controller', () => {
   let controller: TopicController;
-  let service: TopicService; 
+  let service: TopicService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -38,12 +38,12 @@ describe('accessing topic controller', () => {
   describe('as an admin,I want to remove a topic', () => {
     it('should remove a topic', async () => {
       const topicId = 'topic-id';
-      const deletedTopic = { 
-        id: topicId, 
-        Title: 'Deleted Topic', 
-        Description: 'This topic was deleted', 
+      const deletedTopic = {
+        id: topicId,
+        Title: 'Deleted Topic',
+        Description: 'This topic was deleted',
         courseId: 'course-id',
-        Course: { id: 'course-id', Title: 'Course Title' }
+        Course: { id: 'course-id', Title: 'Course Title' },
       };
 
       (service.deleteTopic as jest.Mock).mockResolvedValue(deletedTopic);
@@ -57,9 +57,13 @@ describe('accessing topic controller', () => {
     it('should throw NotFoundException if topic not found', async () => {
       const topicId = 'non-existent-topic-id';
 
-      (service.deleteTopic as jest.Mock).mockRejectedValue(new NotFoundException(`Topic with ID ${topicId} not found`));
+      (service.deleteTopic as jest.Mock).mockRejectedValue(
+        new NotFoundException(`Topic with ID ${topicId} not found`),
+      );
 
-      await expect(controller.deleteTopic(topicId)).rejects.toThrow(NotFoundException);
+      await expect(controller.deleteTopic(topicId)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

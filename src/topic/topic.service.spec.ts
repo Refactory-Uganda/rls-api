@@ -40,12 +40,12 @@ describe('TopicsService', () => {
   describe('deleteTopic', () => {
     it('should delete a topic', async () => {
       const topicId = 'topic-id';
-      const deletedTopic = {  
-        id: topicId, 
-        Title: 'Deleted Topic', 
-        Description: 'This topic was deleted', 
+      const deletedTopic = {
+        id: topicId,
+        Title: 'Deleted Topic',
+        Description: 'This topic was deleted',
         courseId: 'course-id',
-        Course: { id: 'course-id', Title: 'Course Title' }
+        Course: { id: 'course-id', Title: 'Course Title' },
       };
 
       (prismaService.topic.delete as jest.Mock).mockResolvedValue(deletedTopic);

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { PartialType } from "@nestjs/swagger";
-import { CreateQuizDto } from "./create-quiz.dto";
+import { PartialType } from '@nestjs/swagger';
+import { CreateQuizDto } from './create-quiz.dto';
 
 export class UpdateQuizDto extends PartialType(CreateQuizDto) {}

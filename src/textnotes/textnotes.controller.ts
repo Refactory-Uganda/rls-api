@@ -1,7 +1,15 @@
 /* eslint-disable prettier/prettier */
 // src/note/note.controller.ts
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Controller, Post, Body, Get, Param, Delete, Patch, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Patch,
+  Put,
+} from '@nestjs/common';
 import { NoteService } from './textnotes.service';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -9,12 +17,11 @@ import { UpdateTextnotesDto } from './dto/update-textnotes.dto';
 
 @Controller('notes')
 @ApiTags('Notes')
-
 export class NoteController {
   constructor(private readonly noteService: NoteService) {}
 
   @Post()
-  @ApiOperation({summary: 'create notes'})
+  @ApiOperation({ summary: 'create notes' })
   create(@Body() createNoteDto: CreateNoteDto) {
     return this.noteService.create(createNoteDto);
   }
@@ -39,10 +46,8 @@ export class NoteController {
   }
 
   @Delete(':id')
-  @ApiOperation({summary: 'delete a particular note'})
+  @ApiOperation({ summary: 'delete a particular note' })
   remove(@Param('id') id: string) {
     return this.noteService.remove(id);
   }
-
-
 }

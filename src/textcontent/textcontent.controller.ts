@@ -26,8 +26,14 @@ export class TextContentController {
 
   @Put(':textcontent_id')
   @ApiOperation({ summary: 'Update textcontent' })
-  async update(@Body() updateTextContentDto: UpdateTextContentDto, @Param('textcontent_id') textcontent_id: string) {
-    return this.textContentService.updateTextContent(textcontent_id, updateTextContentDto);
+  async update(
+    @Body() updateTextContentDto: UpdateTextContentDto,
+    @Param('textcontent_id') textcontent_id: string,
+  ) {
+    return this.textContentService.updateTextContent(
+      textcontent_id,
+      updateTextContentDto,
+    );
   }
 
   @Patch(':textcontent_id')
@@ -37,6 +43,9 @@ export class TextContentController {
     @Param('textcontent_id') textcontent_id: string,
     @Body() partialUpdateDto: Partial<UpdateTextContentDto>,
   ) {
-    return this.textContentService.patchTextContent(textcontent_id, partialUpdateDto);
+    return this.textContentService.patchTextContent(
+      textcontent_id,
+      partialUpdateDto,
+    );
   }
 }

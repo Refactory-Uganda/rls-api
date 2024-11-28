@@ -6,13 +6,12 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
 
-
 @Injectable()
 export class QuestionService {
   constructor(private prisma: PrismaService) {}
 
   async create(createQuestionDto: CreateQuestionDto) {
-    const { Option, ...questionData } = createQuestionDto;
+    const { option, ...questionData } = createQuestionDto;
 
     const question = await this.prisma.question.create({
       data: {
@@ -21,15 +20,15 @@ export class QuestionService {
         //   create: options || [],
         // },
       },
-      include: { Option: true },
+      include: { option: true },
     });
 
-    return {'Question': question}
+    return { Question: question };
   }
 
   async patchQuestion(id: string, updateQuestionDto: UpdateQuestionDto) {
-    const { Option, ...questionData } = updateQuestionDto;
-  
+    const { option, ...questionData } = updateQuestionDto;
+
     // Step 1: Update the question
     const updatedQuestion = await this.prisma.question.update({
       where: { id },
@@ -39,31 +38,30 @@ export class QuestionService {
         order: questionData.order,
         explanation: questionData.explanation,
         quizId: questionData.quizId,
-        Option: {
-          upsert: Option?.map(option => ({
-            where: { id: option.id },
-            create: {
-              optionText: option.optionText,
-              iscorrect: option.iscorrect,
-              order: option.order,
-            },
-            update: {
-              optionText: option.optionText,
-              iscorrect: option.iscorrect,
-              order: option.order,
-            },
-          })) || [],
+        option: {
+          upsert:
+            option?.map((option) => ({
+              where: { id: option.id },
+              create: {
+                optionText: option.optionText,
+                iscorrect: option.iscorrect,
+                order: option.order,
+              },
+              update: {
+                optionText: option.optionText,
+                iscorrect: option.iscorrect,
+                order: option.order,
+              },
+            })) || [],
         },
       },
       include: {
-        Option: true,
+        option: true,
       },
     });
-  
+
     return updatedQuestion;
   }
-  
-  
 
   async remove(id: string) {
     return this.prisma.question.delete({
@@ -74,20 +72,19 @@ export class QuestionService {
   async findQuestions() {
     return this.prisma.question.findMany({
       include: {
-        Option: true,
-      }
+        option: true,
+      },
     });
   }
 
-  async findQuestionById(id:string) {
+  async findQuestionById(id: string) {
     return this.prisma.question.findUnique({
       where: {
         id: id,
       },
       include: {
-        Option: true,
+        option: true,
+      },
+    });
   }
-})
-
-}
 }

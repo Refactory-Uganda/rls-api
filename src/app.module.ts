@@ -19,10 +19,19 @@ import { SubheadingModule } from './subheading/subheading.module';
 import { QuizModule } from './quiz/quiz.module';
 import { QuestionModule } from './question/question.module';
 import { OptionModule } from './option/option.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { SlideModule } from './slide/slide.module';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
     ConfigModule.forRoot({ isGlobal: true }), // Global configuration
     HttpModule, // For external API calls (e.g., fetching roles)
     PrismaModule,
@@ -42,9 +51,10 @@ import { AuthenticationModule } from './authentication/authentication.module';
     QuizModule,
     QuestionModule,
     OptionModule,
-    AuthenticationModule, 
+    AuthenticationModule,
+    SlideModule,
   ],
-  controllers: [], 
-  providers: [], 
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

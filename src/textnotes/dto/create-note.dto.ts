@@ -7,10 +7,10 @@ export class CreateNoteDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()
-  notesText: string; 
+  notesText: string;
 
   @IsOptional()
   @IsString()
   // @ApiProperty()
-  textContentId?: string; 
+  textContentId?: string;
 }

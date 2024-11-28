@@ -1,7 +1,18 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Put, Delete, Patch, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Patch,
+  Body,
+  Param,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { CohortService } from './cohort.service';
 import { CreateCohortModuleDto } from '../modules/dto/create-cohortModule.dto';
 import { UpdateCohortDto } from '../modules/dto/update-cohort.dto';
@@ -13,7 +24,7 @@ export class CohortController {
   constructor(private readonly cohortService: CohortService) {}
 
   @Get()
-  @ApiOperation({ summary: ' Get All Cohorts '})
+  @ApiOperation({ summary: ' Get All Cohorts ' })
   async getAllCohorts() {
     try {
       const cohorts = await this.cohortService.getAllCohorts();
@@ -27,11 +38,14 @@ export class CohortController {
   }
 
   @Get()
-  @ApiOperation({ summary: ' Get Cohort by ID '})
+  @ApiOperation({ summary: ' Get Cohort by ID ' })
   async getCohortById(@Param('cohortId') cohortId: string) {
     const moduleData = {};
     try {
-      const cohort = await this.cohortService.getModuleById(cohortId, moduleData);
+      const cohort = await this.cohortService.getModuleById(
+        cohortId,
+        moduleData,
+      );
       if (!cohort) {
         throw new HttpException('Cohort not found', HttpStatus.NOT_FOUND);
       }
@@ -45,14 +59,21 @@ export class CohortController {
   }
 
   @Post('cohortId/modules')
-  @ApiOperation({ summary: ' Create Cohort Module '})
+  @ApiOperation({ summary: ' Create Cohort Module ' })
   async createCohortModule(
     @Param('cohortId') cohortId: string,
-    @Body() createCohortModuleDto: CreateCohortModuleDto) {
+    @Body() createCohortModuleDto: CreateCohortModuleDto,
+  ) {
     try {
-      const newCohortModule = await this.cohortService.createCohortModule(cohortId, createCohortModuleDto);
-      console.log("I am running")
-      return { message: 'Cohort module created successfully', cohort: newCohortModule };
+      const newCohortModule = await this.cohortService.createCohortModule(
+        cohortId,
+        createCohortModuleDto,
+      );
+      console.log('I am running');
+      return {
+        message: 'Cohort module created successfully',
+        cohort: newCohortModule,
+      };
     } catch (error) {
       throw new HttpException(
         `Error creating cohort module: ${error.message}`,
@@ -62,7 +83,7 @@ export class CohortController {
   }
 
   @Put('cohortId')
-  @ApiOperation({ summary: ' Update Cohort '})
+  @ApiOperation({ summary: ' Update Cohort ' })
   async updateCohort(
     @Param('cohortId') cohortId: string,
     @Body() updateCohortDto: UpdateCohortDto,
@@ -85,13 +106,16 @@ export class CohortController {
   }
 
   @Patch(':cohortId')
-  @ApiOperation({ summary: ' Partially Update Cohort'})
+  @ApiOperation({ summary: ' Partially Update Cohort' })
   async patchCohort(
     @Param('cohortId') cohortId: string,
     @Body() partialUpdateDto: Partial<UpdateCohortDto>,
   ) {
     try {
-      const patchedCohort = await this.cohortService.patchCohort(cohortId, partialUpdateDto);
+      const patchedCohort = await this.cohortService.patchCohort(
+        cohortId,
+        partialUpdateDto,
+      );
       if (!patchedCohort) {
         throw new HttpException('Cohort not found', HttpStatus.NOT_FOUND);
       }
@@ -105,7 +129,7 @@ export class CohortController {
   }
 
   @Delete(':cohortId')
-  @ApiOperation({ summary: ' Delete a Cohort '})
+  @ApiOperation({ summary: ' Delete a Cohort ' })
   async deleteCohort(@Param('cohortId') cohortId: string) {
     try {
       const deleted = await this.cohortService.deleteCohort(cohortId);

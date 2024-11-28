@@ -4,8 +4,32 @@ import { UpdateTextnotesDto } from './dto/update-textnotes.dto';
 export declare class NoteService {
     private prisma;
     constructor(prisma: PrismaService);
-    create(createNoteDto: CreateNoteDto): Promise<any>;
-    updateTextnotes(id: string, updateTextnotesDto: UpdateTextnotesDto): Promise<any>;
-    patchTextnotes(id: string, partialUpdateDto: UpdateTextnotesDto): Promise<any>;
-    remove(id: string): Promise<any>;
+    create(createNoteDto: CreateNoteDto): Promise<{
+        id: string;
+        notesText: string;
+        createdAt: Date;
+        updatedAt: Date;
+        textContentId: string | null;
+    }>;
+    updateTextnotes(id: string, updateTextnotesDto: UpdateTextnotesDto): Promise<{
+        id: string;
+        notesText: string;
+        createdAt: Date;
+        updatedAt: Date;
+        textContentId: string | null;
+    }>;
+    patchTextnotes(id: string, partialUpdateDto: UpdateTextnotesDto): Promise<{
+        id: string;
+        notesText: string;
+        createdAt: Date;
+        updatedAt: Date;
+        textContentId: string | null;
+    }>;
+    remove(id: string): Promise<{
+        id: string;
+        notesText: string;
+        createdAt: Date;
+        updatedAt: Date;
+        textContentId: string | null;
+    }>;
 }

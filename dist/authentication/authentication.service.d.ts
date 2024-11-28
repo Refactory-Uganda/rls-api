@@ -16,19 +16,19 @@ export declare class AuthenticationService {
         message: string;
         success: boolean;
         user: {
-            id: any;
-            email: any;
-            firstName: any;
-            lastName: any;
-            userGroup: any;
+            id: string;
+            email: string;
+            firstName: string;
+            lastName: string;
+            userGroup: import(".prisma/client").$Enums.Groups;
         };
         tokens: {
-            access_token: any;
-            refresh_token: any;
+            access_token: string;
+            refresh_token: string;
         };
     }>;
     refreshToken(refreshToken: RefreshTokendto): Promise<{
-        access_token: any;
-        refresh_token: any;
+        access_token: string;
+        refresh_token: string;
     }>;
 }

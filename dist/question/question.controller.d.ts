@@ -5,10 +5,87 @@ export declare class QuestionController {
     private readonly questionService;
     constructor(questionService: QuestionService);
     create(createQuestionDto: CreateQuestionDto): Promise<{
-        Question: any;
+        Question: {
+            option: {
+                id: string;
+                optionText: string;
+                iscorrect: boolean;
+                order: number;
+                questionId: string | null;
+            }[];
+        } & {
+            id: string;
+            text: string;
+            createdAt: Date;
+            updatedAt: Date;
+            quizId: string;
+            order: number;
+            answer: string;
+            explanation: string | null;
+        };
     }>;
-    patch(id: string, partialUpdateDto: Partial<UpdateQuestionDto>): Promise<any>;
-    remove(id: string): Promise<any>;
-    findAll(): Promise<any>;
-    findOne(question_id: string): Promise<any>;
+    patch(id: string, partialUpdateDto: Partial<UpdateQuestionDto>): Promise<{
+        option: {
+            id: string;
+            optionText: string;
+            iscorrect: boolean;
+            order: number;
+            questionId: string | null;
+        }[];
+    } & {
+        id: string;
+        text: string;
+        createdAt: Date;
+        updatedAt: Date;
+        quizId: string;
+        order: number;
+        answer: string;
+        explanation: string | null;
+    }>;
+    remove(id: string): Promise<{
+        id: string;
+        text: string;
+        createdAt: Date;
+        updatedAt: Date;
+        quizId: string;
+        order: number;
+        answer: string;
+        explanation: string | null;
+    }>;
+    findAll(): Promise<({
+        option: {
+            id: string;
+            optionText: string;
+            iscorrect: boolean;
+            order: number;
+            questionId: string | null;
+        }[];
+    } & {
+        id: string;
+        text: string;
+        createdAt: Date;
+        updatedAt: Date;
+        quizId: string;
+        order: number;
+        answer: string;
+        explanation: string | null;
+    })[]>;
+    findOne(question_id: string): Promise<{
+        option: {
+            id: string;
+            optionText: string;
+            iscorrect: boolean;
+            order: number;
+            questionId: string | null;
+        }[];
+    } & {
+        id: string;
+        text: string;
+        createdAt: Date;
+        updatedAt: Date;
+        quizId: string;
+        order: number;
+        answer: string;
+        explanation: string | null;
+    }>;
 }

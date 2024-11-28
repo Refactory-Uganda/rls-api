@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TopicController = void 0;
 const common_1 = require("@nestjs/common");
@@ -101,7 +100,7 @@ __decorate([
     __param(1, (0, common_1.UploadedFile)()),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, typeof (_b = typeof Express !== "undefined" && (_a = Express.Multer) !== void 0 && _a.File) === "function" ? _b : Object, create_topic_dto_1.CreateTopicDto]),
+    __metadata("design:paramtypes", [String, Object, create_topic_dto_1.CreateTopicDto]),
     __metadata("design:returntype", Promise)
 ], TopicController.prototype, "create", null);
 __decorate([
@@ -155,7 +154,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_topic_dto_1.UpdateTopicDto, typeof (_d = typeof Express !== "undefined" && (_c = Express.Multer) !== void 0 && _c.File) === "function" ? _d : Object]),
+    __metadata("design:paramtypes", [String, update_topic_dto_1.UpdateTopicDto, Object]),
     __metadata("design:returntype", Promise)
 ], TopicController.prototype, "patch", null);
 __decorate([

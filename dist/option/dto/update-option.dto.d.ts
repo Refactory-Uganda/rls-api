@@ -1,4 +1,5 @@
-declare const UpdateOptionDto_base: any;
+import { CreateOptionDto } from './option.dto';
+declare const UpdateOptionDto_base: import("@nestjs/common").Type<Partial<CreateOptionDto>>;
 export declare class UpdateOptionDto extends UpdateOptionDto_base {
 }
 export {};

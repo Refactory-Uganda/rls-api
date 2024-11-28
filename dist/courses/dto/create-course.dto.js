@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateCourseDto = exports.CreateTopicDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
@@ -136,7 +135,7 @@ __decorate([
         enum: client_2.AssessmentMode,
         example: 'QUIZ | ASSIGNMENT',
     }),
-    __metadata("design:type", typeof (_a = typeof client_2.AssessmentMode !== "undefined" && client_2.AssessmentMode) === "function" ? _a : Object)
+    __metadata("design:type", String)
 ], CreateCourseDto.prototype, "assessmentMode", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
@@ -152,7 +151,7 @@ __decorate([
         description: 'The status of the course',
         example: 'DRAFT | PUBLISHED | DELETED',
     }),
-    __metadata("design:type", typeof (_b = typeof client_1.CourseStatus !== "undefined" && client_1.CourseStatus) === "function" ? _b : Object)
+    __metadata("design:type", String)
 ], CreateCourseDto.prototype, "status", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),

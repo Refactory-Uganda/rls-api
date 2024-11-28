@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM node:20.14.0 
+FROM node:20.14.0 AS builder
 
 WORKDIR /rls-api
 

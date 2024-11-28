@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationService = void 0;
 const common_1 = require("@nestjs/common");
@@ -20,17 +21,17 @@ let AuthenticationService = class AuthenticationService {
         this.prisma = prisma;
         this.jwtService = jwtService;
         this.httpService = httpService;
-        this.urlAdmin = "https://rims-api-xufp.onrender.com/accounts/admin/login";
-        this.urlStaff = "https://rims-api-xufp.onrender.com/accounts/staff/login";
-        this.urlStudent = "https://rims-api-xufp.onrender.com/accounts/student/login";
-        this.urlUser = "https://rims-api-xufp.onrender.com/accounts/users/login";
+        this.urlAdmin = 'https://rims-api-xufp.onrender.com/accounts/admin/login';
+        this.urlStaff = 'https://rims-api-xufp.onrender.com/accounts/staff/login';
+        this.urlStudent = 'https://rims-api-xufp.onrender.com/accounts/student/login';
+        this.urlUser = 'https://rims-api-xufp.onrender.com/accounts/users/login';
     }
     async login(dto) {
         const endpoints = {
-            admin: "https://rims-api-xufp.onrender.com/accounts/admin/login",
-            staff: "https://rims-api-xufp.onrender.com/accounts/staff/login",
-            student: "https://rims-api-xufp.onrender.com/accounts/student/login",
-            user: "https://rims-api-xufp.onrender.com/accounts/users/login"
+            admin: 'https://rims-api-xufp.onrender.com/accounts/admin/login',
+            staff: 'https://rims-api-xufp.onrender.com/accounts/staff/login',
+            student: 'https://rims-api-xufp.onrender.com/accounts/student/login',
+            user: 'https://rims-api-xufp.onrender.com/accounts/users/login',
         };
         try {
             console.log('Starting');
@@ -55,7 +56,7 @@ let AuthenticationService = class AuthenticationService {
             }
             const response = await axios_2.default.post(targetUrl, {
                 email: dto.email,
-                password: dto.password
+                password: dto.password,
             });
             const { user: externalUser, tokens } = response.data;
             if (!externalUser || !tokens) {
@@ -64,8 +65,8 @@ let AuthenticationService = class AuthenticationService {
             console.log('Received response from API:', externalUser);
             let user = await this.prisma.user.findUnique({
                 where: {
-                    email: externalUser.email.email
-                }
+                    email: externalUser.email.email,
+                },
             });
             const userData = {
                 externalId: externalUser.id,
@@ -86,7 +87,7 @@ let AuthenticationService = class AuthenticationService {
                 console.log('updating existing user');
                 user = await this.prisma.user.update({
                     where: {
-                        id: user.id
+                        id: user.id,
                     },
                     data: userData,
                 });
@@ -94,17 +95,17 @@ let AuthenticationService = class AuthenticationService {
             const payload = {
                 sub: user.id,
                 email: user.email,
-                userGroup: user.userGroup
+                userGroup: user.userGroup,
             };
             const access_token = this.jwtService.sign(payload, {
-                expiresIn: '15m'
+                expiresIn: '15m',
             });
             const refresh_token = this.jwtService.sign(payload, {
-                expiresIn: '7d'
+                expiresIn: '7d',
             });
             await this.prisma.user.update({
                 where: { id: user.id },
-                data: { refresh_token }
+                data: { refresh_token },
             });
             return {
                 message: 'Login Successfully to RLS',
@@ -118,8 +119,8 @@ let AuthenticationService = class AuthenticationService {
                 },
                 tokens: {
                     access_token,
-                    refresh_token
-                }
+                    refresh_token,
+                },
             };
         }
         catch (error) {
@@ -148,7 +149,7 @@ let AuthenticationService = class AuthenticationService {
             catch (error) {
                 await this.prisma.user.update({
                     where: { id: user.id },
-                    data: { refresh_token: null }
+                    data: { refresh_token: null },
                 });
                 console.error(error);
                 throw new common_1.UnauthorizedException('Expired refresh token');
@@ -156,21 +157,21 @@ let AuthenticationService = class AuthenticationService {
             const payload = {
                 sub: user.id,
                 email: user.email,
-                userGroup: user.userGroup
+                userGroup: user.userGroup,
             };
             const access_token = this.jwtService.sign(payload, {
-                expiresIn: '15m'
+                expiresIn: '15m',
             });
             const new_refresh_token = this.jwtService.sign(payload, {
-                expiresIn: '7d'
+                expiresIn: '7d',
             });
             await this.prisma.user.update({
                 where: { id: user.id },
-                data: { refresh_token: new_refresh_token }
+                data: { refresh_token: new_refresh_token },
             });
             return {
                 access_token,
-                refresh_token: new_refresh_token
+                refresh_token: new_refresh_token,
             };
         }
         catch (error) {
@@ -188,8 +189,6 @@ let AuthenticationService = class AuthenticationService {
 exports.AuthenticationService = AuthenticationService;
 exports.AuthenticationService = AuthenticationService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        jwt_1.JwtService,
-        axios_1.HttpService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, typeof (_a = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _a : Object, typeof (_b = typeof axios_1.HttpService !== "undefined" && axios_1.HttpService) === "function" ? _b : Object])
 ], AuthenticationService);
 //# sourceMappingURL=authentication.service.js.map

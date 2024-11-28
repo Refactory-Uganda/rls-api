@@ -16,7 +16,7 @@ exports.CohortModule = CohortModule;
 exports.CohortModule = CohortModule = __decorate([
     (0, common_1.Module)({
         providers: [cohort_service_1.CohortService],
-        controllers: [cohort_controller_1.CohortController]
+        controllers: [cohort_controller_1.CohortController],
     })
 ], CohortModule);
 //# sourceMappingURL=cohort.module.js.map

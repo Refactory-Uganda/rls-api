@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { HttpService } from '@nestjs/axios';
 import { LoginDto } from './dto/create-login.dto';
 import { RefreshTokendto } from './dto/refresh-token.dto';
@@ -16,19 +16,19 @@ export declare class AuthenticationService {
         message: string;
         success: boolean;
         user: {
-            id: string;
-            email: string;
-            firstName: string;
-            lastName: string;
-            userGroup: import(".prisma/client").$Enums.Groups;
+            id: any;
+            email: any;
+            firstName: any;
+            lastName: any;
+            userGroup: any;
         };
         tokens: {
-            access_token: string;
-            refresh_token: string;
+            access_token: any;
+            refresh_token: any;
         };
     }>;
     refreshToken(refreshToken: RefreshTokendto): Promise<{
-        access_token: string;
-        refresh_token: string;
+        access_token: any;
+        refresh_token: any;
     }>;
 }

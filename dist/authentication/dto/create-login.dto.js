@@ -16,7 +16,10 @@ class LoginDto {
 }
 exports.LoginDto = LoginDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'user adds thier email address registered by rims', example: 'example@email.com' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'user adds thier email address registered by rims',
+        example: 'example@email.com',
+    }),
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], LoginDto.prototype, "email", void 0);
@@ -30,7 +33,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'The Different users who can access these accounts',
         example: 'Administrator | Staff | Student',
-        enumName: 'User Roles'
+        enumName: 'User Roles',
     }),
     __metadata("design:type", String)
 ], LoginDto.prototype, "userGroup", void 0);

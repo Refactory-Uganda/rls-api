@@ -16,7 +16,7 @@ exports.SlideModule = SlideModule;
 exports.SlideModule = SlideModule = __decorate([
     (0, common_1.Module)({
         providers: [slide_service_1.SlideService],
-        controllers: [slide_controller_1.SlideController]
+        controllers: [slide_controller_1.SlideController],
     })
 ], SlideModule);
 //# sourceMappingURL=slide.module.js.map

@@ -26,7 +26,7 @@ let OptionService = class OptionService {
             const updateData = {
                 ...partialUpdateDto,
             };
-            Object.keys(updateData).forEach(key => {
+            Object.keys(updateData).forEach((key) => {
                 if (updateData[key] === undefined) {
                     delete updateData[key];
                 }
@@ -47,14 +47,14 @@ let OptionService = class OptionService {
             },
             include: {
                 question: true,
-            }
+            },
         });
     }
     async findAll() {
         return this.prisma.option.findMany({
             include: {
                 question: true,
-            }
+            },
         });
     }
     async remove(id) {

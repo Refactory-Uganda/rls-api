@@ -57,7 +57,7 @@ let QuizController = class QuizController {
         return {
             status: 'success',
             message: 'Quiz submitted successfully',
-            data: result
+            data: result,
         };
     }
 };

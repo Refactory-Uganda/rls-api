@@ -21,7 +21,7 @@ let TextContentService = class TextContentService {
             data: {
                 heading: dto.heading,
                 lessonId: dto.lessonId,
-            }
+            },
         });
         return text;
     }
@@ -59,7 +59,7 @@ let TextContentService = class TextContentService {
         const text = await this.prisma.textContent.delete({
             where: {
                 id: id,
-            }
+            },
         });
         return text;
     }

@@ -16,7 +16,7 @@ exports.SubheadingModule = SubheadingModule;
 exports.SubheadingModule = SubheadingModule = __decorate([
     (0, common_1.Module)({
         providers: [subheading_service_1.SubHeadingService],
-        controllers: [subheading_controller_1.SubHeadingController]
+        controllers: [subheading_controller_1.SubHeadingController],
     })
 ], SubheadingModule);
 //# sourceMappingURL=subheading.module.js.map

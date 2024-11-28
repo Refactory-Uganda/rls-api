@@ -61,7 +61,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':lesson_id'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a Lesson' }),
-    __param(0, (0, common_1.Param)("lesson_id")),
+    __param(0, (0, common_1.Param)('lesson_id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

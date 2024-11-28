@@ -8,26 +8,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JwtStrategy = void 0;
 const passport_jwt_1 = require("passport-jwt");
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const prisma_service_1 = require("../../prisma/prisma.service");
+const config_1 = require("@nestjs/config");
 let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
-    constructor(prisma) {
+    constructor(prisma, configService) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
-            secretOrKey: process.env.JWT_SECRET,
+            secretOrKey: configService.get('JWT_SECRET') || 'test-secret',
         });
         this.prisma = prisma;
+        this.configService = configService;
     }
     async validate(payload) {
         const user = await this.prisma.user.findUnique({
             where: {
-                id: payload.sub
-            }
+                id: payload.sub,
+            },
         });
         if (!user) {
             throw new common_1.UnauthorizedException('youre not the user my guy');
@@ -35,13 +38,13 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         return {
             id: user.id,
             email: user.email,
-            userGroup: user.userGroup
+            userGroup: user.userGroup,
         };
     }
 };
 exports.JwtStrategy = JwtStrategy;
 exports.JwtStrategy = JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, typeof (_a = typeof config_1.ConfigService !== "undefined" && config_1.ConfigService) === "function" ? _a : Object])
 ], JwtStrategy);
 //# sourceMappingURL=jwt.strategy.js.map

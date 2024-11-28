@@ -23,7 +23,7 @@ let QuizService = class QuizService {
                 description: createQuizDto.description,
                 lesson: {
                     connect: { id: createQuizDto.lessonId },
-                }
+                },
             },
         });
     }
@@ -32,15 +32,17 @@ let QuizService = class QuizService {
             const { questions, ...quizData } = partialUpdateDto;
             const updateData = {
                 ...quizData,
-                questions: questions ? {
-                    update: questions.map(question => ({
-                        where: { id: question.id },
-                        data: {
-                            text: question.text,
-                            answer: question.answer,
-                        }
-                    })),
-                } : undefined,
+                questions: questions
+                    ? {
+                        update: questions.map((question) => ({
+                            where: { id: question.id },
+                            data: {
+                                text: question.text,
+                                answer: question.answer,
+                            },
+                        })),
+                    }
+                    : undefined,
             };
             return await this.prisma.quiz.update({
                 where: { id },
@@ -65,8 +67,8 @@ let QuizService = class QuizService {
             include: {
                 questions: {
                     include: {
-                        option: true
-                    }
+                        option: true,
+                    },
                 },
             },
         });
@@ -76,30 +78,30 @@ let QuizService = class QuizService {
             include: {
                 questions: {
                     include: {
-                        option: true
-                    }
-                }
+                        option: true,
+                    },
+                },
             },
         });
     }
     async findByQuizId(quizId) {
         return this.prisma.quiz.findUnique({
             where: {
-                id: quizId
+                id: quizId,
             },
             include: {
                 questions: {
                     include: {
-                        option: true
-                    }
-                }
-            }
+                        option: true,
+                    },
+                },
+            },
         });
     }
     async startQuiz(quizId) {
         const quiz = await this.prisma.quiz.findUnique({
             where: { id: quizId },
-            include: { questions: true }
+            include: { questions: true },
         });
         if (!quiz) {
             throw new common_1.NotFoundException('Quiz not found');
@@ -117,12 +119,12 @@ let QuizService = class QuizService {
                     include: {
                         questions: {
                             include: {
-                                option: true
-                            }
-                        }
-                    }
-                }
-            }
+                                option: true,
+                            },
+                        },
+                    },
+                },
+            },
         });
     }
     async submitAnswer(attemptId, answerDto) {
@@ -130,7 +132,7 @@ let QuizService = class QuizService {
             where: {
                 id: attemptId,
                 status: 'IN_PROGRESS',
-            }
+            },
         });
         if (!attempt) {
             throw new common_1.NotFoundException('Quiz attempt already completed');
@@ -139,17 +141,17 @@ let QuizService = class QuizService {
             where: {
                 id: answerDto.questionId,
                 quiz: {
-                    id: attempt.quizId
-                }
+                    id: attempt.quizId,
+                },
             },
             include: {
-                option: true
-            }
+                option: true,
+            },
         });
         if (!question) {
             throw new common_1.BadRequestException('Invalid question');
         }
-        const selectedOption = question.option.find(s_option => s_option.id === answerDto.optionId);
+        const selectedOption = question.option.find((s_option) => s_option.id === answerDto.optionId);
         if (!selectedOption) {
             throw new common_1.BadRequestException('Invalid option');
         }
@@ -158,8 +160,8 @@ let QuizService = class QuizService {
                 quizAttemptId: attemptId,
                 questionId: question.id,
                 selectedOptionId: selectedOption.id,
-                isCorrect: selectedOption.isCorrect,
-            }
+                isCorrect: selectedOption.iscorrect,
+            },
         });
         return userAnswer;
     }
@@ -173,15 +175,15 @@ let QuizService = class QuizService {
                 answers: true,
                 quiz: {
                     include: {
-                        questions: true
-                    }
-                }
-            }
+                        questions: true,
+                    },
+                },
+            },
         });
         if (!attempt) {
             throw new common_1.NotFoundException('Quiz attempt not found');
         }
-        const correctAnswers = attempt.answers.filter(answer => answer.isCorrect).length;
+        const correctAnswers = attempt.answers.filter((answer) => answer.isCorrect).length;
         const score = (correctAnswers / attempt.quiz.questions.length) * attempt.maxScore;
         return this.prisma.quizAttempt.update({
             where: { id: attemptId },
@@ -194,10 +196,10 @@ let QuizService = class QuizService {
                 answers: {
                     include: {
                         question: true,
-                        selectedOption: true
-                    }
-                }
-            }
+                        selectedOption: true,
+                    },
+                },
+            },
         });
     }
     async getQuizResults(attemptId) {
@@ -211,18 +213,18 @@ let QuizService = class QuizService {
                     include: {
                         questions: {
                             include: {
-                                option: true
-                            }
-                        }
-                    }
+                                option: true,
+                            },
+                        },
+                    },
                 },
                 answers: {
                     include: {
                         question: true,
-                        selectedOption: true
-                    }
-                }
-            }
+                        selectedOption: true,
+                    },
+                },
+            },
         });
         if (!attempt) {
             throw new common_1.NotFoundException('Completed Quiz attempt not found');
@@ -232,12 +234,14 @@ let QuizService = class QuizService {
             maxScore: attempt.maxScore,
             percentage: (attempt.score / attempt.maxScore) * 100,
             completedAt: attempt.completedAt,
-            answers: attempt.answers.map(answer => ({
+            answers: attempt.answers.map((answer) => ({
                 question: answer.question.text,
                 selectedAnswer: answer.selectedOption.optionText,
                 isCorrect: answer.isCorrect,
-                correctOption: attempt.quiz.questions.find(q => q.id === answer.questionId)?.option.find(opt => opt.isCorrect)?.optionText,
-            }))
+                correctOption: attempt.quiz.questions
+                    .find((q) => q.id === answer.questionId)
+                    ?.option.find((opt) => opt.iscorrect)?.optionText,
+            })),
         };
     }
     async submitQuiz(attemptId, submitQuizDto) {
@@ -270,7 +274,7 @@ let QuizService = class QuizService {
             if (!selectedOption) {
                 throw new common_1.BadRequestException('Invalid optionId');
             }
-            if (selectedOption.isCorrect) {
+            if (selectedOption.iscorrect) {
                 score += 1;
             }
             maxScore += 1;
@@ -278,7 +282,7 @@ let QuizService = class QuizService {
                 questionId,
                 quizAttemptId: submitQuizDto.attemptId,
                 optionId,
-                isCorrect: selectedOption.isCorrect,
+                isCorrect: selectedOption.iscorrect,
             });
         }
         const quizAttempt = await this.prisma.quizAttempt.create({
@@ -290,7 +294,7 @@ let QuizService = class QuizService {
                         selectedOptionId: optionId,
                         isCorrect: quiz.questions
                             .find((q) => q.id === questionId)
-                            .option.find((o) => o.id === optionId).isCorrect,
+                            .option.find((o) => o.id === optionId).iscorrect,
                     })),
                 },
                 score,

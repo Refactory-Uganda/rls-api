@@ -27,7 +27,7 @@ let TopicService = class TopicService {
             },
             include: {
                 Course: true,
-                Lesson: true
+                Lesson: true,
             },
         });
     }
@@ -37,7 +37,9 @@ let TopicService = class TopicService {
             if (!/^[a-fA-F0-9]{24}$/.test(sanitizedId)) {
                 throw new Error(`Invalid topic ID format: ${sanitizedId}`);
             }
-            const imageUrl = partialUpdateDto.image ? `/uploads/courses/${partialUpdateDto.image}` : null;
+            const imageUrl = partialUpdateDto.image
+                ? `/uploads/courses/${partialUpdateDto.image}`
+                : null;
             console.log('Updating topic with ID:', sanitizedId);
             console.log('Image URL:', imageUrl);
             console.log('Partial update data:', partialUpdateDto);
@@ -47,7 +49,7 @@ let TopicService = class TopicService {
                     Title: partialUpdateDto.Title,
                     Description: partialUpdateDto.Description,
                     image: imageUrl,
-                    courseId: partialUpdateDto.courseId
+                    courseId: partialUpdateDto.courseId,
                 },
             });
         }

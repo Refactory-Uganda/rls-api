@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateCourseDto = exports.CreateTopicDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
@@ -22,6 +23,9 @@ exports.CreateTopicDto = CreateTopicDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Object)
+], CreateTopicDto.prototype, "s", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({
         description: 'The title of the topic',
         example: 'Introduction to JavaScript',
@@ -33,14 +37,15 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({
         description: 'The description of the topic',
-        example: 'This topic is an introduction to JavaScript'
+        example: 'This topic is an introduction to JavaScript',
     }),
     __metadata("design:type", String)
 ], CreateTopicDto.prototype, "Description", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: [create_lesson_dto_1.CreateLessonDto],
+    (0, swagger_1.ApiProperty)({
+        type: [create_lesson_dto_1.CreateLessonDto],
         description: 'The lessons of the topic',
-        example: 'Lesson 1: DataTypes'
+        example: 'Lesson 1: DataTypes',
     }),
     __metadata("design:type", Array)
 ], CreateTopicDto.prototype, "lessons", void 0);
@@ -52,7 +57,7 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({
         description: 'Course ID (optional)',
-        required: false
+        required: false,
     }),
     __metadata("design:type", String)
 ], CreateCourseDto.prototype, "id", void 0);
@@ -70,7 +75,7 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({
         description: 'The description of the course',
-        example: 'This course is an introduction to programming'
+        example: 'This course is an introduction to programming',
     }),
     __metadata("design:type", String)
 ], CreateCourseDto.prototype, "Description", void 0);
@@ -78,7 +83,7 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, swagger_1.ApiProperty)({
         description: 'The duration of the course',
-        example: '6 weeks'
+        example: '6 weeks',
     }),
     __metadata("design:type", String)
 ], CreateCourseDto.prototype, "Duration", void 0);
@@ -89,7 +94,10 @@ __decorate([
         if (Array.isArray(value))
             return value;
         if (typeof value === 'string') {
-            return value.split(',').map(item => item.trim()).filter(Boolean);
+            return value
+                .split(',')
+                .map((item) => item.trim())
+                .filter(Boolean);
         }
     }),
     (0, swagger_1.ApiProperty)({
@@ -107,7 +115,10 @@ __decorate([
         if (Array.isArray(value))
             return value;
         if (typeof value === 'string') {
-            return value.split(',').map(item => item.trim()).filter(Boolean);
+            return value
+                .split(',')
+                .map((item) => item.trim())
+                .filter(Boolean);
         }
     }),
     (0, swagger_1.ApiProperty)({
@@ -125,7 +136,7 @@ __decorate([
         enum: client_2.AssessmentMode,
         example: 'QUIZ | ASSIGNMENT',
     }),
-    __metadata("design:type", String)
+    __metadata("design:type", typeof (_a = typeof client_2.AssessmentMode !== "undefined" && client_2.AssessmentMode) === "function" ? _a : Object)
 ], CreateCourseDto.prototype, "assessmentMode", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
@@ -139,9 +150,9 @@ __decorate([
     (0, class_validator_1.IsEnum)(client_1.CourseStatus),
     (0, swagger_1.ApiProperty)({
         description: 'The status of the course',
-        example: 'DRAFT | PUBLISHED | DELETED'
+        example: 'DRAFT | PUBLISHED | DELETED',
     }),
-    __metadata("design:type", String)
+    __metadata("design:type", typeof (_b = typeof client_1.CourseStatus !== "undefined" && client_1.CourseStatus) === "function" ? _b : Object)
 ], CreateCourseDto.prototype, "status", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
@@ -160,7 +171,10 @@ __decorate([
         if (Array.isArray(value))
             return value;
         if (typeof value === 'string') {
-            return value.split(',').map(item => item.trim()).filter(Boolean);
+            return value
+                .split(',')
+                .map((item) => item.trim())
+                .filter(Boolean);
         }
     }),
     (0, swagger_1.ApiProperty)({

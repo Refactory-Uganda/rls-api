@@ -8,19 +8,19 @@ export declare class AuthenticationController {
         message: string;
         success: boolean;
         user: {
-            id: string;
-            email: string;
-            firstName: string;
-            lastName: string;
-            userGroup: import(".prisma/client").$Enums.Groups;
+            id: any;
+            email: any;
+            firstName: any;
+            lastName: any;
+            userGroup: any;
         };
         tokens: {
-            access_token: string;
-            refresh_token: string;
+            access_token: any;
+            refresh_token: any;
         };
     }>;
     refreshToken(dto: RefreshTokendto): Promise<{
-        access_token: string;
-        refresh_token: string;
+        access_token: any;
+        refresh_token: any;
     }>;
 }

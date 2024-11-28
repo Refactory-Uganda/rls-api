@@ -22,12 +22,12 @@ let FacilitatorService = class FacilitatorService {
         return await this.prisma.user.findUnique({
             where: {
                 externalId,
-            }
+            },
         });
     }
     async createFacilitator(createUser) {
         return await this.prisma.user.create({
-            data: createUser
+            data: createUser,
         });
     }
     async getStaffFromRims() {

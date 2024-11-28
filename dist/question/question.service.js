@@ -24,7 +24,7 @@ let QuestionService = class QuestionService {
             },
             include: { option: true },
         });
-        return { 'Question': question };
+        return { Question: question };
     }
     async patchQuestion(id, updateQuestionDto) {
         const { option, ...questionData } = updateQuestionDto;
@@ -37,16 +37,16 @@ let QuestionService = class QuestionService {
                 explanation: questionData.explanation,
                 quizId: questionData.quizId,
                 option: {
-                    upsert: option?.map(option => ({
+                    upsert: option?.map((option) => ({
                         where: { id: option.id },
                         create: {
                             optionText: option.optionText,
-                            isCorrect: option.isCorrect,
+                            iscorrect: option.iscorrect,
                             order: option.order,
                         },
                         update: {
                             optionText: option.optionText,
-                            iscorrect: option.isCorrect,
+                            iscorrect: option.iscorrect,
                             order: option.order,
                         },
                     })) || [],
@@ -67,7 +67,7 @@ let QuestionService = class QuestionService {
         return this.prisma.question.findMany({
             include: {
                 option: true,
-            }
+            },
         });
     }
     async findQuestionById(id) {
@@ -77,7 +77,7 @@ let QuestionService = class QuestionService {
             },
             include: {
                 option: true,
-            }
+            },
         });
     }
 };

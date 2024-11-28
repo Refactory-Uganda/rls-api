@@ -1,6 +1,5 @@
-import { Strategy } from 'passport-jwt';
 import { AuthenticationService } from './authentication.service';
-declare const JwtStrategy_base: new (...args: any[]) => Strategy;
+declare const JwtStrategy_base: any;
 export declare class JwtStrategy extends JwtStrategy_base {
     private readonly authService;
     constructor(authService: AuthenticationService);

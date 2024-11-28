@@ -4,25 +4,7 @@ import { UpdateTextContentDto } from './dto/update-textcontent.dto';
 export declare class TextContentController {
     private readonly textContentService;
     constructor(textContentService: TextContentService);
-    create(createTextContentDto: CreateTextContentDto): Promise<{
-        id: string;
-        heading: string;
-        createdAt: Date;
-        updatedAt: Date;
-        lessonId: string | null;
-    }>;
-    update(updateTextContentDto: UpdateTextContentDto, textcontent_id: string): Promise<{
-        id: string;
-        heading: string;
-        createdAt: Date;
-        updatedAt: Date;
-        lessonId: string | null;
-    }>;
-    patch(textcontent_id: string, partialUpdateDto: Partial<UpdateTextContentDto>): Promise<{
-        id: string;
-        heading: string;
-        createdAt: Date;
-        updatedAt: Date;
-        lessonId: string | null;
-    }>;
+    create(createTextContentDto: CreateTextContentDto): Promise<any>;
+    update(updateTextContentDto: UpdateTextContentDto, textcontent_id: string): Promise<any>;
+    patch(textcontent_id: string, partialUpdateDto: Partial<UpdateTextContentDto>): Promise<any>;
 }

@@ -31,7 +31,10 @@ let CourseService = class CourseService {
                     return value.split(',').map((item) => item.trim());
                 }
             }
-            return value.split(',').map(item => item.trim()).filter(item => item.length > 0);
+            return value
+                .split(',')
+                .map((item) => item.trim())
+                .filter((item) => item.length > 0);
         }
         return [];
     }
@@ -52,11 +55,12 @@ let CourseService = class CourseService {
                     email: true,
                 },
             });
-            if (dto.facilitator && !staffFacilitator.some((user) => user.id === dto.facilitator)) {
+            if (dto.facilitator &&
+                !staffFacilitator.some((user) => user.id === dto.facilitator)) {
                 throw new common_1.BadRequestException('Invalid facilitator ID');
             }
             const hasTopics = dto.topics && dto.topics.length > 0;
-            const status = hasTopics ? dto.status ?? `DRAFT` : `DRAFT`;
+            const status = hasTopics ? (dto.status ?? `DRAFT`) : `DRAFT`;
             if (hasTopics) {
                 dto.topics.forEach((topic, index) => {
                     if (!topic.Title || typeof topic.Description !== 'string') {
@@ -140,8 +144,8 @@ let CourseService = class CourseService {
             return {
                 courses: {
                     ...createdCourse,
-                    facilitator: facilitatorDetails
-                }
+                    facilitator: facilitatorDetails,
+                },
             };
         }
         catch (error) {
@@ -181,7 +185,7 @@ let CourseService = class CourseService {
     async publishCourse(id) {
         const course = await this.prisma.course.findUnique({
             where: { id },
-            include: { topics: true }
+            include: { topics: true },
         });
         if (!course.topics || course.topics.length === 0) {
             throw new common_1.HttpException({
@@ -229,22 +233,23 @@ let CourseService = class CourseService {
                 const outline = partialUpdateDto.courseOutline;
                 updateData.courseOutline = Array.isArray(outline)
                     ? outline
-                    : outline.split(',').map(item => item.trim());
+                    : outline.split(',').map((item) => item.trim());
             }
             if ('requirements' in partialUpdateDto) {
                 const reqs = partialUpdateDto.requirements;
                 updateData.requirements = Array.isArray(reqs)
                     ? reqs
-                    : reqs.split(',').map(item => item.trim());
+                    : reqs.split(',').map((item) => item.trim());
             }
             if ('courseObjective' in partialUpdateDto) {
                 const objectives = partialUpdateDto.courseObjective;
                 updateData.courseObjective = Array.isArray(objectives)
                     ? objectives
-                    : objectives.split(',').map(item => item.trim());
+                    : objectives.split(',').map((item) => item.trim());
             }
             if ('facilitator' in partialUpdateDto) {
-                if (partialUpdateDto.facilitator && partialUpdateDto.facilitator.trim() !== '') {
+                if (partialUpdateDto.facilitator &&
+                    partialUpdateDto.facilitator.trim() !== '') {
                     const staffFacilitator = await this.prisma.user.findMany({
                         where: {
                             userGroup: 'Staff',
@@ -279,7 +284,7 @@ let CourseService = class CourseService {
                 data: updateData,
                 include: {
                     topics: true,
-                    quiz: true
+                    quiz: true,
                 },
             });
             return updatedCourse;
@@ -296,7 +301,6 @@ let CourseService = class CourseService {
         try {
             const courses = await this.prisma.course.findMany({
                 include: {
-                    facilitator: true,
                     topics: {
                         include: {
                             Lesson: {
@@ -418,9 +422,9 @@ let CourseService = class CourseService {
                     Course: {
                         select: {
                             Title: true,
-                            Description: true
-                        }
-                    }
+                            Description: true,
+                        },
+                    },
                 },
             });
         }

@@ -1,4 +1,4 @@
-import { CreateCohortModuleDto } from 'src/modules/dto/create-cohortModule.dto';
+import { CreateCohortModuleDto } from '../modules/dto/create-cohortModule.dto';
 export declare class CohortService {
     getAllCohorts(): Promise<any>;
     getModuleById(cohortId: string, moduleData: any): Promise<any>;

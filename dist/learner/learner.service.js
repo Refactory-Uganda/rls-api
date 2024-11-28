@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LearnerService = void 0;
 const axios_1 = require("@nestjs/axios");
@@ -17,17 +18,21 @@ let LearnerService = class LearnerService {
         this.httpService = httpService;
     }
     async getAll() {
-        const response = await this.httpService.get('https://rims-api-xufp.onrender.com/#/Accounts/StudentLoginController_login').toPromise();
+        const response = await this.httpService
+            .get('https://rims-api-xufp.onrender.com/#/Accounts/StudentLoginController_login')
+            .toPromise();
         return response.data;
     }
     async getLearner(learnerId) {
-        const response = await this.httpService.get(`https://rims-api-xufp.onrender.com/#/Accounts/StudentLoginController_login/${learnerId}`).toPromise();
+        const response = await this.httpService
+            .get(`https://rims-api-xufp.onrender.com/#/Accounts/StudentLoginController_login/${learnerId}`)
+            .toPromise();
         return response.data;
     }
 };
 exports.LearnerService = LearnerService;
 exports.LearnerService = LearnerService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [axios_1.HttpService])
+    __metadata("design:paramtypes", [typeof (_a = typeof axios_1.HttpService !== "undefined" && axios_1.HttpService) === "function" ? _a : Object])
 ], LearnerService);
 //# sourceMappingURL=learner.service.js.map

@@ -34,7 +34,7 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)({
         description: 'The description of the topic',
-        example: 'This topic is an introduction to JavaScript'
+        example: 'This topic is an introduction to JavaScript',
     }),
     __metadata("design:type", String)
 ], CreateTopicDto.prototype, "Description", void 0);

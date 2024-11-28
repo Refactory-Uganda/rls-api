@@ -59,7 +59,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'The content of the lesson',
-        example: 'This lesson is an introduction to JavaScript datatypes....'
+        example: 'This lesson is an introduction to JavaScript datatypes....',
     }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
@@ -67,7 +67,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'The topicId of the lesson',
-        example: '60b3f7c4f2f5f40015'
+        example: '60b3f7c4f2f5f40015',
     }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)

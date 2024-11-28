@@ -37,10 +37,13 @@ let ImageService = class ImageService {
         const filename = `${Date.now()}-${file.originalname.replace(/\s/g, '-')}`;
         const filePath = (0, path_1.join)(this.uploadsPath, filename);
         try {
-            await sharp(file.buffer).resize(800, 600, {
+            await sharp(file.buffer)
+                .resize(800, 600, {
                 fit: 'inside',
-                withoutEnlargement: true
-            }).jpeg({ quality: 80 }).toFile(filePath);
+                withoutEnlargement: true,
+            })
+                .jpeg({ quality: 80 })
+                .toFile(filePath);
             return filename;
         }
         catch (error) {

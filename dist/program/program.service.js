@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProgramService = void 0;
 const common_1 = require("@nestjs/common");
@@ -20,7 +21,9 @@ let ProgramService = class ProgramService {
     async createProgram(createProgramDto) {
         const url = `${this.baseUrl}/programs`;
         try {
-            const response = await this.httpService.post(url, createProgramDto).toPromise();
+            const response = await this.httpService
+                .post(url, createProgramDto)
+                .toPromise();
             return response.data;
         }
         catch (error) {
@@ -53,7 +56,9 @@ let ProgramService = class ProgramService {
     async updateProgram(id, updateProgramDto) {
         const url = `${this.baseUrl}/programs/${id}`;
         try {
-            const response = await this.httpService.patch(url, updateProgramDto).toPromise();
+            const response = await this.httpService
+                .patch(url, updateProgramDto)
+                .toPromise();
             return response.data;
         }
         catch (error) {
@@ -64,7 +69,9 @@ let ProgramService = class ProgramService {
     async updateAllProgramData(id, updateProgramDto) {
         const url = `${this.baseUrl}/programs/${id}`;
         try {
-            const response = await this.httpService.put(url, updateProgramDto).toPromise();
+            const response = await this.httpService
+                .put(url, updateProgramDto)
+                .toPromise();
             return response.data;
         }
         catch (error) {
@@ -135,6 +142,6 @@ let ProgramService = class ProgramService {
 exports.ProgramService = ProgramService;
 exports.ProgramService = ProgramService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [axios_1.HttpService])
+    __metadata("design:paramtypes", [typeof (_a = typeof axios_1.HttpService !== "undefined" && axios_1.HttpService) === "function" ? _a : Object])
 ], ProgramService);
 //# sourceMappingURL=program.service.js.map

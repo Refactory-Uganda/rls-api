@@ -1,4 +1,4 @@
-import { slideContentType } from "@prisma/client";
+import { slideContentType } from '@prisma/client';
 export declare class CreateSlideDto {
     title: string;
     order: number;

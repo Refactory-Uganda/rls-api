@@ -10,24 +10,30 @@ exports.MailModule = void 0;
 const common_1 = require("@nestjs/common");
 const mailer_1 = require("@nestjs-modules/mailer");
 const mail_service_1 = require("./mail.service");
+const config_1 = require("@nestjs/config");
 let MailModule = class MailModule {
 };
 exports.MailModule = MailModule;
 exports.MailModule = MailModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            mailer_1.MailerModule.forRoot({
-                transport: {
-                    host: 'smtp.mailtrap.io',
-                    port: 2525,
-                    auth: {
-                        user: 'your_user',
-                        pass: 'your_password',
+            mailer_1.MailerModule.forRootAsync({
+                useFactory: async (config) => ({
+                    transport: {
+                        host: config.get('MAIL_HOST'),
+                        port: parseInt(config.get('MAIL_PORT')),
+                        secure: false,
+                        auth: {
+                            user: config.get('MAIL_USER'),
+                            pass: config.get('MAIL_PASSWORD'),
+                        },
+                        logger: false,
                     },
-                },
-                defaults: {
-                    from: '"No Reply" <no-reply@example.com>',
-                },
+                    defaults: {
+                        from: '"No Reply" <noreply@example.com>',
+                    },
+                }),
+                inject: [config_1.ConfigService],
             }),
         ],
         providers: [mail_service_1.MailService],

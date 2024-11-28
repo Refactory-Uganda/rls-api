@@ -28,8 +28,9 @@ __decorate([
 ], SubmitQuizDto.prototype, "attemptId", void 0);
 __decorate([
     (0, class_validator_1.ValidateNested)({ each: true }),
-    (0, swagger_1.ApiProperty)({ type: [submitAnswer_dto_1.SubmitAnswerDto],
-        description: 'The topics of the course'
+    (0, swagger_1.ApiProperty)({
+        type: [submitAnswer_dto_1.SubmitAnswerDto],
+        description: 'The topics of the course',
     }),
     (0, class_validator_1.ArrayNotEmpty)(),
     __metadata("design:type", Array)

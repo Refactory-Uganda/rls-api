@@ -1,5 +1,4 @@
-import { CreateTextContentDto } from "./create-text-content.dto";
-declare const UpdateTextContentDto_base: import("@nestjs/common").Type<Partial<CreateTextContentDto>>;
+declare const UpdateTextContentDto_base: any;
 export declare class UpdateTextContentDto extends UpdateTextContentDto_base {
 }
 export {};

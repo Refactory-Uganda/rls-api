@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a, _b, _c, _d;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TopicController = void 0;
 const common_1 = require("@nestjs/common");
@@ -53,16 +54,16 @@ __decorate([
         storage: (0, multer_1.diskStorage)({
             destination: './uploads/topics',
             filename: (req, file, callback) => {
-                const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
                 callback(null, `${uniqueName}${file.originalname}`);
-            }
+            },
         }),
         fileFilter: (req, file, callback) => {
             if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
                 return callback(new Error('Only image files are allowed!'), false);
             }
             callback(null, true);
-        }
+        },
     })),
     (0, swagger_1.ApiOperation)({ summary: 'Create Topic' }),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),
@@ -75,13 +76,13 @@ __decorate([
                     type: 'string',
                     minLength: 3,
                     maxLength: 100,
-                    description: 'Title of the Topic'
+                    description: 'Title of the Topic',
                 },
                 Description: {
                     type: 'string',
                     minLength: 10,
                     maxLength: 500,
-                    description: 'Add a detailed description of the topic'
+                    description: 'Add a detailed description of the topic',
                 },
                 image: {
                     type: 'string',
@@ -90,17 +91,17 @@ __decorate([
                 },
                 courseId: {
                     type: 'string',
-                    description: 'add a Course ID'
-                }
-            }
-        }
+                    description: 'add a Course ID',
+                },
+            },
+        },
     }),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     __param(0, (0, common_1.Param)('course_id')),
     __param(1, (0, common_1.UploadedFile)()),
     __param(2, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object, create_topic_dto_1.CreateTopicDto]),
+    __metadata("design:paramtypes", [String, typeof (_b = typeof Express !== "undefined" && (_a = Express.Multer) !== void 0 && _a.File) === "function" ? _b : Object, create_topic_dto_1.CreateTopicDto]),
     __metadata("design:returntype", Promise)
 ], TopicController.prototype, "create", null);
 __decorate([
@@ -110,16 +111,16 @@ __decorate([
         storage: (0, multer_1.diskStorage)({
             destination: './uploads/topics',
             filename: (req, file, callback) => {
-                const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
                 callback(null, `${uniqueName}${file.originalname}`);
-            }
+            },
         }),
         fileFilter: (req, file, callback) => {
             if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
                 return callback(new Error('Only image files are allowed!'), false);
             }
             callback(null, true);
-        }
+        },
     })),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),
     (0, swagger_1.ApiBody)({
@@ -130,13 +131,13 @@ __decorate([
                     type: 'string',
                     minLength: 3,
                     maxLength: 100,
-                    description: 'Update Title of the Topic'
+                    description: 'Update Title of the Topic',
                 },
                 Description: {
                     type: 'string',
                     minLength: 10,
                     maxLength: 500,
-                    description: 'Update the detailed description of the topic'
+                    description: 'Update the detailed description of the topic',
                 },
                 image: {
                     type: 'string',
@@ -145,16 +146,16 @@ __decorate([
                 },
                 courseId: {
                     type: 'string',
-                    description: 'add a Course ID'
-                }
-            }
-        }
+                    description: 'add a Course ID',
+                },
+            },
+        },
     }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_topic_dto_1.UpdateTopicDto, Object]),
+    __metadata("design:paramtypes", [String, update_topic_dto_1.UpdateTopicDto, typeof (_d = typeof Express !== "undefined" && (_c = Express.Multer) !== void 0 && _c.File) === "function" ? _d : Object]),
     __metadata("design:returntype", Promise)
 ], TopicController.prototype, "patch", null);
 __decorate([

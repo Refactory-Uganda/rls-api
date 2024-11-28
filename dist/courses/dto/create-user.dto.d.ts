@@ -1,4 +1,4 @@
-import { Groups } from "@prisma/client";
+import { Groups } from '@prisma/client';
 export declare class CreateUserDto {
     externalId: string;
     email: string;

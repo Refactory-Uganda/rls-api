@@ -18,7 +18,7 @@ exports.ProgramModule = ProgramModule = __decorate([
     (0, common_1.Module)({
         imports: [axios_1.HttpModule],
         providers: [program_service_1.ProgramService],
-        controllers: [program_controller_1.ProgramController]
+        controllers: [program_controller_1.ProgramController],
     })
 ], ProgramModule);
 //# sourceMappingURL=program.module.js.map

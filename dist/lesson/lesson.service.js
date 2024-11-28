@@ -21,11 +21,11 @@ let LessonService = class LessonService {
             data: {
                 title: createLessonDto.title,
                 topicId: createLessonDto.topicId,
-                text: createLessonDto.text
+                text: createLessonDto.text,
             },
             include: {
-                topic: true
-            }
+                topic: true,
+            },
         });
         return lesson;
     }
@@ -34,7 +34,9 @@ let LessonService = class LessonService {
             const updateData = {
                 title: partialUpdateDto.title,
                 text: partialUpdateDto.text,
-                topic: partialUpdateDto.topicId ? { connect: { id: partialUpdateDto.topicId } } : undefined,
+                topic: partialUpdateDto.topicId
+                    ? { connect: { id: partialUpdateDto.topicId } }
+                    : undefined,
             };
             return await this.prisma.lesson.update({
                 where: { id },
@@ -49,14 +51,15 @@ let LessonService = class LessonService {
     async deleteLesson(id) {
         const lesson = await this.prisma.lesson.delete({
             where: {
-                id
-            }
+                id,
+            },
         });
         return lesson;
     }
     async findAllLessons() {
         return this.prisma.lesson.findMany({
-            include: { quiz: {
+            include: {
+                quiz: {
                     include: {
                         questions: {
                             include: {
@@ -66,7 +69,8 @@ let LessonService = class LessonService {
                         },
                         attempts: true,
                     },
-                } }
+                },
+            },
         });
     }
     async findLessonById(lessonId) {
@@ -85,7 +89,7 @@ let LessonService = class LessonService {
                         },
                         attempts: true,
                     },
-                }
+                },
             },
         });
     }

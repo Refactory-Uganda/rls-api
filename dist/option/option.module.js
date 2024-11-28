@@ -16,7 +16,7 @@ exports.OptionModule = OptionModule;
 exports.OptionModule = OptionModule = __decorate([
     (0, common_1.Module)({
         providers: [option_service_1.OptionService],
-        controllers: [option_controller_1.OptionController]
+        controllers: [option_controller_1.OptionController],
     })
 ], OptionModule);
 //# sourceMappingURL=option.module.js.map

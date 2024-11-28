@@ -12,14 +12,13 @@ const courses_service_1 = require("./courses.service");
 const courses_controller_1 = require("./courses.controller");
 const prisma_service_1 = require("../prisma/prisma.service");
 const images_service_1 = require("./images.service");
-const faculitator_service_1 = require("./faculitator.service");
 let CoursesModule = class CoursesModule {
 };
 exports.CoursesModule = CoursesModule;
 exports.CoursesModule = CoursesModule = __decorate([
     (0, common_1.Module)({
         controllers: [courses_controller_1.CourseController],
-        providers: [courses_service_1.CourseService, prisma_service_1.PrismaService, images_service_1.ImageService, faculitator_service_1.FacilitatorService],
+        providers: [courses_service_1.CourseService, prisma_service_1.PrismaService, images_service_1.ImageService],
     })
 ], CoursesModule);
 //# sourceMappingURL=courses.module.js.map

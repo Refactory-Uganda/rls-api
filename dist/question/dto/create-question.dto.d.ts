@@ -1,4 +1,4 @@
-import { CreateOptionDto } from "src/option/dto/option.dto";
+import { CreateOptionDto } from '../../option/dto/option.dto';
 export declare class CreateQuestionDto {
     text: string;
     answer: string;

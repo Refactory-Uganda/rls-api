@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FacilitatorService = void 0;
 const axios_1 = require("@nestjs/axios");
@@ -17,17 +18,21 @@ let FacilitatorService = class FacilitatorService {
         this.httpService = httpService;
     }
     async getAll() {
-        const response = await this.httpService.get('http://localhost:3001/staff').toPromise();
+        const response = await this.httpService
+            .get('http://localhost:3001/staff')
+            .toPromise();
         return response.data;
     }
     async getFacilitator(facilitatorId) {
-        const response = await this.httpService.get(`http://localhost:3001/staff/${facilitatorId}`).toPromise();
+        const response = await this.httpService
+            .get(`http://localhost:3001/staff/${facilitatorId}`)
+            .toPromise();
         return response.data;
     }
 };
 exports.FacilitatorService = FacilitatorService;
 exports.FacilitatorService = FacilitatorService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [axios_1.HttpService])
+    __metadata("design:paramtypes", [typeof (_a = typeof axios_1.HttpService !== "undefined" && axios_1.HttpService) === "function" ? _a : Object])
 ], FacilitatorService);
 //# sourceMappingURL=facilitator.service.js.map

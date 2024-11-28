@@ -26,10 +26,12 @@ const subheading_module_1 = require("./subheading/subheading.module");
 const quiz_module_1 = require("./quiz/quiz.module");
 const question_module_1 = require("./question/question.module");
 const option_module_1 = require("./option/option.module");
+const app_controller_1 = require("./app.controller");
+const app_service_1 = require("./app.service");
 const authentication_module_1 = require("./authentication/authentication.module");
-const slide_module_1 = require("./slide/slide.module");
-const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
+const serve_static_1 = require("@nestjs/serve-static");
+const slide_module_1 = require("./slide/slide.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -61,8 +63,8 @@ exports.AppModule = AppModule = __decorate([
             authentication_module_1.AuthenticationModule,
             slide_module_1.SlideModule,
         ],
-        controllers: [],
-        providers: [],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuizAttemptDto = void 0;
 const client_1 = require("@prisma/client");
@@ -41,7 +42,7 @@ __decorate([
 ], QuizAttemptDto.prototype, "maxScore", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({}),
-    __metadata("design:type", String)
+    __metadata("design:type", typeof (_a = typeof client_1.AttemptStatus !== "undefined" && client_1.AttemptStatus) === "function" ? _a : Object)
 ], QuizAttemptDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),

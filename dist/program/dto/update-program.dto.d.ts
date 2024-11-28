@@ -1,5 +1,4 @@
-import { CreateProgramDto } from "./create-program.dto";
-declare const UpdateProgramDto_base: import("@nestjs/common").Type<Partial<CreateProgramDto>>;
+declare const UpdateProgramDto_base: any;
 export declare class UpdateProgramDto extends UpdateProgramDto_base {
 }
 export {};

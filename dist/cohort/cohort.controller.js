@@ -47,8 +47,11 @@ let CohortController = class CohortController {
     async createCohortModule(cohortId, createCohortModuleDto) {
         try {
             const newCohortModule = await this.cohortService.createCohortModule(cohortId, createCohortModuleDto);
-            console.log("I am running");
-            return { message: 'Cohort module created successfully', cohort: newCohortModule };
+            console.log('I am running');
+            return {
+                message: 'Cohort module created successfully',
+                cohort: newCohortModule,
+            };
         }
         catch (error) {
             throw new common_1.HttpException(`Error creating cohort module: ${error.message}`, common_1.HttpStatus.BAD_REQUEST);

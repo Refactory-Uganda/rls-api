@@ -6,9 +6,14 @@ export declare class OptionController {
     constructor(optionService: OptionService);
     create(createOptionDto: CreateOptionDto): Promise<{
         id: string;
+<<<<<<< HEAD
         optionText: string;
         iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
         order: number;
+        optionText: string;
+        isCorrect: boolean;
         questionId: string | null;
     }>;
     findAll(): Promise<({
@@ -18,15 +23,20 @@ export declare class OptionController {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            order: number;
             answer: string;
+            order: number;
             explanation: string | null;
         };
     } & {
         id: string;
+<<<<<<< HEAD
         optionText: string;
         iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
         order: number;
+        optionText: string;
+        isCorrect: boolean;
         questionId: string | null;
     })[]>;
     findOne(optionId: string): Promise<{
@@ -36,29 +46,44 @@ export declare class OptionController {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            order: number;
             answer: string;
+            order: number;
             explanation: string | null;
         };
     } & {
         id: string;
+<<<<<<< HEAD
         optionText: string;
         iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
         order: number;
+        optionText: string;
+        isCorrect: boolean;
         questionId: string | null;
     }>;
     patchOption(id: string, partialUpdateDto: Partial<UpdateOptionDto>): Promise<{
         id: string;
+<<<<<<< HEAD
         optionText: string;
         iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
         order: number;
+        optionText: string;
+        isCorrect: boolean;
         questionId: string | null;
     }>;
     remove(id: string): Promise<{
         id: string;
+<<<<<<< HEAD
         optionText: string;
         iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
         order: number;
+        optionText: string;
+        isCorrect: boolean;
         questionId: string | null;
     }>;
 }

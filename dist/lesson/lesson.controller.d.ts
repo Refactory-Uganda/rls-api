@@ -54,9 +54,14 @@ export declare class LessonController {
             questions: ({
                 option: {
                     id: string;
+<<<<<<< HEAD
                     optionText: string;
                     iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                     order: number;
+                    optionText: string;
+                    isCorrect: boolean;
                     questionId: string | null;
                 }[];
                 userAnswers: {
@@ -74,8 +79,8 @@ export declare class LessonController {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                order: number;
                 answer: string;
+                order: number;
                 explanation: string | null;
             })[];
             attempts: {
@@ -112,9 +117,14 @@ export declare class LessonController {
             questions: ({
                 option: {
                     id: string;
+<<<<<<< HEAD
                     optionText: string;
                     iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                     order: number;
+                    optionText: string;
+                    isCorrect: boolean;
                     questionId: string | null;
                 }[];
                 userAnswers: {
@@ -132,8 +142,8 @@ export declare class LessonController {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                order: number;
                 answer: string;
+                order: number;
                 explanation: string | null;
             })[];
             attempts: {

@@ -1,32 +1,13 @@
-import { PrismaService } from '../prisma/prisma.service';
+import { CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ImageService } from './images.service';
-export declare class CourseService {
-    private prisma;
-    private imageService;
-    private transformToArray;
-    constructor(prisma: PrismaService, imageService: ImageService);
-    createCourseDraft(dto: CreateCourseDto): Promise<{
-        courses: {
-            facilitator: any;
-            id: string;
-            status: import(".prisma/client").$Enums.CourseStatus;
-            award: string | null;
-            Title: string;
-            Description: string | null;
-            Duration: string;
-            courseOutline: string[];
-            requirements: string[];
-            assessmentMode: import(".prisma/client").$Enums.AssessmentMode | null;
-            courseObjective: string[];
-            image: string | null;
-            createdAt: Date;
-            facilitatorId: string | null;
-            quizId: string | null;
-        };
-    }>;
-    publishCourse(id: string): Promise<{
+export declare class CourseController {
+    private readonly courseService;
+    private readonly imageService;
+    constructor(courseService: CourseService, imageService: ImageService);
+    uploadImage(file: Express.Multer.File): Promise<string>;
+    deleteCourse(id: string): Promise<{
         id: string;
         status: import(".prisma/client").$Enums.CourseStatus;
         award: string | null;
@@ -42,23 +23,7 @@ export declare class CourseService {
         facilitatorId: string | null;
         quizId: string | null;
     }>;
-    draftCourse(id: string): Promise<{
-        id: string;
-        status: import(".prisma/client").$Enums.CourseStatus;
-        award: string | null;
-        Title: string;
-        Description: string | null;
-        Duration: string;
-        courseOutline: string[];
-        requirements: string[];
-        assessmentMode: import(".prisma/client").$Enums.AssessmentMode | null;
-        courseObjective: string[];
-        image: string | null;
-        createdAt: Date;
-        facilitatorId: string | null;
-        quizId: string | null;
-    }>;
-    patchCourse(id: string, partialUpdateDto: UpdateCourseDto): Promise<{
+    update(id: string, updateCourseDto: UpdateCourseDto, image?: Express.Multer.File): Promise<{
         quiz: {
             description: string | null;
             id: string;
@@ -92,34 +57,39 @@ export declare class CourseService {
         facilitatorId: string | null;
         quizId: string | null;
     }>;
+    staffFacilitator(): Promise<{
+        id: string;
+        email: string;
+        firstName: string;
+        lastName: string;
+    }[]>;
+    getStaffById(staffId: string): Promise<{
+        id: string;
+        email: string;
+        firstName: string;
+        lastName: string;
+        Course: {
+            Title: string;
+            Description: string;
+        }[];
+    }>;
     findAll(): Promise<{
         courses: ({
             quiz: {
                 questions: ({
                     option: {
                         id: string;
-<<<<<<< HEAD
-                        optionText: string;
-                        iscorrect: boolean;
-                        order: number;
-=======
                         order: number;
                         optionText: string;
                         isCorrect: boolean;
->>>>>>> 8c70dbe8 (fixed options)
                         questionId: string | null;
                     }[];
                     userAnswers: {
                         id: string;
                         createdAt: Date;
                         updatedAt: Date;
-<<<<<<< HEAD
-                        questionId: string;
-                        isCorrect: boolean;
-=======
                         isCorrect: boolean;
                         questionId: string;
->>>>>>> 8c70dbe8 (fixed options)
                         quizAttemptId: string;
                         selectedOptionId: string;
                     }[];
@@ -129,13 +99,8 @@ export declare class CourseService {
                     createdAt: Date;
                     updatedAt: Date;
                     quizId: string;
-<<<<<<< HEAD
-                    order: number;
-                    answer: string;
-=======
                     answer: string;
                     order: number;
->>>>>>> 8c70dbe8 (fixed options)
                     explanation: string | null;
                 })[];
                 attempts: {
@@ -164,28 +129,17 @@ export declare class CourseService {
                         questions: ({
                             option: {
                                 id: string;
-<<<<<<< HEAD
-                                optionText: string;
-                                iscorrect: boolean;
-                                order: number;
-=======
                                 order: number;
                                 optionText: string;
                                 isCorrect: boolean;
->>>>>>> 8c70dbe8 (fixed options)
                                 questionId: string | null;
                             }[];
                             userAnswers: {
                                 id: string;
                                 createdAt: Date;
                                 updatedAt: Date;
-<<<<<<< HEAD
-                                questionId: string;
-                                isCorrect: boolean;
-=======
                                 isCorrect: boolean;
                                 questionId: string;
->>>>>>> 8c70dbe8 (fixed options)
                                 quizAttemptId: string;
                                 selectedOptionId: string;
                             }[];
@@ -195,13 +149,8 @@ export declare class CourseService {
                             createdAt: Date;
                             updatedAt: Date;
                             quizId: string;
-<<<<<<< HEAD
-                            order: number;
-                            answer: string;
-=======
                             answer: string;
                             order: number;
->>>>>>> 8c70dbe8 (fixed options)
                             explanation: string | null;
                         })[];
                         attempts: {
@@ -263,21 +212,17 @@ export declare class CourseService {
             questions: ({
                 option: {
                     id: string;
-                    optionText: string;
-<<<<<<< HEAD
-                    iscorrect: boolean;
                     order: number;
-=======
+                    optionText: string;
                     isCorrect: boolean;
->>>>>>> 8c70dbe8 (fixed options)
                     questionId: string | null;
                 }[];
                 userAnswers: {
                     id: string;
                     createdAt: Date;
                     updatedAt: Date;
-                    questionId: string;
                     isCorrect: boolean;
+                    questionId: string;
                     quizAttemptId: string;
                     selectedOptionId: string;
                 }[];
@@ -287,12 +232,8 @@ export declare class CourseService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-<<<<<<< HEAD
-=======
                 answer: string;
->>>>>>> 8c70dbe8 (fixed options)
                 order: number;
-                answer: string;
                 explanation: string | null;
             })[];
             attempts: {
@@ -321,28 +262,17 @@ export declare class CourseService {
                     questions: ({
                         option: {
                             id: string;
-<<<<<<< HEAD
-                            optionText: string;
-                            iscorrect: boolean;
-                            order: number;
-=======
                             order: number;
                             optionText: string;
                             isCorrect: boolean;
->>>>>>> 8c70dbe8 (fixed options)
                             questionId: string | null;
                         }[];
                         userAnswers: {
                             id: string;
                             createdAt: Date;
                             updatedAt: Date;
-<<<<<<< HEAD
-                            questionId: string;
-                            isCorrect: boolean;
-=======
                             isCorrect: boolean;
                             questionId: string;
->>>>>>> 8c70dbe8 (fixed options)
                             quizAttemptId: string;
                             selectedOptionId: string;
                         }[];
@@ -352,13 +282,8 @@ export declare class CourseService {
                         createdAt: Date;
                         updatedAt: Date;
                         quizId: string;
-<<<<<<< HEAD
-                        order: number;
-                        answer: string;
-=======
                         answer: string;
                         order: number;
->>>>>>> 8c70dbe8 (fixed options)
                         explanation: string | null;
                     })[];
                     attempts: {
@@ -414,7 +339,26 @@ export declare class CourseService {
         facilitatorId: string | null;
         quizId: string | null;
     }>;
-    deleteCourse(id: string): Promise<{
+    createCourseP_D(createCourseDto: CreateCourseDto, image?: Express.Multer.File): Promise<{
+        courses: {
+            facilitator: any;
+            id: string;
+            status: import(".prisma/client").$Enums.CourseStatus;
+            award: string | null;
+            Title: string;
+            Description: string | null;
+            Duration: string;
+            courseOutline: string[];
+            requirements: string[];
+            assessmentMode: import(".prisma/client").$Enums.AssessmentMode | null;
+            courseObjective: string[];
+            image: string | null;
+            createdAt: Date;
+            facilitatorId: string | null;
+            quizId: string | null;
+        };
+    }>;
+    publishCourse(id: string): Promise<{
         id: string;
         status: import(".prisma/client").$Enums.CourseStatus;
         award: string | null;
@@ -430,20 +374,20 @@ export declare class CourseService {
         facilitatorId: string | null;
         quizId: string | null;
     }>;
-    staffFacilitator(): Promise<{
+    draftCourse(id: string): Promise<{
         id: string;
-        email: string;
-        firstName: string;
-        lastName: string;
-    }[]>;
-    getStaffById(staffId: string): Promise<{
-        id: string;
-        email: string;
-        firstName: string;
-        lastName: string;
-        Course: {
-            Title: string;
-            Description: string;
-        }[];
+        status: import(".prisma/client").$Enums.CourseStatus;
+        award: string | null;
+        Title: string;
+        Description: string | null;
+        Duration: string;
+        courseOutline: string[];
+        requirements: string[];
+        assessmentMode: import(".prisma/client").$Enums.AssessmentMode | null;
+        courseObjective: string[];
+        image: string | null;
+        createdAt: Date;
+        facilitatorId: string | null;
+        quizId: string | null;
     }>;
 }

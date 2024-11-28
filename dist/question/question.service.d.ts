@@ -8,9 +8,14 @@ export declare class QuestionService {
         Question: {
             option: {
                 id: string;
+<<<<<<< HEAD
                 optionText: string;
                 iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                 order: number;
+                optionText: string;
+                isCorrect: boolean;
                 questionId: string | null;
             }[];
         } & {
@@ -19,17 +24,22 @@ export declare class QuestionService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            order: number;
             answer: string;
+            order: number;
             explanation: string | null;
         };
     }>;
     patchQuestion(id: string, updateQuestionDto: UpdateQuestionDto): Promise<{
         option: {
             id: string;
+<<<<<<< HEAD
             optionText: string;
             iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
             order: number;
+            optionText: string;
+            isCorrect: boolean;
             questionId: string | null;
         }[];
     } & {
@@ -38,8 +48,8 @@ export declare class QuestionService {
         createdAt: Date;
         updatedAt: Date;
         quizId: string;
-        order: number;
         answer: string;
+        order: number;
         explanation: string | null;
     }>;
     remove(id: string): Promise<{
@@ -48,16 +58,21 @@ export declare class QuestionService {
         createdAt: Date;
         updatedAt: Date;
         quizId: string;
-        order: number;
         answer: string;
+        order: number;
         explanation: string | null;
     }>;
     findQuestions(): Promise<({
         option: {
             id: string;
+<<<<<<< HEAD
             optionText: string;
             iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
             order: number;
+            optionText: string;
+            isCorrect: boolean;
             questionId: string | null;
         }[];
     } & {
@@ -66,16 +81,21 @@ export declare class QuestionService {
         createdAt: Date;
         updatedAt: Date;
         quizId: string;
-        order: number;
         answer: string;
+        order: number;
         explanation: string | null;
     })[]>;
     findQuestionById(id: string): Promise<{
         option: {
             id: string;
+<<<<<<< HEAD
             optionText: string;
             iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
             order: number;
+            optionText: string;
+            isCorrect: boolean;
             questionId: string | null;
         }[];
     } & {
@@ -84,8 +104,8 @@ export declare class QuestionService {
         createdAt: Date;
         updatedAt: Date;
         quizId: string;
-        order: number;
         answer: string;
+        order: number;
         explanation: string | null;
     }>;
 }

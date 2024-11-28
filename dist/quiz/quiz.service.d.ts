@@ -23,8 +23,8 @@ export declare class QuizService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            order: number;
             answer: string;
+            order: number;
             explanation: string | null;
         }[];
     } & {
@@ -49,9 +49,14 @@ export declare class QuizService {
         questions: ({
             option: {
                 id: string;
+<<<<<<< HEAD
                 optionText: string;
                 iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                 order: number;
+                optionText: string;
+                isCorrect: boolean;
                 questionId: string | null;
             }[];
         } & {
@@ -60,8 +65,8 @@ export declare class QuizService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            order: number;
             answer: string;
+            order: number;
             explanation: string | null;
         })[];
     } & {
@@ -77,9 +82,14 @@ export declare class QuizService {
         questions: ({
             option: {
                 id: string;
+<<<<<<< HEAD
                 optionText: string;
                 iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                 order: number;
+                optionText: string;
+                isCorrect: boolean;
                 questionId: string | null;
             }[];
         } & {
@@ -88,8 +98,8 @@ export declare class QuizService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            order: number;
             answer: string;
+            order: number;
             explanation: string | null;
         })[];
     } & {
@@ -107,9 +117,14 @@ export declare class QuizService {
             questions: ({
                 option: {
                     id: string;
+<<<<<<< HEAD
                     optionText: string;
                     iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                     order: number;
+                    optionText: string;
+                    isCorrect: boolean;
                     questionId: string | null;
                 }[];
             } & {
@@ -118,8 +133,8 @@ export declare class QuizService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                order: number;
                 answer: string;
+                order: number;
                 explanation: string | null;
             })[];
         } & {
@@ -159,15 +174,20 @@ export declare class QuizService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                order: number;
                 answer: string;
+                order: number;
                 explanation: string | null;
             };
             selectedOption: {
                 id: string;
+<<<<<<< HEAD
                 optionText: string;
                 iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                 order: number;
+                optionText: string;
+                isCorrect: boolean;
                 questionId: string | null;
             };
         } & {
@@ -207,9 +227,14 @@ export declare class QuizService {
             question: {
                 option: {
                     id: string;
+<<<<<<< HEAD
                     optionText: string;
                     iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                     order: number;
+                    optionText: string;
+                    isCorrect: boolean;
                     questionId: string | null;
                 }[];
             } & {
@@ -218,15 +243,20 @@ export declare class QuizService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                order: number;
                 answer: string;
+                order: number;
                 explanation: string | null;
             };
             selectedOption: {
                 id: string;
+<<<<<<< HEAD
                 optionText: string;
                 iscorrect: boolean;
+=======
+>>>>>>> 8c70dbe8 (fixed options)
                 order: number;
+                optionText: string;
+                isCorrect: boolean;
                 questionId: string | null;
             };
         } & {

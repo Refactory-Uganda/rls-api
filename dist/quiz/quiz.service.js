@@ -160,7 +160,11 @@ let QuizService = class QuizService {
                 quizAttemptId: attemptId,
                 questionId: question.id,
                 selectedOptionId: selectedOption.id,
+<<<<<<< HEAD
                 isCorrect: selectedOption.iscorrect,
+=======
+                isCorrect: selectedOption.isCorrect,
+>>>>>>> 8c70dbe8 (fixed options)
             },
         });
         return userAnswer;
@@ -240,7 +244,11 @@ let QuizService = class QuizService {
                 isCorrect: answer.isCorrect,
                 correctOption: attempt.quiz.questions
                     .find((q) => q.id === answer.questionId)
+<<<<<<< HEAD
                     ?.option.find((opt) => opt.iscorrect)?.optionText,
+=======
+                    ?.option.find((opt) => opt.isCorrect)?.optionText,
+>>>>>>> 8c70dbe8 (fixed options)
             })),
         };
     }

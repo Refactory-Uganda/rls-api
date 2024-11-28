@@ -17,7 +17,7 @@ export class CreateOptionDto {
 
   @IsBoolean()
   @ApiProperty()
-  iscorrect: boolean;
+  isCorrect: boolean;
 
   @IsNumber()
   @ApiProperty()

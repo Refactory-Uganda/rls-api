@@ -26,10 +26,19 @@ RUN npx prisma generate
 # Build the application
 RUN npm run build
 
+# Stage 2: Run the application
+FROM node:20.14.0
+
+WORKDIR /rls-api
+
+# Copy built files from the builder stage
+COPY --from=builder /rls-api /rls-api
+
+# Install production dependencies
+RUN npm install --only=production
+
 # Expose the port from environment variable
 EXPOSE ${PORT}
-
-RUN npm -v && which npm
 
 # Start the application
 CMD ["npm", "run", "start:prod"]

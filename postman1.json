@@ -1,0 +1,127 @@
+{
+    "info": {
+        "name": "Modules Service",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Create Module",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"name\": \"New Module Name\", \"description\": \"Module Description\"}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/modules",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "modules"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get All Modules",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/:courseId/modules",
+                    "host": [
+                        "{{baseUrl}}",
+                        ":courseId"
+                    ],
+                    "path": [
+                        "modules"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get One Module",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/modules/{{courseId}}/{{moduleId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "modules",
+                        "{{courseId}}",
+                        "{{moduleId}}"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete Module",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                    "raw": "{{baseUrl}}/modules/{{courseId}}/{{moduleId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "modules",
+                        "{{courseId}}",
+                        "{{moduleId}}"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Module",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\"name\": \"Updated Module Name\", \"description\": \"Updated Description\"}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/modules/{{courseId}}/{{moduleId}}",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "modules",
+                        "{{courseId}}",
+                        "{{moduleId}}"
+                    ]
+                }
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000"
+        },
+        {
+            "key": "courseId",
+            "value": ""
+        },
+        {
+            "key": "moduleId",
+            "value": ""
+        }
+    ]
+}

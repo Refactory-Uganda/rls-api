@@ -1,0 +1,97 @@
+import { Injectable, HttpException, HttpStatus, ForbiddenException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import axios from 'axios';
+
+@Injectable()
+export class AuthService {
+    private apiUrl = 'https://rims-api-xufp.onrender.com/accounts/staff/login';
+
+    constructor(
+        private jwtService: JwtService,
+    ) { }
+
+    createAccessToken(id: string): { accessToken: string } {
+        return { accessToken: this.jwtService.sign({ id }) };
+    }
+
+    validateToken(token: string) {
+        return this.jwtService.verify(token, {
+            secret : process.env.JWT_SECRET_KEY
+        });
+    }
+    async login(credentials: { email: string; password: string }): Promise<any> {
+        try {
+            console.log('Sending login request with credentials:', credentials);
+
+            const response = await axios.post(this.apiUrl, credentials, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+           // console.log("Data...", JSON.stringify(response.data, null, 2)) // For debug...
+            if (!response.data || !response.data.tokens) {
+                throw new HttpException('Login failed: invalid response from API', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            const { user } = response.data;
+            const access_token = this.createAccessToken(user.id)
+
+            return {
+                id: user.id,
+                access_token: access_token.accessToken
+            };
+
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error('Login failed:', error.response?.data || error.message);
+                throw new HttpException(
+                    `Login failed: ${error.response?.data || error.message}`,
+                    error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR
+                );
+            } else {
+                console.error('Login failed:', error.message);
+                throw new HttpException(`Login failed: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    async forgotPassword(email: string): Promise<any> {
+      try {
+        console.log(`Sending forgot password request for email: ${email}`);
+  
+        const response = await axios.post('https://rims-api-xufp.onrender.com/auth/forgot-password', {
+          email: email.trim(),
+        });
+  
+        console.log('Response from external API:', response.data);
+        return response.data;
+  
+      } catch (error) {
+        console.error('Error sending forgot password request:', error.response?.data || error.message);
+        throw new ForbiddenException('Unable to send password reset link');
+      }
+    }
+  
+    async resetPassword(token: string, newPassword: string): Promise<any> {
+      try {
+        console.log('Resetting password with token:', token);
+        console.log('New password:', newPassword);
+  
+        const response = await axios.post('https://rims-api-xufp.onrender.com/auth/password-reset', {
+          token,
+          password: newPassword,
+        });
+  
+        console.log('Response from external reset password API:', response.data);
+        return response.data;
+  
+      } catch (error) {
+        console.error('Reset Password Error:', error.response?.data || error.message);
+        throw new ForbiddenException('Unable to reset password');
+      }
+    }
+  }
+ 
+
+
+
+
+

@@ -16,12 +16,9 @@ import { LessonModule } from './lesson/lesson.module';
 import { QuizModule } from './quiz/quiz.module';
 import { QuestionModule } from './question/question.module';
 import { OptionModule } from './option/option.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { AssignmentModule } from './assignment/assignment.module';
 
 @Module({
@@ -47,10 +44,9 @@ import { AssignmentModule } from './assignment/assignment.module';
     QuestionModule,
     OptionModule,
     AuthenticationModule,
-    SlideModule,
     AssignmentModule, 
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

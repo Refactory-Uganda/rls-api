@@ -90,8 +90,8 @@ export declare class LessonController {
                 completedAt: Date | null;
             }[];
         } & {
-            description: string | null;
             id: string;
+            description: string | null;
             title: string;
             createdAt: Date;
             updatedAt: Date;
@@ -148,8 +148,8 @@ export declare class LessonController {
                 completedAt: Date | null;
             }[];
         } & {
-            description: string | null;
             id: string;
+            description: string | null;
             title: string;
             createdAt: Date;
             updatedAt: Date;

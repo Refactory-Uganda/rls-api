@@ -8,84 +8,84 @@ export declare class QuestionController {
         Question: {
             option: {
                 id: string;
-                order: number;
                 optionText: string;
                 isCorrect: boolean;
+                order: number;
                 questionId: string | null;
             }[];
         } & {
             id: string;
             text: string;
-            answer: string;
-            order: number;
-            explanation: string | null;
-            quizId: string;
             createdAt: Date;
             updatedAt: Date;
+            quizId: string;
+            order: number;
+            answer: string;
+            explanation: string | null;
         };
     }>;
     patch(id: string, partialUpdateDto: Partial<UpdateQuestionDto>): Promise<{
         option: {
             id: string;
-            order: number;
             optionText: string;
             isCorrect: boolean;
+            order: number;
             questionId: string | null;
         }[];
     } & {
         id: string;
         text: string;
-        answer: string;
-        order: number;
-        explanation: string | null;
-        quizId: string;
         createdAt: Date;
         updatedAt: Date;
+        quizId: string;
+        order: number;
+        answer: string;
+        explanation: string | null;
     }>;
     remove(id: string): Promise<{
         id: string;
         text: string;
-        answer: string;
-        order: number;
-        explanation: string | null;
-        quizId: string;
         createdAt: Date;
         updatedAt: Date;
+        quizId: string;
+        order: number;
+        answer: string;
+        explanation: string | null;
     }>;
     findAll(): Promise<({
         option: {
             id: string;
-            order: number;
             optionText: string;
             isCorrect: boolean;
+            order: number;
             questionId: string | null;
         }[];
     } & {
         id: string;
         text: string;
-        answer: string;
-        order: number;
-        explanation: string | null;
-        quizId: string;
         createdAt: Date;
         updatedAt: Date;
+        quizId: string;
+        order: number;
+        answer: string;
+        explanation: string | null;
     })[]>;
     findOne(question_id: string): Promise<{
         option: {
             id: string;
-            order: number;
             optionText: string;
             isCorrect: boolean;
+            order: number;
             questionId: string | null;
         }[];
     } & {
         id: string;
         text: string;
-        answer: string;
-        order: number;
-        explanation: string | null;
-        quizId: string;
         createdAt: Date;
         updatedAt: Date;
+        quizId: string;
+        order: number;
+        answer: string;
+        explanation: string | null;
     }>;
 }

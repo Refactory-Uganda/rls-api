@@ -20,14 +20,9 @@ const program_module_1 = require("./program/program.module");
 const courses_module_1 = require("./courses/courses.module");
 const topic_module_1 = require("./topic/topic.module");
 const lesson_module_1 = require("./lesson/lesson.module");
-const textcontent_module_1 = require("./textcontent/textcontent.module");
-const textnotes_module_1 = require("./textnotes/textnotes.module");
-const subheading_module_1 = require("./subheading/subheading.module");
 const quiz_module_1 = require("./quiz/quiz.module");
 const question_module_1 = require("./question/question.module");
 const option_module_1 = require("./option/option.module");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
 const authentication_module_1 = require("./authentication/authentication.module");
 const path_1 = require("path");
 const serve_static_1 = require("@nestjs/serve-static");
@@ -54,17 +49,14 @@ exports.AppModule = AppModule = __decorate([
             courses_module_1.CoursesModule,
             topic_module_1.TopicsModule,
             lesson_module_1.LessonModule,
-            textcontent_module_1.TextContentModule,
-            textnotes_module_1.TextnotesModule,
-            subheading_module_1.SubheadingModule,
             quiz_module_1.QuizModule,
             question_module_1.QuestionModule,
             option_module_1.OptionModule,
             authentication_module_1.AuthenticationModule,
             slide_module_1.SlideModule,
         ],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        controllers: [],
+        providers: [],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

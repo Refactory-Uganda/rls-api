@@ -60,8 +60,8 @@ export declare class CourseService {
     }>;
     patchCourse(id: string, partialUpdateDto: UpdateCourseDto): Promise<{
         quiz: {
-            description: string | null;
             id: string;
+            description: string | null;
             title: string;
             createdAt: Date;
             updatedAt: Date;
@@ -134,8 +134,8 @@ export declare class CourseService {
                     completedAt: Date | null;
                 }[];
             } & {
-                description: string | null;
                 id: string;
+                description: string | null;
                 title: string;
                 createdAt: Date;
                 updatedAt: Date;
@@ -184,8 +184,8 @@ export declare class CourseService {
                             completedAt: Date | null;
                         }[];
                     } & {
-                        description: string | null;
                         id: string;
+                        description: string | null;
                         title: string;
                         createdAt: Date;
                         updatedAt: Date;
@@ -267,8 +267,8 @@ export declare class CourseService {
                 completedAt: Date | null;
             }[];
         } & {
-            description: string | null;
             id: string;
+            description: string | null;
             title: string;
             createdAt: Date;
             updatedAt: Date;
@@ -317,8 +317,8 @@ export declare class CourseService {
                         completedAt: Date | null;
                     }[];
                 } & {
-                    description: string | null;
                     id: string;
+                    description: string | null;
                     title: string;
                     createdAt: Date;
                     updatedAt: Date;

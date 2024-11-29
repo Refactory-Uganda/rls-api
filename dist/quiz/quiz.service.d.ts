@@ -8,8 +8,8 @@ export declare class QuizService {
     private prisma;
     constructor(prisma: PrismaService);
     create(createQuizDto: CreateQuizDto): Promise<{
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -28,8 +28,8 @@ export declare class QuizService {
             explanation: string | null;
         }[];
     } & {
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -37,8 +37,8 @@ export declare class QuizService {
         courseId: string | null;
     }>;
     remove(id: string): Promise<{
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -65,8 +65,8 @@ export declare class QuizService {
             explanation: string | null;
         })[];
     } & {
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -93,8 +93,8 @@ export declare class QuizService {
             explanation: string | null;
         })[];
     } & {
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -123,8 +123,8 @@ export declare class QuizService {
                 explanation: string | null;
             })[];
         } & {
-            description: string | null;
             id: string;
+            description: string | null;
             title: string;
             createdAt: Date;
             updatedAt: Date;

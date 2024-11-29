@@ -2,7 +2,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TopicService } from './topic.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { NotFoundException } from '@nestjs/common';
 import { Topic } from '@prisma/client';
 
 describe('TopicsService', () => {

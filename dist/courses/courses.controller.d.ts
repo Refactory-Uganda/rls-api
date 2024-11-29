@@ -25,8 +25,8 @@ export declare class CourseController {
     }>;
     update(id: string, updateCourseDto: UpdateCourseDto, image?: Express.Multer.File): Promise<{
         quiz: {
-            description: string | null;
             id: string;
+            description: string | null;
             title: string;
             createdAt: Date;
             updatedAt: Date;
@@ -115,8 +115,8 @@ export declare class CourseController {
                     completedAt: Date | null;
                 }[];
             } & {
-                description: string | null;
                 id: string;
+                description: string | null;
                 title: string;
                 createdAt: Date;
                 updatedAt: Date;
@@ -165,8 +165,8 @@ export declare class CourseController {
                             completedAt: Date | null;
                         }[];
                     } & {
-                        description: string | null;
                         id: string;
+                        description: string | null;
                         title: string;
                         createdAt: Date;
                         updatedAt: Date;
@@ -248,8 +248,8 @@ export declare class CourseController {
                 completedAt: Date | null;
             }[];
         } & {
-            description: string | null;
             id: string;
+            description: string | null;
             title: string;
             createdAt: Date;
             updatedAt: Date;
@@ -298,8 +298,8 @@ export declare class CourseController {
                         completedAt: Date | null;
                     }[];
                 } & {
-                    description: string | null;
                     id: string;
+                    description: string | null;
                     title: string;
                     createdAt: Date;
                     updatedAt: Date;

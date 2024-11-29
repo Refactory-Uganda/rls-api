@@ -8,8 +8,8 @@ export declare class QuizController {
     private readonly quizService;
     constructor(quizService: QuizService);
     create(createQuizDto: CreateQuizDto): Promise<{
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -28,8 +28,8 @@ export declare class QuizController {
             explanation: string | null;
         }[];
     } & {
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -37,8 +37,8 @@ export declare class QuizController {
         courseId: string | null;
     }>;
     remove(id: string): Promise<{
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -46,8 +46,8 @@ export declare class QuizController {
         courseId: string | null;
     }>;
     findQuizAndQuestions(quizId: string): Promise<{
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -74,8 +74,8 @@ export declare class QuizController {
             explanation: string | null;
         })[];
     } & {
-        description: string | null;
         id: string;
+        description: string | null;
         title: string;
         createdAt: Date;
         updatedAt: Date;
@@ -103,8 +103,8 @@ export declare class QuizController {
                 explanation: string | null;
             })[];
         } & {
-            description: string | null;
             id: string;
+            description: string | null;
             title: string;
             createdAt: Date;
             updatedAt: Date;

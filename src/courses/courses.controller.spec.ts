@@ -4,7 +4,11 @@ import { CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { Course } from '@prisma/client';
-import { mockCourseResponse, mockCreateCourseDto, mockUpdateCourseDto } from './mock-data';
+import {
+  mockCourseResponse,
+  mockCreateCourseDto,
+  mockUpdateCourseDto,
+} from './mock-data';
 
 describe('CoursesController', () => {
   let courseController: CourseController;
@@ -35,26 +39,32 @@ describe('CoursesController', () => {
     it('should create a course draft successfully', async () => {
       const createCourseDto: CreateCourseDto = {
         ...mockCreateCourseDto,
-        topics: [], 
+        topics: [],
       };
 
       // Mock the service method
-      jest.spyOn(courseService, 'createCourseDraft').mockResolvedValue(mockCourseResponse as Course);
+      jest
+        .spyOn(courseService, 'createCourseDraft')
+        .mockResolvedValue(mockCourseResponse as Course);
 
       const result = await courseController.createCourseDraft(createCourseDto);
 
       expect(result).toEqual(mockCourseResponse);
-      expect(courseService.createCourseDraft).toHaveBeenCalledWith(createCourseDto);
+      expect(courseService.createCourseDraft).toHaveBeenCalledWith(
+        createCourseDto,
+      );
       expect(courseService.createCourseDraft).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('findAll', () => {
     it('should return an array of courses', async () => {
-      jest.spyOn(courseService, 'findAll').mockResolvedValue([{ 
-        ...mockCourseResponse, 
-        topics: [] // Add the topics property here
-      }]);
+      jest.spyOn(courseService, 'findAll').mockResolvedValue([
+        {
+          ...mockCourseResponse,
+          topics: [], // Add the topics property here
+        },
+      ]);
 
       const result = await courseController.findAll();
 
@@ -69,7 +79,7 @@ describe('CoursesController', () => {
 
       jest.spyOn(courseService, 'findOne').mockResolvedValue({
         ...mockCourseResponse,
-        topics: [] // Add the topics property here
+        topics: [], // Add the topics property here
       });
 
       const result = await courseController.findOne(courseId);
@@ -85,12 +95,17 @@ describe('CoursesController', () => {
       const courseId = '60c72b2f9b1d4e3a4c8b4567';
       const updateCourseDto: UpdateCourseDto = mockUpdateCourseDto;
 
-      jest.spyOn(courseService, 'updateCourse').mockResolvedValue(mockCourseResponse);
+      jest
+        .spyOn(courseService, 'updateCourse')
+        .mockResolvedValue(mockCourseResponse);
 
       const result = await courseController.update(courseId, updateCourseDto);
 
       expect(result).toEqual(mockCourseResponse);
-      expect(courseService.updateCourse).toHaveBeenCalledWith(courseId, updateCourseDto);
+      expect(courseService.updateCourse).toHaveBeenCalledWith(
+        courseId,
+        updateCourseDto,
+      );
       expect(courseService.updateCourse).toHaveBeenCalledTimes(1);
     });
   });
@@ -99,7 +114,9 @@ describe('CoursesController', () => {
     it('should delete a course by id', async () => {
       const courseId = '60c72b2f9b1d4e3a4c8b4567';
 
-      jest.spyOn(courseService, 'deleteCourse').mockResolvedValue(mockCourseResponse);
+      jest
+        .spyOn(courseService, 'deleteCourse')
+        .mockResolvedValue(mockCourseResponse);
 
       const result = await courseController.deleteCourse(courseId);
 

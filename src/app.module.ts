@@ -13,9 +13,6 @@ import { ProgramModule } from './program/program.module';
 import { CoursesModule } from './courses/courses.module';
 import { TopicsModule } from './topic/topic.module';
 import { LessonModule } from './lesson/lesson.module';
-import { TextContentModule } from './textcontent/textcontent.module'; // Corrected from TextcontentModule to TextContentModule
-import { TextnotesModule } from './textnotes/textnotes.module';
-import { SubheadingModule } from './subheading/subheading.module';
 import { QuizModule } from './quiz/quiz.module';
 import { QuestionModule } from './question/question.module';
 import { OptionModule } from './option/option.module';
@@ -23,6 +20,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { SlideModule } from './slide/slide.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AssignmentModule } from './assignment/assignment.module';
 
 @Module({
   imports: [
@@ -43,14 +41,12 @@ import { join } from 'path';
     CoursesModule,
     TopicsModule,
     LessonModule,
-    TextContentModule, // Corrected from TextcontentModule to TextContentModule
-    TextnotesModule,
-    SubheadingModule,
     QuizModule,
     QuestionModule,
     OptionModule,
     AuthenticationModule,
-    SlideModule, 
+    SlideModule,
+    AssignmentModule, 
   ],
   controllers: [], 
   providers: [], 

@@ -45,6 +45,7 @@ export class QuestionService {
               create: {
                 optionText: option.optionText,
                 isCorrect: option.isCorrect,
+                isCorrect: option.isCorrect,
                 order: option.order,
               },
               update: {

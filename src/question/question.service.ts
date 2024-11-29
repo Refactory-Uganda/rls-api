@@ -6,7 +6,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
 
-
 @Injectable()
 export class QuestionService {
   constructor(private prisma: PrismaService) {}
@@ -24,12 +23,12 @@ export class QuestionService {
       include: { option: true },
     });
 
-    return {'Question': question}
+    return { Question: question };
   }
 
   async patchQuestion(id: string, updateQuestionDto: UpdateQuestionDto) {
     const { option, ...questionData } = updateQuestionDto;
-  
+
     // Step 1: Update the question
     const updatedQuestion = await this.prisma.question.update({
       where: { id },
@@ -59,11 +58,9 @@ export class QuestionService {
         option: true,
       },
     });
-  
+
     return updatedQuestion;
   }
-  
-  
 
   async remove(id: string) {
     return this.prisma.question.delete({
@@ -75,19 +72,18 @@ export class QuestionService {
     return this.prisma.question.findMany({
       include: {
         option: true,
-      }
+      },
     });
   }
 
-  async findQuestionById(id:string) {
+  async findQuestionById(id: string) {
     return this.prisma.question.findUnique({
       where: {
         id: id,
       },
       include: {
         option: true,
+      },
+    });
   }
-})
-
-}
 }

@@ -1,7 +1,13 @@
 /* eslint-disable prettier/prettier */
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsBoolean, IsNumber, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsBoolean,
+  IsNumber,
+  IsNotEmpty,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateOptionDto {
   @IsString()

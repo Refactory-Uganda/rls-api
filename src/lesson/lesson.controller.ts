@@ -20,7 +20,10 @@ export class LessonController {
 
   @Post(':topic_id')
   @ApiOperation({ summary: 'Create a Lesson' })
-  async createLesson(@Param('topic_id') topic_id:string, @Body() createLessonDto: CreateLessonDto) {
+  async createLesson(
+    @Param('topic_id') topic_id: string,
+    @Body() createLessonDto: CreateLessonDto,
+  ) {
     return this.lessonService.createNew(createLessonDto);
   }
 
@@ -36,7 +39,7 @@ export class LessonController {
 
   @Delete(':lesson_id')
   @ApiOperation({ summary: 'Delete a Lesson' })
-  async deleteLesson(@Param("lesson_id") lesson_id: string) {
+  async deleteLesson(@Param('lesson_id') lesson_id: string) {
     return this.lessonService.deleteLesson(lesson_id);
   }
   @Get()

@@ -1,39 +1,39 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsString } from "class-validator"
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 export class CreateProgramDto {
   @ApiProperty()
   @IsString()
-  "name": "string"
+  'name': 'string';
 
   @ApiProperty()
   @IsString()
-  "award": "string"
+  'award': 'string';
 
   @ApiProperty()
   @IsString()
-  "modularity": "string"
+  'modularity': 'string';
 
   @ApiProperty()
   @IsString()
-  "minSize": 0
+  'minSize': 0;
 
   @ApiProperty()
   @IsString()
-  "duration": 0
+  'duration': 0;
 
   @ApiProperty()
   @IsString()
-  "description": "string"
+  'description': 'string';
 
   @ApiProperty()
   @IsString()
-  "timesOffered": 0
+  'timesOffered': 0;
 
   @ApiProperty()
   @IsString()
-  "units": "string"
+  'units': 'string';
 
   @ApiProperty()
   @IsString()
-  "programTuition": 0
+  'programTuition': 0;
 }

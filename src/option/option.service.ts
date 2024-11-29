@@ -19,14 +19,14 @@ export class OptionService {
       const updateData = {
         ...partialUpdateDto,
       };
-  
+
       // Remove undefined properties from the updateData
-      Object.keys(updateData).forEach(key => {
+      Object.keys(updateData).forEach((key) => {
         if (updateData[key] === undefined) {
           delete updateData[key];
         }
       });
-  
+
       return await this.prisma.option.update({
         where: { id },
         data: updateData,
@@ -37,7 +37,7 @@ export class OptionService {
       );
     }
   }
-  
+
   async findOptionById(optionId: string) {
     return this.prisma.option.findUnique({
       where: {
@@ -45,7 +45,7 @@ export class OptionService {
       },
       include: {
         question: true,
-      }
+      },
     });
   }
 
@@ -53,10 +53,10 @@ export class OptionService {
     return this.prisma.option.findMany({
       include: {
         question: true,
-      }
+      },
     });
   }
-  
+
   async remove(id: string) {
     return this.prisma.option.delete({
       where: { id },

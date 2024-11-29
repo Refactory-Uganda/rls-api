@@ -11,15 +11,14 @@ export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
   @Post('login')
-  @ApiOperation({summary: 'login in to RLS'})
+  @ApiOperation({ summary: 'login in to RLS' })
   async login(@Body() dto: LoginDto) {
     return this.authenticationService.login(dto);
   }
 
   @Post('refresh-token')
-  @ApiOperation({summary: 'refresh token'})
+  @ApiOperation({ summary: 'refresh token' })
   async refreshToken(@Body() dto: RefreshTokendto) {
     return this.authenticationService.refreshToken(dto);
   }
-
 }

@@ -39,12 +39,12 @@ describe('TopicsService', () => {
   describe('deleteTopic', () => {
     it('should delete a topic', async () => {
       const topicId = 'topic-id';
-      const deletedTopic = {  
-        id: topicId, 
-        Title: 'Deleted Topic', 
-        Description: 'This topic was deleted', 
+      const deletedTopic = {
+        id: topicId,
+        Title: 'Deleted Topic',
+        Description: 'This topic was deleted',
         courseId: 'course-id',
-        Course: { id: 'course-id', Title: 'Course Title' }
+        Course: { id: 'course-id', Title: 'Course Title' },
       };
 
       (prismaService.topic.delete as jest.Mock).mockResolvedValue(deletedTopic);
@@ -61,9 +61,13 @@ describe('TopicsService', () => {
     it('should throw NotFoundException if topic not found', async () => {
       const topicId = 'non-existent-topic-id';
 
-      (prismaService.topic.delete as jest.Mock).mockRejectedValue(new Error('Record to delete does not exist.'));
+      (prismaService.topic.delete as jest.Mock).mockRejectedValue(
+        new NotFoundException(`Topic with ID ${topicId} not found`),
+      );
 
-      await expect(service.deleteTopic(topicId)).rejects.toThrow(NotFoundException);
+      await expect(service.deleteTopic(topicId)).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

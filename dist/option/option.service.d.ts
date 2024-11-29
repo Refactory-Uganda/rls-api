@@ -6,16 +6,16 @@ export declare class OptionService {
     constructor(prisma: PrismaService);
     create(createOptionDto: CreateOptionDto): Promise<{
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     }>;
     patchOption(id: string, partialUpdateDto: UpdateOptionDto): Promise<{
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     }>;
     findOptionById(optionId: string): Promise<{
@@ -25,15 +25,15 @@ export declare class OptionService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            answer: string;
             order: number;
+            answer: string;
             explanation: string | null;
         };
     } & {
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     }>;
     findAll(): Promise<({
@@ -43,22 +43,22 @@ export declare class OptionService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            answer: string;
             order: number;
+            answer: string;
             explanation: string | null;
         };
     } & {
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     })[]>;
     remove(id: string): Promise<{
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     }>;
 }

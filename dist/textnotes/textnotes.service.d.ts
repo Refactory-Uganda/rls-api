@@ -3,6 +3,7 @@ import { CreateNoteDto } from './dto/create-note.dto';
 import { UpdateTextnotesDto } from './dto/update-textnotes.dto';
 export declare class NoteService {
     private prisma;
+    update(id: string, updateNoteDto: UpdateTextnotesDto): void;
     constructor(prisma: PrismaService);
     create(createNoteDto: CreateNoteDto): Promise<{
         id: string;

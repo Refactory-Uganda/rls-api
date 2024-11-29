@@ -50,7 +50,7 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Boolean)
-], UpdateOptionDto.prototype, "iscorrect", void 0);
+], UpdateOptionDto.prototype, "isCorrect", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),

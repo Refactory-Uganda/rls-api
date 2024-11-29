@@ -16,12 +16,12 @@ export declare class QuestionController {
         } & {
             id: string;
             text: string;
-            createdAt: Date;
-            updatedAt: Date;
-            quizId: string;
             answer: string;
             order: number;
             explanation: string | null;
+            quizId: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
     }>;
     patch(id: string, partialUpdateDto: Partial<UpdateQuestionDto>): Promise<{
@@ -35,22 +35,22 @@ export declare class QuestionController {
     } & {
         id: string;
         text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        quizId: string;
         answer: string;
         order: number;
         explanation: string | null;
+        quizId: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
         id: string;
         text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        quizId: string;
         answer: string;
         order: number;
         explanation: string | null;
+        quizId: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(): Promise<({
         option: {
@@ -63,12 +63,12 @@ export declare class QuestionController {
     } & {
         id: string;
         text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        quizId: string;
         answer: string;
         order: number;
         explanation: string | null;
+        quizId: string;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
     findOne(question_id: string): Promise<{
         option: {
@@ -81,11 +81,11 @@ export declare class QuestionController {
     } & {
         id: string;
         text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        quizId: string;
         answer: string;
         order: number;
         explanation: string | null;
+        quizId: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }

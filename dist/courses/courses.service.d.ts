@@ -98,9 +98,9 @@ export declare class CourseService {
                 questions: ({
                     option: {
                         id: string;
-                        order: number;
                         optionText: string;
                         isCorrect: boolean;
+                        order: number;
                         questionId: string | null;
                     }[];
                     userAnswers: {
@@ -118,8 +118,8 @@ export declare class CourseService {
                     createdAt: Date;
                     updatedAt: Date;
                     quizId: string;
-                    answer: string;
                     order: number;
+                    answer: string;
                     explanation: string | null;
                 })[];
                 attempts: {
@@ -148,9 +148,9 @@ export declare class CourseService {
                         questions: ({
                             option: {
                                 id: string;
-                                order: number;
                                 optionText: string;
                                 isCorrect: boolean;
+                                order: number;
                                 questionId: string | null;
                             }[];
                             userAnswers: {
@@ -168,8 +168,8 @@ export declare class CourseService {
                             createdAt: Date;
                             updatedAt: Date;
                             quizId: string;
-                            answer: string;
                             order: number;
+                            answer: string;
                             explanation: string | null;
                         })[];
                         attempts: {
@@ -231,9 +231,9 @@ export declare class CourseService {
             questions: ({
                 option: {
                     id: string;
-                    order: number;
                     optionText: string;
                     isCorrect: boolean;
+                    order: number;
                     questionId: string | null;
                 }[];
                 userAnswers: {
@@ -251,8 +251,8 @@ export declare class CourseService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                answer: string;
                 order: number;
+                answer: string;
                 explanation: string | null;
             })[];
             attempts: {
@@ -281,9 +281,9 @@ export declare class CourseService {
                     questions: ({
                         option: {
                             id: string;
-                            order: number;
                             optionText: string;
                             isCorrect: boolean;
+                            order: number;
                             questionId: string | null;
                         }[];
                         userAnswers: {
@@ -301,8 +301,8 @@ export declare class CourseService {
                         createdAt: Date;
                         updatedAt: Date;
                         quizId: string;
-                        answer: string;
                         order: number;
+                        answer: string;
                         explanation: string | null;
                     })[];
                     attempts: {

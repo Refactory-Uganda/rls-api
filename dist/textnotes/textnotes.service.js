@@ -13,6 +13,9 @@ exports.NoteService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 let NoteService = class NoteService {
+    update(id, updateNoteDto) {
+        throw new Error('Method not implemented.');
+    }
     constructor(prisma) {
         this.prisma = prisma;
     }

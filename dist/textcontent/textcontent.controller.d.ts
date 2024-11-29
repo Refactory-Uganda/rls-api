@@ -3,6 +3,8 @@ import { CreateTextContentDto } from './dto/create-text-content.dto';
 import { UpdateTextContentDto } from './dto/update-textcontent.dto';
 export declare class TextContentController {
     private readonly textContentService;
+    remove(id: string): void;
+    delete(id: string): void;
     constructor(textContentService: TextContentService);
     create(createTextContentDto: CreateTextContentDto): Promise<{
         id: string;

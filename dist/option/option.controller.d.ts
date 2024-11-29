@@ -6,9 +6,9 @@ export declare class OptionController {
     constructor(optionService: OptionService);
     create(createOptionDto: CreateOptionDto): Promise<{
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     }>;
     findAll(): Promise<({
@@ -18,15 +18,15 @@ export declare class OptionController {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            answer: string;
             order: number;
+            answer: string;
             explanation: string | null;
         };
     } & {
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     })[]>;
     findOne(optionId: string): Promise<{
@@ -36,29 +36,29 @@ export declare class OptionController {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            answer: string;
             order: number;
+            answer: string;
             explanation: string | null;
         };
     } & {
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     }>;
     patchOption(id: string, partialUpdateDto: Partial<UpdateOptionDto>): Promise<{
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     }>;
     remove(id: string): Promise<{
         id: string;
-        order: number;
         optionText: string;
         isCorrect: boolean;
+        order: number;
         questionId: string | null;
     }>;
 }

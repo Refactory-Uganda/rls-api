@@ -23,8 +23,8 @@ export declare class QuizService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            answer: string;
             order: number;
+            answer: string;
             explanation: string | null;
         }[];
     } & {
@@ -49,9 +49,9 @@ export declare class QuizService {
         questions: ({
             option: {
                 id: string;
-                order: number;
                 optionText: string;
                 isCorrect: boolean;
+                order: number;
                 questionId: string | null;
             }[];
         } & {
@@ -60,8 +60,8 @@ export declare class QuizService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            answer: string;
             order: number;
+            answer: string;
             explanation: string | null;
         })[];
     } & {
@@ -77,9 +77,9 @@ export declare class QuizService {
         questions: ({
             option: {
                 id: string;
-                order: number;
                 optionText: string;
                 isCorrect: boolean;
+                order: number;
                 questionId: string | null;
             }[];
         } & {
@@ -88,8 +88,8 @@ export declare class QuizService {
             createdAt: Date;
             updatedAt: Date;
             quizId: string;
-            answer: string;
             order: number;
+            answer: string;
             explanation: string | null;
         })[];
     } & {
@@ -107,9 +107,9 @@ export declare class QuizService {
             questions: ({
                 option: {
                     id: string;
-                    order: number;
                     optionText: string;
                     isCorrect: boolean;
+                    order: number;
                     questionId: string | null;
                 }[];
             } & {
@@ -118,8 +118,8 @@ export declare class QuizService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                answer: string;
                 order: number;
+                answer: string;
                 explanation: string | null;
             })[];
         } & {
@@ -159,15 +159,15 @@ export declare class QuizService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                answer: string;
                 order: number;
+                answer: string;
                 explanation: string | null;
             };
             selectedOption: {
                 id: string;
-                order: number;
                 optionText: string;
                 isCorrect: boolean;
+                order: number;
                 questionId: string | null;
             };
         } & {
@@ -207,9 +207,9 @@ export declare class QuizService {
             question: {
                 option: {
                     id: string;
-                    order: number;
                     optionText: string;
                     isCorrect: boolean;
+                    order: number;
                     questionId: string | null;
                 }[];
             } & {
@@ -218,15 +218,15 @@ export declare class QuizService {
                 createdAt: Date;
                 updatedAt: Date;
                 quizId: string;
-                answer: string;
                 order: number;
+                answer: string;
                 explanation: string | null;
             };
             selectedOption: {
                 id: string;
-                order: number;
                 optionText: string;
                 isCorrect: boolean;
+                order: number;
                 questionId: string | null;
             };
         } & {

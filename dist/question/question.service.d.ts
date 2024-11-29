@@ -16,12 +16,12 @@ export declare class QuestionService {
         } & {
             id: string;
             text: string;
-            createdAt: Date;
-            updatedAt: Date;
-            quizId: string;
             answer: string;
             order: number;
             explanation: string | null;
+            quizId: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
     }>;
     patchQuestion(id: string, updateQuestionDto: UpdateQuestionDto): Promise<{
@@ -35,22 +35,22 @@ export declare class QuestionService {
     } & {
         id: string;
         text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        quizId: string;
         answer: string;
         order: number;
         explanation: string | null;
+        quizId: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
         id: string;
         text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        quizId: string;
         answer: string;
         order: number;
         explanation: string | null;
+        quizId: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findQuestions(): Promise<({
         option: {
@@ -63,12 +63,12 @@ export declare class QuestionService {
     } & {
         id: string;
         text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        quizId: string;
         answer: string;
         order: number;
         explanation: string | null;
+        quizId: string;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
     findQuestionById(id: string): Promise<{
         option: {
@@ -81,11 +81,11 @@ export declare class QuestionService {
     } & {
         id: string;
         text: string;
-        createdAt: Date;
-        updatedAt: Date;
-        quizId: string;
         answer: string;
         order: number;
         explanation: string | null;
+        quizId: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }

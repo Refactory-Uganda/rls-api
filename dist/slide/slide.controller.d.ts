@@ -10,8 +10,8 @@ export declare class SlideController {
         createdAt: Date;
         updatedAt: Date;
         lessonId: string;
-        order: number;
         content: string;
+        order: number;
         contentType: import(".prisma/client").$Enums.slideContentType;
     }>;
     getAllByLesson(lessonId: string): Promise<{
@@ -20,8 +20,8 @@ export declare class SlideController {
         createdAt: Date;
         updatedAt: Date;
         lessonId: string;
-        order: number;
         content: string;
+        order: number;
         contentType: import(".prisma/client").$Enums.slideContentType;
     }[]>;
     findOne(id: string): Promise<{
@@ -30,8 +30,8 @@ export declare class SlideController {
         createdAt: Date;
         updatedAt: Date;
         lessonId: string;
-        order: number;
         content: string;
+        order: number;
         contentType: import(".prisma/client").$Enums.slideContentType;
     }>;
     update(id: string, updateSlideDto: UpdateSlideDto): Promise<{
@@ -40,8 +40,8 @@ export declare class SlideController {
         createdAt: Date;
         updatedAt: Date;
         lessonId: string;
-        order: number;
         content: string;
+        order: number;
         contentType: import(".prisma/client").$Enums.slideContentType;
     }>;
     patch(id: string, updateSlideDto: UpdateSlideDto): Promise<{
@@ -50,8 +50,8 @@ export declare class SlideController {
         createdAt: Date;
         updatedAt: Date;
         lessonId: string;
-        order: number;
         content: string;
+        order: number;
         contentType: import(".prisma/client").$Enums.slideContentType;
     }>;
     delete(id: string): Promise<{
@@ -60,8 +60,8 @@ export declare class SlideController {
         createdAt: Date;
         updatedAt: Date;
         lessonId: string;
-        order: number;
         content: string;
+        order: number;
         contentType: import(".prisma/client").$Enums.slideContentType;
     }>;
 }

@@ -19,6 +19,12 @@ const create_text_content_dto_1 = require("./dto/create-text-content.dto");
 const swagger_1 = require("@nestjs/swagger");
 const update_textcontent_dto_1 = require("./dto/update-textcontent.dto");
 let TextContentController = class TextContentController {
+    remove(id) {
+        throw new Error('Method not implemented.');
+    }
+    delete(id) {
+        throw new Error('Method not implemented.');
+    }
     constructor(textContentService) {
         this.textContentService = textContentService;
     }

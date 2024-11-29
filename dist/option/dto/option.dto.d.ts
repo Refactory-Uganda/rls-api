@@ -7,6 +7,6 @@ export declare class CreateOptionDto {
 }
 export declare class UpdateOptionDto {
     optionText?: string;
-    iscorrect?: boolean;
+    isCorrect?: boolean;
     order?: number;
 }

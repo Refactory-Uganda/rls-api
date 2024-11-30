@@ -56,6 +56,8 @@ model Lesson {
   topicId   String?   @db.ObjectId
   quiz      Quiz?    @relation("Quiz")
   quizId    String?  @db.ObjectId
+  assignment Assignment? @relation("Assignment", fields: [assignmentId], references: [id])
+  assignmentId String? @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -188,20 +190,24 @@ model UserAnswer {
 
 model Assignment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title  String
   instructions String[]
   dueDate   DateTime
-  question  String
+  question  String[]
+  uploadQuestion String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   AssignmentSubmission AssignmentSubmission[]
+
+  Lesson Lesson[] @relation("Assignment")
 }
 model AssignmentSubmission {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   assignmentId  String @db.ObjectId
   assignment Assignment @relation(fields: [assignmentId], references: [id])
-  answer String
-  response String?
+  answerUpload String
+  // response String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

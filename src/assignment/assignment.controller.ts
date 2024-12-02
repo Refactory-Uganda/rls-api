@@ -9,6 +9,8 @@ import {
     BadRequestException,
     HttpException,
     HttpStatus,
+    Get,
+    Delete,
   } from '@nestjs/common';
   import { AssignmentService } from './assignment.service';
   import { CreateAssignmentDto } from './dto/create-assignment.dto';
@@ -21,6 +23,19 @@ import {
   @ApiTags('Assignments')
   export class AssignmentController {
     constructor(private readonly assignmentService: AssignmentService) {}
+
+    // Upload Assignment Question (Facilitator)
+    @Post(':id/upload')
+    @UseInterceptors(FileInterceptor('file'))
+    @ApiOperation({ summary: 'Upload assignment question' })
+    async uploadAssignmentQuestion(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
+      try {
+        const fieldId = await this.assignmentService.uploadAssignmentQuestion(id, file.path, file.originalname);
+        return { fieldId };
+      } catch (error) {
+        throw new HttpException('Failed to upload assignment question', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
   
     // Create Assignment (Facilitator)
     @Post()
@@ -62,5 +77,40 @@ import {
         throw new HttpException('Failed to submit assignment', HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
+
+    // Get All Assignments
+    @Get()
+    @ApiOperation({ summary: 'Get all assignments' })
+    async getAllAssignments() {
+      try {
+        return await this.assignmentService.getAllAssignments();
+      } catch (error) {
+        throw new HttpException('Failed to get assignments', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+
+    // Get Assignment by ID
+    @Get(':id')
+    @ApiOperation({ summary: 'Get an assignment by ID' })
+    async getAssignmentById(@Param('id') id: string) {
+      try {
+        return await this.assignmentService.getAssignmentById(id);
+      } catch (error) {
+        throw new HttpException('Failed to get assignment', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+
+    // Delete Assignment
+    @Delete(':id/delete')
+    @ApiOperation({ summary: 'Delete an assignment' })
+    async deleteAssignment(@Param('id') id: string) {
+      try {
+        return await this.assignmentService.deleteAssignment(id);
+      } catch (error) {
+        throw new HttpException('Failed to delete assignment', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+
+
   }
   

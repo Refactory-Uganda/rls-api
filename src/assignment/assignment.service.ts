@@ -3,10 +3,28 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { Assignment, Prisma } from '@prisma/client';
+import { DocUploadService } from './docUpload.service';
 
 @Injectable()
 export class AssignmentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private docUploadService: DocUploadService
+  ) {}
+
+
+  // upload assignment question
+  async uploadAssignmentQuestion(id:string, filepath:string,fileName:string) {
+    const fieldId = await this.docUploadService.uploadFile(filepath, fileName);
+
+    await this.prisma.assignment.update({
+      where: {id: id},
+      data: {
+        uploadQuestion: fieldId
+      },
+    });
+    return {fieldId};
+  }
 
   // Create an Assignment
   async createAssignment(data: CreateAssignmentDto): Promise<Assignment> {
@@ -16,7 +34,7 @@ export class AssignmentService {
           title: data.title,
           instructions: data.instructions,
           dueDate: new Date(data.dueDate),
-          question: data.question,
+          points: data.points,
           uploadQuestion: data.uploadQuestion || undefined,
         } as Prisma.AssignmentCreateInput,
       });
@@ -44,4 +62,36 @@ export class AssignmentService {
       throw new HttpException('Failed to submit assignment', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async getAllAssignments(): Promise<{AllAssignments :Assignment[]}> {
+    try{
+      const assignments = await this.prisma.assignment.findMany();
+      return {AllAssignments : assignments};
+    }catch (error) {
+      throw new HttpException('Failed to get assignments', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async getAssignmentById(id: string): Promise<{AssignmentById : Assignment}> {
+    try {
+      const assignment = await this.prisma.assignment.findUnique({
+        where: { id },
+      })
+      return {AssignmentById : assignment};
+    }catch (error) {
+      throw new HttpException('Failed to get assignment', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async deleteAssignment(id: string): Promise<{Deleted : Assignment}> {
+    try {
+      const assignment = await this.prisma.assignment.delete({
+        where: { id },
+      })
+      return { Deleted :assignment};
+    }catch (error) {
+      throw new HttpException('Failed to delete assignment', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
 }

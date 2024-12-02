@@ -1,7 +1,7 @@
 // create-assignment.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsArray, IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateAssignmentDto {
   @ApiProperty()
@@ -15,11 +15,11 @@ export class CreateAssignmentDto {
   @ApiProperty()
   @IsDateString()
   @Transform(({ value }) => new Date(value).toISOString(), { toClassOnly: true })  // Convert date to ISO 8601 format
-  dueDate: string;
+  dueDate: Date;
 
   @ApiProperty()
-  @IsArray()
-  question: string[];
+  @IsInt()
+  points? : number;
 
   @ApiProperty({ required: false })
   @IsOptional()

@@ -85,11 +85,10 @@ export class CourseService {
 
 			let imageUrl = null;
 			if (dto.image) {
-
-				const imagePath = join(process.cwd(), 'uploads/courses', dto.image);
 				try {
-					await fs.access(imagePath);
-					imageUrl = `/uploads/courses/${dto.image}`;
+					imageUrl = dto.image;
+          const imageDetails = await this.imageService.imageDetails(dto.image);
+          console.log('imageDetails:', imageDetails);
 				} catch (error) {
 					console.log('Error accessing image path:', error);
 					throw new BadRequestException('Invalid image file');

@@ -52,8 +52,8 @@ export class CourseController {
     )
     file: Express.Multer.File,
   ) {
-    const filename = await this.imageService.saveImage(file);
-    return filename;
+    const fileId = await this.imageService.saveImage(file);
+    return fileId;
   }
 
   
@@ -214,25 +214,7 @@ async getStaffFromRims() {
   }
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/courses',
-        filename: (req, file, callback) => {
-          // generate a unique name for the file
-          const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          callback(null, `${uniqueName}${file.originalname}`);
-        },
-      }),
-      fileFilter: (req, file, callback) => {
-        // validate the file type to only image files
-        if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-          return callback(new Error('Only image files are allowed!'), false);
-        }
-        callback(null, true);
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('image'))
   @ApiOperation({ summary: 'Create a Course draft' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -305,7 +287,8 @@ async getStaffFromRims() {
     console.log('Recieved DTO:', createCourseDto); // Debugging
     console.log('Recieved Image:', image); // Debugging
     if (image) {
-      createCourseDto.image = image.filename;
+      const fieldId = await this.imageService.saveImage(image);
+      createCourseDto.image = fieldId;
     }
     return this.courseService.createCourseDraft(createCourseDto);
   }

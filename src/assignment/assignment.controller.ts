@@ -19,6 +19,7 @@ import {
   import { FileInterceptor } from '@nestjs/platform-express';
   // import { multerOptions } from '../uploads/upload.config'; // Import the multer options
   import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { memoryStorage } from 'multer';
   
   @Controller('assignments')
   @ApiTags('Assignments')
@@ -27,14 +28,16 @@ import {
 
     // Upload Assignment Question (Facilitator)
     @Put(':id/upload-question')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('question',{
+      storage: memoryStorage(),
+      limits: {
+        fileSize: 10*1024*1024 // 10mb
+      }
+    }))
     @ApiOperation({ summary: 'Upload assignment question' })
     async uploadAssignmentQuestion(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
       try {
-        const filePath = file.path;
-        const fileName = file.originalname;
-        const result = await this.assignmentService.uploadAssignmentQuestion(id, filePath, fileName);
-        return { result };
+        return this.assignmentService.uploadQuestion(id, file)
       } catch (error) {
         throw new HttpException('Failed to upload assignment question', HttpStatus.INTERNAL_SERVER_ERROR);
       }
@@ -42,12 +45,17 @@ import {
   
     // Create Assignment (Facilitator)
     @Post()
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('uploadQuestion',{
+      storage: memoryStorage(),
+      limits: {
+        fileSize: 10*1024*1024 // max 10mb
+      }
+    }))
     @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'Create a new assignment' })
     async create(@Body() createAssignmentDto: CreateAssignmentDto, @UploadedFile() file?: Express.Multer.File) {
       try {
-        const newAssignment = await this.assignmentService.createAssignment(createAssignmentDto, file);
+        const newAssignment = await this.assignmentService.create(createAssignmentDto, file);
         return newAssignment;
       } catch (error) {
         throw new HttpException(

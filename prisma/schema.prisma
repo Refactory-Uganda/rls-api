@@ -193,8 +193,8 @@ model Assignment {
   title  String
   instructions String[]
   dueDate   DateTime
-  uploadQuestion String?
-  points Int?
+  uploadQuestion String? // upload a question
+  points Int? // not morethan 100
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

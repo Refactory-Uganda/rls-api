@@ -1,7 +1,7 @@
 // create-assignment.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
-import { IsArray, IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsArray, IsDateString, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreateAssignmentDto {
   @ApiProperty()
@@ -10,26 +10,27 @@ export class CreateAssignmentDto {
 
   @ApiProperty()
   @IsArray()
-  instructions: string[];
+  instructions?: string[];
 
   @ApiProperty()
   @IsDateString()
-  @Transform(({ value }) => new Date(value).toISOString(), { toClassOnly: true })  // Convert date to ISO 8601 format
+  @Type(() => Date)
   dueDate: Date;
 
   @ApiProperty()
+  @IsOptional()
+  @Min(0)
+  @Max(100)
   @IsInt()
   points? : number;
 
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  uploadQuestion?: string; // Optional file upload link (could be the file URL or path)
+  uploadQuestion?: Express.Multer.File; // Optional file upload link (could be the file URL or path)
 
   @ApiProperty()
   @IsString()
   lessonIds: string; // IDs of lessons to which the assignment is related
 
-  @IsOptional()
-  file?: any;
 }

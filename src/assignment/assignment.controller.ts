@@ -11,13 +11,14 @@ import {
     HttpStatus,
     Get,
     Delete,
+    Put,
   } from '@nestjs/common';
   import { AssignmentService } from './assignment.service';
   import { CreateAssignmentDto } from './dto/create-assignment.dto';
   import { SubmitAssignmentDto } from './dto/submit-assignment.dto';
   import { FileInterceptor } from '@nestjs/platform-express';
   // import { multerOptions } from '../uploads/upload.config'; // Import the multer options
-  import { ApiOperation, ApiTags } from '@nestjs/swagger';
+  import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
   
   @Controller('assignments')
   @ApiTags('Assignments')
@@ -25,13 +26,15 @@ import {
     constructor(private readonly assignmentService: AssignmentService) {}
 
     // Upload Assignment Question (Facilitator)
-    @Post(':id/upload')
+    @Put(':id/upload-question')
     @UseInterceptors(FileInterceptor('file'))
     @ApiOperation({ summary: 'Upload assignment question' })
     async uploadAssignmentQuestion(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
       try {
-        const fieldId = await this.assignmentService.uploadAssignmentQuestion(id, file.path, file.originalname);
-        return { fieldId };
+        const filePath = file.path;
+        const fileName = file.originalname;
+        const result = await this.assignmentService.uploadAssignmentQuestion(id, filePath, fileName);
+        return { result };
       } catch (error) {
         throw new HttpException('Failed to upload assignment question', HttpStatus.INTERNAL_SERVER_ERROR);
       }
@@ -39,10 +42,13 @@ import {
   
     // Create Assignment (Facilitator)
     @Post()
+    @UseInterceptors(FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'Create a new assignment' })
-    async create(@Body() createAssignmentDto: CreateAssignmentDto) {
+    async create(@Body() createAssignmentDto: CreateAssignmentDto, @UploadedFile() file?: Express.Multer.File) {
       try {
-        return await this.assignmentService.createAssignment(createAssignmentDto);
+        const newAssignment = await this.assignmentService.createAssignment(createAssignmentDto, file);
+        return newAssignment;
       } catch (error) {
         throw new HttpException(
           'Failed to create assignment, please try again later.',
@@ -54,6 +60,7 @@ import {
     // Submit Assignment (Learner)
     @Post(':assignmentId/submit')
     @UseInterceptors(FileInterceptor('answerUpload'))
+    @ApiConsumes('multipart/form-data')
     @ApiOperation({ summary: 'Submit an assignment' })
     async submit(
       @Param('assignmentId') assignmentId: string,

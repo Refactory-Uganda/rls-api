@@ -13,29 +13,24 @@ export class AssignmentService {
   ) {}
 
 
-  // upload assignment question
-  async uploadAssignmentQuestion(id:string, filepath:string,fileName:string) {
-    const fieldId = await this.docUploadService.uploadFile(filepath, fileName);
-
-    await this.prisma.assignment.update({
-      where: {id: id},
-      data: {
-        uploadQuestion: fieldId
-      },
-    });
-    return {fieldId};
-  }
-
   // Create an Assignment
-  async createAssignment(data: CreateAssignmentDto): Promise<Assignment> {
+  async createAssignment(data: CreateAssignmentDto, file?:Express.Multer.File): Promise<Assignment> {
     try {
+
+      let uploadQuestionPath: string | undefined;
+      if (file) {
+        const filePath = file.path;
+        const fileName = file.originalname;
+        uploadQuestionPath = await this.docUploadService.uploadFile(filePath, fileName);
+      }
+
       const newAssignment = await this.prisma.assignment.create({
         data: {
           title: data.title,
           instructions: data.instructions,
           dueDate: new Date(data.dueDate),
           points: data.points,
-          uploadQuestion: data.uploadQuestion || undefined,
+          uploadQuestion: uploadQuestionPath || data.uploadQuestion || undefined,
         } as Prisma.AssignmentCreateInput,
       });
       return newAssignment;
@@ -46,6 +41,19 @@ export class AssignmentService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async uploadAssignmentQuestion(id: string, filePath: string, fileName: string): Promise<string> {
+    const fieldId = await this.docUploadService.uploadFile(filePath, fileName);
+
+    await this.prisma.assignment.update({
+      where: { id : id},
+      data: {
+        uploadQuestion: fieldId,
+      },
+    });
+
+    return fieldId;
   }
   
   // Submit an Assignment (by Learner)

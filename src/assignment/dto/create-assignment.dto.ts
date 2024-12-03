@@ -26,7 +26,10 @@ export class CreateAssignmentDto {
   @IsString()
   uploadQuestion?: string; // Optional file upload link (could be the file URL or path)
 
-  @ApiProperty({ type: [String] })
-  @IsArray()
-  lessonIds: string[]; // IDs of lessons to which the assignment is related
+  @ApiProperty()
+  @IsString()
+  lessonIds: string; // IDs of lessons to which the assignment is related
+
+  @IsOptional()
+  file?: any;
 }

@@ -344,8 +344,25 @@ export class CourseService {
         where: { id },
         data: updateData,
         include: {
-          topics: true,
-          quiz: true,
+          topics: {
+            include: {
+              Lesson: {
+                include: {
+                  quiz: {
+                    include: {
+                      questions: {
+                        include: {
+                          option: true, // Include options within questions
+                          userAnswers: true, // Include userAnswers within questions
+                        },
+                      },
+                      attempts: true, // Include quiz attempts
+                    },
+                  },
+                },
+              },
+            }
+          },
         },
       });
 
@@ -388,17 +405,6 @@ export class CourseService {
 				  },
 				},
 			  },
-			  quiz: {
-				include: {
-				  questions: {
-					include: {
-					  option: true, // Include options within questions
-					  userAnswers: true, // Include userAnswers within questions
-					},
-				  },
-				  attempts: true, // Include quiz attempts
-				},
-			  },
 			},
 		  });
 	  
@@ -430,17 +436,6 @@ export class CourseService {
 					  },
 					},
 				  },
-				},
-			  },
-			  quiz: {
-				include: {
-				  questions: {
-					include: {
-					  option: true,
-					  userAnswers: true,
-					},
-				  },
-				  attempts: true,
 				},
 			  },
 			},

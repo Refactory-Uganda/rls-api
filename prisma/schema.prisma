@@ -29,8 +29,6 @@ model Course {
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
-  quiz        Quiz?   @relation(name: "Quiz")
-  quizId     String? @db.ObjectId
   image       String?
 }
 
@@ -90,8 +88,6 @@ model Quiz {
   title     String
   description String?
   questions Question[]
-  Course      Course?   @relation(name: "Quiz", fields: [courseId], references: [id])
-  courseId  String?     @unique @db.ObjectId
   lesson    Lesson?     @relation(fields: [lessonId], references: [id], name: "Quiz")
   attempts  QuizAttempt[]
   lessonId  String?     @unique @db.ObjectId

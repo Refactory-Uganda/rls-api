@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { Prisma, Question, Quiz } from '@prisma/client';
 import { CreateQuestionDto } from '../question/dto/create-question.dto';
 import { SubmitAnswerDto } from './dto/submitAnswer.dto';
 import { SubmitQuizDto } from './dto/submitQuiz.dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class QuizService {
@@ -22,6 +24,7 @@ export class QuizService {
   async create(createQuizDto: CreateQuizDto) {
     // const { questions, ...quizData } = createQuizDto;
 
+   try {
     return this.prisma.quiz.create({
       data: {
         title: createQuizDto.title,
@@ -31,7 +34,16 @@ export class QuizService {
         },
       },
     });
+  }catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('A quiz with this lesson ID already exists.');
+      }
+    }
+    throw new BadRequestException('Error creating quiz');
   }
+  }
+
 
   async patchQuiz(id: string, partialUpdateDto: UpdateQuizDto) {
     try {

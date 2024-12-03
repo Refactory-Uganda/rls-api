@@ -9,8 +9,8 @@ export class CreateAssignmentDto {
   title: string;
 
   @ApiProperty()
-  @IsArray()
-  instructions?: string[];
+  @IsString()
+  instructions?: string;
 
   @ApiProperty()
   @IsDateString()

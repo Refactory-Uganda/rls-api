@@ -17,32 +17,24 @@ import { ImageService } from './images.service';
 
 @Injectable()
 export class CourseService {
-  // update(arg0: string, updateDto: { Title: string; Description: string; Duration: string; status: "PUBLISHED"; topics: { id: string; Title: string; Description: string; lessons: { id: string; title: string; text: string; }[]; }[]; }) {
-  //     throw new Error('Method not implemented.');
-  // }
-
-  private transformToArray(value: any): string[] {
-    if (Array.isArray(value)) {
-      return value;
-    }
-    if (typeof value === 'string') {
-      //  handle both form data and comma-separated strings
-      if (value.startsWith('[') && value.endsWith(']')) {
-        try {
-          return JSON.parse(value);
-        } catch (error) {
-          console.error('Error parsing JSON string:', error);
-          // handle invalid JSON string
-          return value.split(',').map((item) => item.trim());
-        }
-      }
-      return value
-        .split(',')
-        .map((item) => item.trim())
-        .filter((item) => item.length > 0);
-    }
-    return [];
-  }
+	private transformToArray(value: any): string[] {
+		if (Array.isArray(value)) {
+			return value;
+		}
+		if (typeof value === 'string') {
+			if (value.startsWith('[') && value.endsWith(']')) {
+				try {
+					return JSON.parse(value);
+				} catch (error) {
+					console.error('Error parsing JSON string:', error);
+					// handle invalid JSON string
+					return value.split(',').map((item) => item.trim());
+				}
+			}
+			return value.split(',').map(item => item.trim()).filter(item => item.length > 0);
+		}
+		return [];
+	}
 
   constructor(
     private prisma: PrismaService,
@@ -76,34 +68,33 @@ export class CourseService {
       // set to draft if no topics
       const status = hasTopics ? (dto.status ?? `DRAFT`) : `DRAFT`;
 
-      // Validate each topic to ensure they have the required structure
-      if (hasTopics) {
-        dto.topics.forEach((topic, index) => {
-          if (!topic.Title || typeof topic.Description !== 'string') {
-            throw new Error(
-              `Invalid topic at index ${index}: "name" is required and should be a string.`,
-            );
-          }
-          // Add more validation as needed, like checking `description`, etc.
-        });
-      }
+			// Validate each topic to ensure they have the required structure
+			if (hasTopics) {
+				dto.topics.forEach((topic, index) => {
+					if (!topic.Title || typeof topic.Description !== 'string') {
+						throw new Error(`Invalid topic at index ${index}: "name" is required and should be a string.`);
+					}
+				});
+			}
 
-      if (!dto.Title || dto.Title.trim() === '') {
-        throw new BadRequestException('Course title is required');
-      }
-      console.log('creating course data:', JSON.stringify(dto, null, 2));
+			if (!dto.Title || dto.Title.trim() === '') {
+				throw new BadRequestException('Course title is required');
+			}
+			console.log('creating course data:', JSON.stringify(dto, null, 2));
 
-      let imageUrl = null;
-      if (dto.image) {
-        const imagePath = join(process.cwd(), 'uploads/courses', dto.image);
-        try {
-          await fs.access(imagePath);
-          imageUrl = `/uploads/courses/${dto.image}`;
-        } catch (error) {
-          console.log('Error accessing image path:', error);
-          throw new BadRequestException('Invalid image file');
-        }
-      }
+
+			let imageUrl = null;
+			if (dto.image) {
+
+				const imagePath = join(process.cwd(), 'uploads/courses', dto.image);
+				try {
+					await fs.access(imagePath);
+					imageUrl = `/uploads/courses/${dto.image}`;
+				} catch (error) {
+					console.log('Error accessing image path:', error);
+					throw new BadRequestException('Invalid image file');
+				}
+			}
 
       // Transform string Arrays if they come as coma-separated strings
 
@@ -256,63 +247,6 @@ export class CourseService {
     });
   }
 
-  // async updateCourse(id: string, updateCourseDto: UpdateCourseDto) {
-  // 	try {
-
-  // const staffFacilitator = await this.prisma.user.findMany({
-  // 	where: {
-  // 		userGroup: 'Staff',
-  // 	},
-  // 	select: {
-  // 		id: true,
-  // 		firstName: true,
-  // 		lastName: true,
-  // 		email: true,
-  // 	},
-  // });
-
-  // 		if (updateCourseDto.facilitator && !staffFacilitator.some((user) => user.id === updateCourseDto.facilitator)) {
-  // 			throw new BadRequestException('Invalid facilitator ID');
-  // 		}
-
-  // 		const imageUrl = updateCourseDto.image ? `/uploads/courses/${updateCourseDto.image}` : null;
-
-  // 		return await this.prisma.course.update({
-  // 			where: { id },
-  // 			data: {
-  // 				Title: updateCourseDto.Title,
-  // 				Description: updateCourseDto.Description,
-  // 				Duration: updateCourseDto.Duration,
-  // 				status: updateCourseDto.status,
-  // 				facilitatorId: updateCourseDto.facilitator,
-  // 				courseOutline: updateCourseDto.courseOutline,
-  // 				courseObjective: updateCourseDto.courseObjective,
-  // 				requirements: updateCourseDto.requirements,
-  // 				award: updateCourseDto.award,
-  // 				assessmentMode: updateCourseDto.assessmentMode,
-  // 				image: imageUrl,
-  // 				topics: {
-  // 					update: updateCourseDto.topics?.map((topic) => ({
-  // 						where: { id: topic.id },
-  // 						data: {
-  // 							Title: topic.Title,
-  // 							Description: topic.Description,
-  // 						},
-  // 					})),
-  // 				},
-  // 			},
-  // 		});
-  // 	} catch (error) {
-  // 		throw new HttpException(
-  // 			{
-  // 				status: HttpStatus.BAD_REQUEST,
-  // 				message: 'Failed to update course',
-  // 				error: error.message,
-  // 			},
-  // 			HttpStatus.BAD_REQUEST,
-  // 		);
-  // 	}
-  // }
 
   async patchCourse(id: string, partialUpdateDto: UpdateCourseDto) {
     try {
@@ -410,28 +344,6 @@ export class CourseService {
         where: { id },
         data: updateData,
         include: {
-          topics: true,
-          quiz: true,
-        },
-      });
-
-      return updatedCourse;
-    } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: 'Failed to partially update course',
-          error: error.message,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
-
-  async findAll() {
-    try {
-      const courses = await this.prisma.course.findMany({
-        include: {
           topics: {
             include: {
               Lesson: {
@@ -449,69 +361,90 @@ export class CourseService {
                   },
                 },
               },
-            },
-          },
-          quiz: {
-            include: {
-              questions: {
-                include: {
-                  option: true, // Include options within questions
-                  userAnswers: true, // Include userAnswers within questions
-                },
-              },
-              attempts: true, // Include quiz attempts
-            },
+            }
           },
         },
       });
 
-      return { courses };
-    } catch (error) {
-      throw new Error(`Error fetching courses: ${error.message}`);
-    }
-  }
+			return updatedCourse;
 
-  async findOne(id: string) {
-    try {
-      return await this.prisma.course.findUnique({
-        where: { id },
-        include: {
-          topics: {
-            include: {
-              Lesson: {
-                include: {
-                  quiz: {
-                    include: {
-                      questions: {
-                        include: {
-                          option: true,
-                          userAnswers: true,
-                        },
-                      },
-                      attempts: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-          quiz: {
-            include: {
-              questions: {
-                include: {
-                  option: true,
-                  userAnswers: true,
-                },
-              },
-              attempts: true,
-            },
-          },
-        },
-      });
-    } catch (error) {
-      throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
-    }
-  }
+		} catch (error) {
+			throw new HttpException(
+				{
+					status: HttpStatus.BAD_REQUEST,
+					message: 'Failed to partially update course',
+					error: error.message,
+				},
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+	}
+
+
+	async findAll() {
+		try {
+		  const courses = await this.prisma.course.findMany({
+			include: {
+			facilitator: true,
+			  topics: {
+				include: {
+				  Lesson: {
+					include: {
+					  quiz: {
+						include: {
+						  questions: {
+							include: {
+							  option: true, // Include options within questions
+							  userAnswers: true, // Include userAnswers within questions
+							},
+						  },
+						  attempts: true, // Include quiz attempts
+						},
+					  },
+					},
+				  },
+				},
+			  },
+			},
+		  });
+	  
+		  return { courses };
+		} catch (error) {
+		  throw new Error(`Error fetching courses: ${error.message}`);
+		}
+	  }
+	  
+	  async findOne(id: string) {
+		try {
+		  return await this.prisma.course.findUnique({
+			where: { id },
+			include: {
+			  topics: {
+				include: {
+				  Lesson: {
+					include: {
+					  quiz: {
+						include: {
+						  questions: {
+							include: {
+							  option: true,
+							  userAnswers: true,
+							},
+						  },
+						  attempts: true,
+						},
+					  },
+					},
+				  },
+				},
+			  },
+			},
+		  });
+		} catch (error) {
+		  throw new Error(`Error fetching course with ID ${id}: ${error.message}`);
+		}
+	  }
+	  
 
   async deleteCourse(id: string) {
     try {

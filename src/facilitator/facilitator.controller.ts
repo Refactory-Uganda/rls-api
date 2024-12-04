@@ -2,8 +2,6 @@
 import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { FacilitatorService } from './facilitator.service';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from '../auth/roles.guard';
-import { Roles } from '../auth/roles.decorator';
 
 @Controller('facilitator')
 export class FacilitatorController {
@@ -15,8 +13,6 @@ export class FacilitatorController {
   }
 
   @Post('protected')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles('facilitator')
   getProtectedResource() {
     return { message: 'This is a facilitator-only resource' };
   }

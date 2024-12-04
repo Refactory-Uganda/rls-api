@@ -70,36 +70,25 @@ export class LessonService {
         },
       },
     });
-  }
-  async findLessonById(lessonId: string) {
-    return this.prisma.lesson.findUnique({
-      where: {
-        id: lessonId,
-      },
-      include: {
-        quiz: {
-          include: {
-            questions: {
-              include: {
-                option: true, // Include options within questions
-                userAnswers: true, // Include userAnswers within questions
-              },
-            },
-            attempts: true, // Include quiz attempts
-          },
+    }
+    async findLessonById(lessonId: string) {
+      return this.prisma.lesson.findUnique({
+        where: {
+          id: lessonId,
         },
-      },
-    });
-  }
-
-  // async findContentByLessonId(lessonId: string) {
-  //   return this.prisma.lesson.findUnique({
-  //     where: {
-  //       id: lessonId,
-  //     },
-  //     select: {
-  //       content: true,
-  //     },
-  //   });
-  // }
+        include: {
+          quiz: {
+						include: {
+						  questions: {
+							include: {
+							  option: true, // Include options within questions
+							  userAnswers: true, // Include userAnswers within questions
+							},
+						  },
+						  attempts: true, // Include quiz attempts
+						},
+					  }},
+				  });
+    }
+    
 }

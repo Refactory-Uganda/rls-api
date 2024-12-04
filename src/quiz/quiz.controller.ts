@@ -22,11 +22,11 @@ import { SubmitQuizDto } from './dto/submitQuiz.dto';
 export class QuizController {
   constructor(private readonly quizService: QuizService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Create a new quiz' })
-  create(@Body() createQuizDto: CreateQuizDto) {
-    return this.quizService.create(createQuizDto);
-  }
+	@Post()
+	@ApiOperation({ summary: 'Create a new quiz' })
+	create(@Body() createQuizDto: CreateQuizDto) {
+		return this.quizService.create(createQuizDto);
+	}
 
   @Patch(':id')
   @ApiOperation({ summary: 'Partially Update Quiz' })
@@ -50,11 +50,12 @@ export class QuizController {
     return await this.quizService.findByQuizId(quizId);
   }
 
-  @Get()
-  @ApiOperation({ summary: 'Get all Quizzes' })
-  findAll() {
-    return this.quizService.findQuizzes();
-  }
+	@Get()
+	@ApiOperation({ summary: 'Get all Quizzes' })
+	findAll() {
+		return this.quizService.findQuizzes();
+	}
+
 
   // quiz with submit
   @Post('start')
@@ -93,18 +94,19 @@ export class QuizController {
     return this.quizService.getQuizResults(attemptId);
   }
 
-  @Post(':attemptId/submitQuiz')
-  @ApiOperation({ summary: 'Submit an entire Quiz' })
-  @ApiResponse({ status: 201, description: 'Quiz submitted successfully' })
-  async submitQuiz(
-    @Param('attemptId') attemptId: string,
-    @Body() submitQuizDto: SubmitQuizDto,
-  ) {
-    const result = await this.quizService.submitQuiz(attemptId, submitQuizDto);
-    return {
-      status: 'success',
-      message: 'Quiz submitted successfully',
-      data: result,
-    };
-  }
+	@Post(':attemptId/submitQuiz')
+	@ApiOperation({ summary: 'Submit an entire Quiz' })
+	@ApiResponse({ status: 201, description: 'Quiz submitted successfully' })
+	async submitQuiz(
+		@Param('attemptId') attemptId: string,
+		@Body() submitQuizDto: SubmitQuizDto,
+	) {
+		const result = await this.quizService.submitQuiz(attemptId,submitQuizDto);
+		return {
+			status: 'success',
+			message: 'Quiz submitted successfully',
+			data: result
+		}
+	}
+
 }

@@ -21,10 +21,8 @@ import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ImageService } from './images.service';
-// import { AssessmentMode } from '@prisma/client';
-// import { JwtAuthGaurd } from 'src/authentication/guards/jwt-auth.guard';
-// import { RolesGaurd } from 'src/authentication/guards/roles.guard';
-// import { Roles } from 'src/authentication/decorators/roles.decorator';
+import { FacilitatorService } from './faculitator.service';
+ 
 
 @Controller('courses')
 @ApiTags('Course')
@@ -32,6 +30,7 @@ export class CourseController {
   constructor(
     private readonly courseService: CourseService,
     private readonly imageService: ImageService,
+    private readonly facilitatorService: FacilitatorService
   ) {}
 
   // from image service
@@ -56,6 +55,23 @@ export class CourseController {
     const filename = await this.imageService.saveImage(file);
     return filename;
   }
+
+  
+// staff from Rims
+@Post('getstafffromrims')
+async getStaffFromRims() {
+  await this.facilitatorService.getStaffFromRims();
+  return {
+    message: 'Facilitators have been fetched and stored successfully.'
+  }
+}
+
+
+
+
+
+
+
 
   //  courses and staff
 

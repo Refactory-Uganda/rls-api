@@ -30,8 +30,6 @@ model Course {
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
-  quiz        Quiz?   @relation(name: "Quiz")
-  quizId     String? @db.ObjectId
   image       String?
 }
 
@@ -52,7 +50,6 @@ model Lesson {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   text      String?
-  content   TextContent[]
   slides    Slide[]     @relation("LessonSlides")
   topic     Topic?    @relation(fields: [topicId], references: [id], onDelete:Cascade)
   topicId   String?   @db.ObjectId
@@ -92,8 +89,6 @@ model Quiz {
   title     String
   description String?
   questions Question[]
-  Course      Course?   @relation(name: "Quiz", fields: [courseId], references: [id])
-  courseId  String?     @unique @db.ObjectId
   lesson    Lesson?     @relation(fields: [lessonId], references: [id], name: "Quiz")
   attempts  QuizAttempt[]
   lessonId  String?     @unique @db.ObjectId
@@ -188,6 +183,26 @@ model UserAnswer {
   @@index([selectedOptionId])
 }
 
+model Assignment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  instructions String[]
+  dueDate   DateTime
+  question  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  AssignmentSubmission AssignmentSubmission[]
+}
+model AssignmentSubmission {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  assignmentId  String @db.ObjectId
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+  answer String
+  response String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum AttemptStatus {
   IN_PROGRESS
   COMPLETED
@@ -206,35 +221,6 @@ enum Groups {
   User 
 } 
 
-model TextContent {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  heading      String
-  
-  notes        Note[]    
-  subHeadings  SubHeading[]
 
-  lessonId String? @db.ObjectId
-  lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt  
-  // quizzes      Quiz[]    
-}
 
-model Note {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  notesText  String
-  textContentId String? @db.ObjectId
-  textContent   TextContent? @relation(fields: [textContentId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt  
-}
-
-model SubHeading {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId 
-  subText       String
-  textContentId String? @db.ObjectId
-  textContent   TextContent? @relation(fields: [textContentId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt  
-}
 

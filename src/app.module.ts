@@ -19,7 +19,7 @@ import { OptionModule } from './option/option.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { SlideModule } from './slide/slide.module';
+import { AssignmentModule } from './assignment/assignment.module';
 
 @Module({
   imports: [
@@ -44,7 +44,7 @@ import { SlideModule } from './slide/slide.module';
     QuestionModule,
     OptionModule,
     AuthenticationModule,
-    SlideModule,
+    AssignmentModule, 
   ],
   controllers: [],
   providers: [],

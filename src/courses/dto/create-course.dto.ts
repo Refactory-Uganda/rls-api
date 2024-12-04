@@ -1,18 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { ApiProperty } from '@nestjs/swagger';
-import { CourseStatus } from '@prisma/client';
-import { AssessmentMode } from '@prisma/client';
-import { Transform } from 'class-transformer';
-import {
-  IsArray,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import { CreateLessonDto } from '../../lesson/dto/create-lesson.dto';
-// import { CreateTopicDto } from "src/topic/dto/create-topic.dto";
-// import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
+import { ApiProperty } from "@nestjs/swagger";
+import { CourseStatus } from "@prisma/client";
+import { AssessmentMode } from "@prisma/client";
+import { Transform } from "class-transformer";
+import { IsArray, IsEnum, IsNotEmpty,  IsOptional, IsString } from "class-validator";
+import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
+
+
 
 export class CreateTopicDto {
   @IsString()
@@ -32,22 +26,22 @@ export class CreateTopicDto {
   })
   Description: string;
 
-  @ApiProperty({
-    type: [CreateLessonDto],
-    description: 'The lessons of the topic',
-    example: 'Lesson 1: DataTypes',
-  })
-  lessons?: CreateLessonDto[];
-}
+    @ApiProperty({ type: [CreateLessonDto],
+      description: 'The lessons of the topic',
+      example: 'Lesson 1: DataTypes'
+    })
+    lessons?: CreateLessonDto[]
+  }
+  
+  export class CreateCourseDto {
 
-export class CreateCourseDto {
-  @IsString()
-  @IsOptional() // Make id optional
-  @ApiProperty({
-    description: 'Course ID (optional)',
-    required: false,
-  })
-  id?: string;
+    @IsString() 
+    @IsOptional()
+    @ApiProperty({
+      description: 'Course ID (optional)',
+      required: false
+    })
+    id?: string
 
   @IsString()
   @IsNotEmpty()
@@ -132,13 +126,9 @@ export class CreateCourseDto {
   })
   status?: CourseStatus;
 
-  // @ApiProperty({ type: [CreateTopicDto] ,
-  //   description: 'The topics of the course',
-  //   example: '[Here will be an array of topics]'
-  // })
-  topics: CreateTopicDto[];
-  // page: number;
-  // limit: number;
+ 
+    topics: CreateTopicDto[];
+    // limit: number;
 
   // @IsOptional()
   // @IsNumber()

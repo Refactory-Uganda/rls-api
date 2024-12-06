@@ -18,8 +18,10 @@ import {
   import { SubmitAssignmentDto } from './dto/submit-assignment.dto';
   import { FileInterceptor } from '@nestjs/platform-express';
   // import { multerOptions } from '../uploads/upload.config'; // Import the multer options
-  import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+  import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { memoryStorage } from 'multer';
+import { plainToClass } from 'class-transformer';
+import { validate } from 'class-validator';
   
   @Controller('assignments')
   @ApiTags('Assignments')
@@ -52,18 +54,45 @@ import { memoryStorage } from 'multer';
       }
     }))
     @ApiConsumes('multipart/form-data')
+    
     @ApiOperation({ summary: 'Create a new assignment' })
     async create(@Body() createAssignmentDto: CreateAssignmentDto, @UploadedFile() file?: Express.Multer.File) {
-      try {
-        const newAssignment = await this.assignmentService.create(createAssignmentDto, file);
-        return newAssignment;
-      } catch (error) {
-        throw new HttpException(
-          'Failed to create assignment, please try again later.',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+      // try {
+      console.log(' Controller Recieved DTO:', JSON.stringify(createAssignmentDto, null, 2));
+      
+      const dtoInstance = plainToClass(CreateAssignmentDto, createAssignmentDto, {
+        enableImplicitConversion: true,
+      })
+
+      const errors = await validate(dtoInstance, {
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      });
+
+      if (errors.length > 0) {
+        const errorMessages = errors.map(error => Object.values(error.constraints || {}).join(', ')).filter(message => message.length > 0);
+
+        throw new BadRequestException(errorMessages.length > 0 ? errorMessages : 'Validation failed');
       }
+
+      console.log('ProcessedDto:', JSON.stringify(dtoInstance, null, 2));
+      console.log('File:', file ? {
+        originalname: file.originalname,
+        size: file.size,
+        mimetype: file.mimetype,
+        path: file.path,
+      }: 'No file provided');
+      
+        const newAssignment = await this.assignmentService.create(dtoInstance, file);
+        return newAssignment;
+      // } catch (error) {
+      //   throw new HttpException(
+      //     'Failed to create assignment, please try again later.',
+      //     HttpStatus.INTERNAL_SERVER_ERROR,
+      //   );
+      // }
     }
+
   
     // Submit Assignment (Learner)
     @Post(':assignmentId/submit')

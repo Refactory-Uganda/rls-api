@@ -54,10 +54,10 @@ model Lesson {
   topicId   String?   @db.ObjectId
   quiz      Quiz?    @relation("Quiz")
   quizId    String?  @db.ObjectId
-  assignment Assignment? @relation("Assignment", fields: [assignmentId], references: [id])
-  assignmentId String? @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  assignments Assignment[] @relation(name: "LessonAssignment")
 }
 
 
@@ -196,7 +196,9 @@ model Assignment {
 
   AssignmentSubmission AssignmentSubmission[]
 
-  Lesson Lesson[] @relation("Assignment")
+  lesson    Lesson?     @relation(fields: [lessonId], references: [id], name: "LessonAssignment")
+  lessonId  String?     @unique @db.ObjectId
+
 }
 model AssignmentSubmission {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId

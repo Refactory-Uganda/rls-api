@@ -20,7 +20,7 @@ export class AssignmentService {
   // Create an Assignment
 async create(createAssignmentDto: CreateAssignmentDto, file?: Express.Multer.File) {
   try{
-    let questionFilePath = null;
+    let questionFilePath: string | null = null;
     if (file) {
       // confirm file type is pdf,doc,docx
       const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
@@ -39,31 +39,46 @@ async create(createAssignmentDto: CreateAssignmentDto, file?: Express.Multer.Fil
 
       // save file
       fs.writeFileSync(filePath, file.buffer);
-      questionFilePath = path.join('uploads', 'assignments', filename);
+      if(filename){
+        questionFilePath = path.join('uploads', 'assignments', filename);
+      }
     }
+
+    const processedDto = {
+      ...createAssignmentDto,
+      dueDate: new Date(createAssignmentDto.dueDate),
+      points: createAssignmentDto.points ? Number(createAssignmentDto.points) : null
+    }
+
     return await this.prisma.assignment.create({
       data: {
-        ...createAssignmentDto,
+        ...processedDto,
         uploadQuestion: questionFilePath,
       },
     });
   }catch(error){
+    if(error instanceof BadRequestException){
+      throw error;
+    }
     throw new BadRequestException(`Failed to create assignment:${error.message}`);
   }
 }
 
 
 async uploadQuestion(id: string, file: Express.Multer.File){
-  const assignment = await this.getAssignmentById(id)
-
   try{
+    const assignment = await this.getAssignmentById(id)
+
     const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
     if(!allowedTypes.includes(file.mimetype)) {
       throw new BadRequestException('Only allow Pdf and Doc files');
     }
 
     if(assignment.uploadQuestion) {
-      const oldFilePath = path.join(process.cwd(), assignment.uploadQuestion)
+      const oldFilePath = path.join(process.cwd(), assignment.uploadQuestion);
+      if (fs.existsSync(oldFilePath)) {
+        fs.unlinkSync(oldFilePath);
+      }
     }
     // Create uploads directory if it doesn't exist
     const uploadDir = path.join(process.cwd(), 'uploads', 'assignments');
@@ -84,10 +99,16 @@ async uploadQuestion(id: string, file: Express.Multer.File){
       where: { id },
       data: {
         uploadQuestion: questionFilePath
-      }
+      } 
     });
 
-  }catch(error){}
+  }catch(error){
+    if(error instanceof BadRequestException){
+      throw error;
+    }
+    console.error('Error uploading question:', error);
+    throw new HttpException('Failed to upload question', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
 
 
   }

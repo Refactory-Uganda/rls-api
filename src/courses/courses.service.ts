@@ -84,16 +84,19 @@ export class CourseService {
 
 
 			let imageUrl = null;
-			if (dto.image) {
-
-				const imagePath = join(process.cwd(), 'uploads/courses', dto.image);
-				try {
-					await fs.access(imagePath);
-					imageUrl = `/uploads/courses/${dto.image}`;
-				} catch (error) {
-					console.log('Error accessing image path:', error);
-					throw new BadRequestException('Invalid image file');
-				}
+			if (dto.image ) {
+        if (dto.image.webContentLink){
+          imageUrl = dto.image.webContentLink;
+        }else if (dto.image.filePath){
+          const imagePath = join(process.cwd(), 'uploads/courses', dto.image.filePath);
+          try {
+            await fs.access(imagePath);
+            imageUrl = `/uploads/courses/${dto.image.filePath}`;
+          } catch (error) {
+            console.log('Error accessing image path:', error);
+            throw new BadRequestException('Invalid image file');
+          }
+        }
 			}
 
       // Transform string Arrays if they come as coma-separated strings
@@ -127,9 +130,8 @@ export class CourseService {
         assessmentMode: dto.assessmentMode,
         award: dto.award,
         courseObjective,
-        image: imageUrl,
-        topics: { create: dto.topics },
-        quiz: { create: dto.quiz },
+        image: dto.image.webContentLink ,
+        topics: { create: dto.topics }
       };
 
       // Add if facilitator is provided
@@ -202,7 +204,7 @@ export class CourseService {
       // if (error instanceof) {}
       if (dto.image) {
         try {
-          await this.imageService.deleteImage(dto.image);
+          await this.imageService.deleteImage(dto.image.filePath);
         } catch (cleanupError) {
           console.error('Error Cleaning up Image:', cleanupError);
         }

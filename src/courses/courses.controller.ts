@@ -13,6 +13,8 @@ import {
   UploadedFile,
   UseInterceptors,
   ParseFilePipeBuilder,
+  BadRequestException,
+  UsePipes,
 } from '@nestjs/common';
 import { CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -22,6 +24,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ImageService } from './images.service';
 import { FacilitatorService } from './faculitator.service';
+import { ParseArrayPipe } from './pipes/parse-array.pipe';
  
 
 @Controller('courses')
@@ -171,7 +174,7 @@ async getStaffFromRims() {
     @UploadedFile() image?: Express.Multer.File,
   ) {
     if (image) {
-      updateCourseDto.image = image.filename;
+      updateCourseDto.image.filePath = image.filename;
     }
     return this.courseService.patchCourse(id, updateCourseDto);
   }
@@ -216,14 +219,6 @@ async getStaffFromRims() {
   @Post()
   @UseInterceptors(
     FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/courses',
-        filename: (req, file, callback) => {
-          // generate a unique name for the file
-          const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          callback(null, `${uniqueName}${file.originalname}`);
-        },
-      }),
       fileFilter: (req, file, callback) => {
         // validate the file type to only image files
         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
@@ -296,7 +291,8 @@ async getStaffFromRims() {
         },
       },
     },
-  })
+  })  
+  @UsePipes(new ParseArrayPipe())
   @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
   async createCourseP_D(
     @Body() createCourseDto: CreateCourseDto,
@@ -305,7 +301,14 @@ async getStaffFromRims() {
     console.log('Recieved DTO:', createCourseDto); // Debugging
     console.log('Recieved Image:', image); // Debugging
     if (image) {
-      createCourseDto.image = image.filename;
+      try {
+        // upload image 
+        const driveResponse = await this.imageService.saveImage(image);
+        createCourseDto.image = driveResponse.filename;
+      }catch(error){
+        console.error('Error uploading image:', error);
+        throw new BadRequestException('Failed to upload image to Drive');
+      }
     }
     return this.courseService.createCourseDraft(createCourseDto);
   }

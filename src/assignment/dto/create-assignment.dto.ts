@@ -1,7 +1,7 @@
 // create-assignment.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsDateString, IsInt, IsOptional, IsString, Max, Min, Validate, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import { IsArray, IsDateString, IsInt, IsOptional, IsString, Max, Min, validate, Validate, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 
 @ValidatorConstraint({ name: 'isValidDate', async: false })
 export class IsValidDate implements ValidatorConstraintInterface {
@@ -11,6 +11,24 @@ export class IsValidDate implements ValidatorConstraintInterface {
   }
   defaultMessage(): string {
     return 'Invalid date format';
+  }
+}
+
+@ValidatorConstraint({ name: 'isValidFileType', async: false })
+export class IsValidFileType implements ValidatorConstraintInterface {
+  validate(file: Express.Multer.File): boolean {
+    if(!file) return true;
+
+    const allowedMimeTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+    return file.mimetype ? allowedMimeTypes.includes(file.mimetype) : false;
+  }
+  defaultMessage(): string {
+    return 'Only pdf or word docs allowed';
+  
   }
 }
 
@@ -41,6 +59,9 @@ export class CreateAssignmentDto {
 
   @ApiProperty({ type: 'string', format: 'binary', required: false })
   @IsOptional()
+  @Validate(IsValidFileType, {
+    message: 'Only pdfs or word docs allowed'
+  })
   uploadQuestion?: Express.Multer.File; // Optional file upload link (could be the file URL or path)
 
   @ApiProperty()

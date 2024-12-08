@@ -12,6 +12,7 @@ import {
     Get,
     Delete,
     Put,
+    Patch,
   } from '@nestjs/common';
   import { AssignmentService } from './assignment.service';
   import { CreateAssignmentDto } from './dto/create-assignment.dto';
@@ -28,99 +29,124 @@ import { validate } from 'class-validator';
   export class AssignmentController {
     constructor(private readonly assignmentService: AssignmentService) {}
 
-    // Upload Assignment Question (Facilitator)
-    @Put(':id/upload-question')
-    @UseInterceptors(FileInterceptor('question',{
-      storage: memoryStorage(),
-      limits: {
-        fileSize: 10*1024*1024 // 10mb
-      }
-    }))
-    @ApiOperation({ summary: 'Upload assignment question' })
-    async uploadAssignmentQuestion(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
-      try {
-        return this.assignmentService.uploadQuestion(id, file)
-      } catch (error) {
-        throw new HttpException('Failed to upload assignment question', HttpStatus.INTERNAL_SERVER_ERROR);
-      }
+
+    @Post()
+    @UseInterceptors(FileInterceptor('uploadQuestion'))
+    @ApiConsumes('multipart/form-data')
+    create(
+      @Body() createAssignmentDto: CreateAssignmentDto,
+      @UploadedFile() uploadQuestion?: Express.Multer.File
+    ){
+      return this.assignmentService.create(createAssignmentDto, uploadQuestion)
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Upload Assignment Question (Facilitator)
+    // @Put(':id/upload-question')
+    // @UseInterceptors(FileInterceptor('question',{
+    //   storage: memoryStorage(),
+    //   limits: {
+    //     fileSize: 10*1024*1024 // 10mb
+    //   }
+    // }))
+    // @ApiOperation({ summary: 'Upload assignment question' })
+    // async uploadAssignmentQuestion(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
+    //   try {
+    //     return this.assignmentService.uploadQuestion(id, file)
+    //   } catch (error) {
+    //     throw new HttpException('Failed to upload assignment question', HttpStatus.INTERNAL_SERVER_ERROR);
+    //   }
+    // }
   
     // Create Assignment (Facilitator)
-    @Post()
-    @UseInterceptors(FileInterceptor('uploadQuestion',{
-      storage: memoryStorage(),
-      limits: {
-        fileSize: 10*1024*1024 // max 10mb
-      }
-    }))
-    @ApiConsumes('multipart/form-data')
+    // @Post()
+    // @UseInterceptors(FileInterceptor('uploadQuestion',{
+    //   storage: memoryStorage(),
+    //   limits: {
+    //     fileSize: 10*1024*1024 // max 10mb
+    //   }
+    // }))
+    // @ApiConsumes('multipart/form-data')
     
-    @ApiOperation({ summary: 'Create a new assignment' })
-    async create(@Body() createAssignmentDto: CreateAssignmentDto, @UploadedFile() file?: Express.Multer.File) {
-      // try {
-      console.log(' Controller Recieved DTO:', JSON.stringify(createAssignmentDto, null, 2));
+    // @ApiOperation({ summary: 'Create a new assignment' })
+    // async create(@Body() createAssignmentDto: CreateAssignmentDto, @UploadedFile() file?: Express.Multer.File) {
+    //   // try {
+    //   console.log(' Controller Recieved DTO:', JSON.stringify(createAssignmentDto, null, 2));
       
-      const dtoInstance = plainToClass(CreateAssignmentDto, createAssignmentDto, {
-        enableImplicitConversion: true,
-      })
+    //   const dtoInstance = plainToClass(CreateAssignmentDto, createAssignmentDto, {
+    //     enableImplicitConversion: true,
+    //   })
 
-      const errors = await validate(dtoInstance, {
-        whitelist: true,
-        forbidNonWhitelisted: true,
-      });
+    //   const errors = await validate(dtoInstance, {
+    //     whitelist: true,
+    //     forbidNonWhitelisted: true,
+    //   });
 
-      if (errors.length > 0) {
-        const errorMessages = errors.map(error => Object.values(error.constraints || {}).join(', ')).filter(message => message.length > 0);
+    //   if (errors.length > 0) {
+    //     const errorMessages = errors.map(error => Object.values(error.constraints || {}).join(', ')).filter(message => message.length > 0);
 
-        throw new BadRequestException(errorMessages.length > 0 ? errorMessages : 'Validation failed');
-      }
+    //     throw new BadRequestException(errorMessages.length > 0 ? errorMessages : 'Validation failed');
+    //   }
 
-      console.log('ProcessedDto:', JSON.stringify(dtoInstance, null, 2));
-      console.log('File:', file ? {
-        originalname: file.originalname,
-        size: file.size,
-        mimetype: file.mimetype,
-        path: file.path,
-      }: 'No file provided');
+    //   console.log('ProcessedDto:', JSON.stringify(dtoInstance, null, 2));
+    //   console.log('File:', file ? {
+    //     originalname: file.originalname,
+    //     size: file.size,
+    //     mimetype: file.mimetype,
+    //     path: file.path,
+    //   }: 'No file provided');
       
-        const newAssignment = await this.assignmentService.create(dtoInstance, file);
-        return newAssignment;
-      // } catch (error) {
-      //   throw new HttpException(
-      //     'Failed to create assignment, please try again later.',
-      //     HttpStatus.INTERNAL_SERVER_ERROR,
-      //   );
-      // }
-    }
+    //     const newAssignment = await this.assignmentService.create(dtoInstance, file);
+    //     return newAssignment;
+    //   // } catch (error) {
+    //   //   throw new HttpException(
+    //   //     'Failed to create assignment, please try again later.',
+    //   //     HttpStatus.INTERNAL_SERVER_ERROR,
+    //   //   );
+    //   // }
+    // }
 
   
     // Submit Assignment (Learner)
-    @Post(':assignmentId/submit')
-    @UseInterceptors(FileInterceptor('answerUpload'))
-    @ApiConsumes('multipart/form-data')
-    @ApiOperation({ summary: 'Submit an assignment' })
-    async submit(
-      @Param('assignmentId') assignmentId: string,
-      @UploadedFile() file: Express.Multer.File, // Use Multer to handle file upload
-    ) {
-      try {
-        if (!file) {
-          throw new BadRequestException('File is required');
-        }
+    // @Post(':assignmentId/submit')
+    // @UseInterceptors(FileInterceptor('answerUpload'))
+    // @ApiConsumes('multipart/form-data')
+    // @ApiOperation({ summary: 'Submit an assignment' })
+    // async submit(
+    //   @Param('assignmentId') assignmentId: string,
+    //   @UploadedFile() file: Express.Multer.File, // Use Multer to handle file upload
+    // ) {
+    //   try {
+    //     if (!file) {
+    //       throw new BadRequestException('File is required');
+    //     }
   
-        // Call the service to submit the assignment
-        const submission = await this.assignmentService.submitAssignment(
-          assignmentId,
-          file.path, // Path to the uploaded file
-        );
-        return submission;
-      } catch (error) {
-        if (error instanceof BadRequestException) {
-          throw error; // Propagate the BadRequestException if file is missing
-        }
-        throw new HttpException('Failed to submit assignment', HttpStatus.INTERNAL_SERVER_ERROR);
-      }
-    }
+    //     // Call the service to submit the assignment
+    //     const submission = await this.assignmentService.submitAssignment(
+    //       assignmentId,
+    //       file.path, // Path to the uploaded file
+    //     );
+    //     return submission;
+    //   } catch (error) {
+    //     if (error instanceof BadRequestException) {
+    //       throw error; // Propagate the BadRequestException if file is missing
+    //     }
+    //     throw new HttpException('Failed to submit assignment', HttpStatus.INTERNAL_SERVER_ERROR);
+    //   }
+    // }
 
     // Get All Assignments
     @Get()

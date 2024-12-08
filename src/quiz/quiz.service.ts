@@ -313,6 +313,10 @@ export class QuizService {
   async submitQuiz(attemptId: string, submitQuizDto: SubmitQuizDto) {
     const { quizId, answers } = submitQuizDto;
 
+    console.log(attemptId);
+    console.log('AttemptId type:', typeof attemptId);  // should output 'string'
+    console.log('AttemptId value:', attemptId);        // should show the actual value
+    
     // Check if the quiz exists
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: quizId },
@@ -359,11 +363,12 @@ export class QuizService {
     // Add the quiz attempt an array in the database
     userAnswerData.push({
       questionId,
-      quizAttemptId: submitQuizDto.attemptId,
+      quizAttemptId: attemptId,
       optionId,
       isCorrect: selectedOption.isCorrect,
     }) 
   }
+ 
 
     // Create the quiz attempt
     const quizAttempt = await this.prisma.quizAttempt.create({

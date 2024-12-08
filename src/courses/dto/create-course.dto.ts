@@ -2,8 +2,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { CourseStatus } from "@prisma/client";
 import { AssessmentMode } from "@prisma/client";
-import { Transform } from "class-transformer";
-import { IsArray, IsEnum, IsNotEmpty,  IsOptional, IsString } from "class-validator";
+import { Transform, Type } from "class-transformer";
+import { IsArray, IsEnum, IsNotEmpty,  IsOptional, IsString, IsUrl, ValidateNested } from "class-validator";
 import { CreateLessonDto } from "src/lesson/dto/create-lesson.dto";
 
 
@@ -32,6 +32,18 @@ export class CreateTopicDto {
     })
     lessons?: CreateLessonDto[]
   }
+
+class ImageDto {
+  @ApiProperty({required:false})
+  @IsOptional()
+  @IsUrl()
+  webContentLink?: string;
+
+  @ApiProperty({required:false})
+  @IsOptional()
+  @IsString()
+  filePath?: string;
+}
   
   export class CreateCourseDto {
 
@@ -166,8 +178,12 @@ export class CreateTopicDto {
   })
   courseObjective?: string[];
 
+  @ApiProperty({ type: ImageDto, format: 'binary' })
   @IsOptional()
-  @ApiProperty({ type: 'string', format: 'binary' })
-  image?: string;
+  @ValidateNested()
+  @Type(() => ImageDto)
+  image?: ImageDto;
+
+
   quiz: any;
 }

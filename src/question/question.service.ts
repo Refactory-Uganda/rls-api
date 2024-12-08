@@ -48,7 +48,7 @@ export class QuestionService {
             },
             update: {
               optionText: option.optionText,
-              iscorrect: option.isCorrect,
+              isCorrect: option.isCorrect,
               order: option.order,
             },
           })) || [],

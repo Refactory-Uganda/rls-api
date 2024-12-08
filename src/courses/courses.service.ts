@@ -84,15 +84,19 @@ export class CourseService {
 
 
 			let imageUrl = null;
-			if (dto.image) {
-				try {
-					imageUrl = dto.image;
-          const imageDetails = await this.imageService.imageDetails(dto.image);
-          console.log('imageDetails:', imageDetails);
-				} catch (error) {
-					console.log('Error accessing image path:', error);
-					throw new BadRequestException('Invalid image file');
-				}
+			if (dto.image ) {
+        if (dto.image.webContentLink){
+          imageUrl = dto.image.webContentLink;
+        }else if (dto.image.filePath){
+          const imagePath = join(process.cwd(), 'uploads/courses', dto.image.filePath);
+          try {
+            await fs.access(imagePath);
+            imageUrl = `/uploads/courses/${dto.image.filePath}`;
+          } catch (error) {
+            console.log('Error accessing image path:', error);
+            throw new BadRequestException('Invalid image file');
+          }
+        }
 			}
 
       // Transform string Arrays if they come as coma-separated strings
@@ -126,9 +130,8 @@ export class CourseService {
         assessmentMode: dto.assessmentMode,
         award: dto.award,
         courseObjective,
-        image: imageUrl,
-        topics: { create: dto.topics },
-        quiz: { create: dto.quiz },
+        image: dto.image.webContentLink ,
+        topics: { create: dto.topics }
       };
 
       // Add if facilitator is provided
@@ -201,7 +204,7 @@ export class CourseService {
       // if (error instanceof) {}
       if (dto.image) {
         try {
-          await this.imageService.deleteImage(dto.image);
+          await this.imageService.deleteImage(dto.image.filePath);
         } catch (cleanupError) {
           console.error('Error Cleaning up Image:', cleanupError);
         }
@@ -343,7 +346,25 @@ export class CourseService {
         where: { id },
         data: updateData,
         include: {
-          topics: true,
+          topics: {
+            include: {
+              Lesson: {
+                include: {
+                  quiz: {
+                    include: {
+                      questions: {
+                        include: {
+                          option: true, // Include options within questions
+                          userAnswers: true, // Include userAnswers within questions
+                        },
+                      },
+                      attempts: true, // Include quiz attempts
+                    },
+                  },
+                },
+              },
+            }
+          },
         },
       });
 
@@ -385,7 +406,7 @@ export class CourseService {
 					},
 				  },
 				},
-			  }
+			  },
 			},
 		  });
 	  
@@ -418,7 +439,7 @@ export class CourseService {
 					},
 				  },
 				},
-			  }
+			  },
 			},
 		  });
 		} catch (error) {

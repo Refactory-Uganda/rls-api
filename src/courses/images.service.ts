@@ -10,7 +10,7 @@ import { Readable } from 'stream';
 
 @Injectable()
 export class ImageService {
-  private drive;
+  private drive = google.drive('v3');
   private readonly uploadsPath = join(process.cwd(), 'uploads');
   private readonly credentials = JSON.parse(fs.readFileSync('credentials.json', 'utf-8'));
 
@@ -62,8 +62,8 @@ export class ImageService {
 
     try {
       // convert buffer to readable stream
-      // const bufferStream = new stream.PassThrough();
-      // bufferStream.end(file.buffer);
+      const bufferStream = new stream.PassThrough();
+      bufferStream.end(file.buffer);
       
       // Resize image before uploading
       const resizedBuffer = await sharp(file.buffer)
@@ -98,7 +98,20 @@ export class ImageService {
           },
           fields: 'id, name, webContentLink',
         });
-      return { fileId: driveFile.data.id, filename: driveFile.data.name, webContentLink: driveFile.data.webContentLink };
+
+        await this.drive.permissions.create({
+          fileId: driveFile.data.id,
+          requestBody: {
+            role: 'reader',
+            type: 'anyone',
+          },
+        });
+
+      return { 
+        fileId: driveFile.data.id, 
+        filename: driveFile.data.name, 
+        webContentLink: driveFile.data.webContentLink 
+      };
     } catch (error) {
       console.error('Failed to save image:', error);
       throw new BadRequestException('Failed to save image');

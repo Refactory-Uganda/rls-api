@@ -304,7 +304,9 @@ async getStaffFromRims() {
       try {
         // upload image 
         const driveResponse = await this.imageService.saveImage(image);
-        createCourseDto.image = driveResponse.filename;
+        createCourseDto.image = createCourseDto.image || {};
+        console.log('Drive Response:', driveResponse);
+        createCourseDto.image.webContentLink = driveResponse.webContentLink;
       }catch(error){
         console.error('Error uploading image:', error);
         throw new BadRequestException('Failed to upload image to Drive');

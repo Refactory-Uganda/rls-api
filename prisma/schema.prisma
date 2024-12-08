@@ -202,12 +202,21 @@ model Assignment {
 }
 model AssignmentSubmission {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  assignmentId  String @db.ObjectId
   assignment Assignment @relation(fields: [assignmentId], references: [id])
+  assignmentId  String @db.ObjectId
+  
   answerUpload String
-  // response String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  comment String?
+  submittedAt DateTime @default(now())
+  grade Float?
+  status SubmissionStatus @default(SUBMITTED)
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  GRADED
+  LATE
+  MISSING
 }
 
 enum AttemptStatus {

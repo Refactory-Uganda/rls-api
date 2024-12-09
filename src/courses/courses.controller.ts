@@ -196,8 +196,8 @@ async getStaffFromRims() {
   // }
 
   @Get()
-  @UseGuards(JwtAuthGaurd, RolesGaurd)
-  @Roles('Staff', 'Administrator')
+  // @UseGuards(JwtAuthGaurd, RolesGaurd)
+  // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get all Courses' })
   async findAll() {
     // @Query('limit') limit: number = 2 // @Query('page') page: number = 1,
@@ -208,16 +208,14 @@ async getStaffFromRims() {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGaurd, RolesGaurd)
-  @Roles('Staff', 'Administrator')
+  // @UseGuards(JwtAuthGaurd, RolesGaurd)
+  // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get a Course by ID' })
   async findOne(@Param('id') id: string) {
     return await this.courseService.findOne(id);
   }
 
   @Post()
-  @UseGuards(JwtAuthGaurd, RolesGaurd)
-  @Roles('Staff', 'Administrator')
   @UseInterceptors(
     FileInterceptor('image', {
       fileFilter: (req, file, callback) => {
@@ -317,8 +315,6 @@ async getStaffFromRims() {
   }
 
   @Patch(':id/publish')
-  @UseGuards(JwtAuthGaurd, RolesGaurd)
-  @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Publish a Course' })
   @HttpCode(HttpStatus.OK) // Set the response status code to 200
   async publishCourse(@Param('id') id: string) {
@@ -326,8 +322,6 @@ async getStaffFromRims() {
   }
 
   @Patch(`:id/draft`)
-  @UseGuards(JwtAuthGaurd, RolesGaurd)
-  @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Draft a Course' })
   @HttpCode(HttpStatus.OK) // Set the response status code to 200
   async draftCourse(@Param('id') id: string) {

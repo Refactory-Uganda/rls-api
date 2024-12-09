@@ -9,23 +9,17 @@ export class SubmitAssignmentDto {
   @IsString()
   assignmentId: string;
 
-  @ApiProperty()
-  @IsString()
-  answerUpload: string; // File path of the uploaded answer
-
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({type: 'string', format: 'binary', required: false})
   @IsOptional()
-  comment?: string;
+  @IsString()
+  answerUpload?: Express.Multer.File; // File path of the uploaded answer
+
 
   @ApiProperty()
-  submittedDate: Date;
+  submittedAt: Date;
 
-  @ApiProperty()
-  grade: number;
-
-  @ApiProperty()
-  status: SubmissionStatus;
+  // @ApiProperty({ enum:SubmissionStatus })
+  // status: SubmissionStatus;
 }
 export class GradeSubmissionDto {
   @ApiProperty({
@@ -33,4 +27,12 @@ export class GradeSubmissionDto {
     type: Number,
   })
   grade: number;
+
+  @ApiProperty()
+  @IsString()
+  comment: string;
+
+  @ApiProperty({ enum:SubmissionStatus })
+  status: SubmissionStatus;
+
 }

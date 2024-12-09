@@ -48,9 +48,7 @@ export class AssignmentSubmissionService {
       return this.prisma.assignmentSubmission.update({
         where: { id: existingSubmission.id },
         data: {
-          comment: submitAssignmentDto.comment,
           answerUpload,
-          status,
           submittedAt: new Date(),
         }
       });
@@ -59,10 +57,8 @@ export class AssignmentSubmissionService {
     return this.prisma.assignmentSubmission.create({
       data:{
         assignmentId: submitAssignmentDto.assignmentId,
-        comment: submitAssignmentDto.comment,
         answerUpload,
-        status,
-        // submittedAt: new Date(),
+        submittedAt: new Date(),
       }
     });
   }

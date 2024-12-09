@@ -12,7 +12,7 @@ export class AssignmentSubmissionController {
     ) {}
 
     @Post('submit')
-    @UseInterceptors(FileInterceptor('answerFile'))
+    @UseInterceptors(FileInterceptor('answerUpload'))
     @ApiConsumes('multipart/form-data')
     async submitAssignment(
         @Body() submitAssignmentDto: SubmitAssignmentDto,

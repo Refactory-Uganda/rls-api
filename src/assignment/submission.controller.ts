@@ -34,7 +34,7 @@ export class AssignmentSubmissionController {
         return this.assignmentSubmissionService.getUserSubmission(assignmentId);
     }
 
-    @Post('grade/:submission_id')
+    
     // @ApiBody({
     //     description: 'The grade to asign to the work submitted',
     //     type: Object,
@@ -47,10 +47,12 @@ export class AssignmentSubmissionController {
     //         }
     //     }
     // })
+
+    @Post('grade/:submission_id')
     async gradeSubmission(@Param('submission_id') submissionId: string, 
     @Body() gradeSubmissionDto: GradeSubmissionDto ) {
         const { grade } = gradeSubmissionDto;
-        return this.assignmentSubmissionService.gradeSubmission(submissionId, grade);
+        return this.assignmentSubmissionService.gradeSubmission(submissionId, gradeSubmissionDto);
     }
 
 

@@ -1,7 +1,7 @@
 // submit-assignment.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { SubmissionStatus } from '@prisma/client';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class SubmitAssignmentDto {
 
@@ -15,8 +15,7 @@ export class SubmitAssignmentDto {
   answerUpload?: Express.Multer.File; // File path of the uploaded answer
 
 
-  @ApiProperty()
-  submittedAt: Date;
+  
 
   // @ApiProperty({ enum:SubmissionStatus })
   // status: SubmissionStatus;
@@ -26,13 +25,16 @@ export class GradeSubmissionDto {
     description: 'The grade for the submission',
     type: Number,
   })
+  @IsNumber()
   grade: number;
 
   @ApiProperty()
   @IsString()
-  comment: string;
+  @IsOptional()
+  comment?: string;
 
-  @ApiProperty({ enum:SubmissionStatus })
-  status: SubmissionStatus;
+  // @ApiProperty({ enum:SubmissionStatus })
+  @IsOptional()
+  status?: SubmissionStatus;
 
 }

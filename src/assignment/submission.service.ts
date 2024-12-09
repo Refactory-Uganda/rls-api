@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { DocUploadService } from "./docUpload.service";
 import { SubmissionStatus } from "@prisma/client";
-import { SubmitAssignmentDto } from "./dto/submit-assignment.dto";
+import { GradeSubmissionDto, SubmitAssignmentDto } from "./dto/submit-assignment.dto";
 
 @Injectable()
 export class AssignmentSubmissionService {
@@ -80,7 +80,7 @@ export class AssignmentSubmissionService {
     // for facilitator
     async gradeSubmission(
         submissionId: string, 
-        grade: number, 
+        grade: GradeSubmissionDto, 
       ) {
         // Validate submission exists
         const submission = await this.prisma.assignmentSubmission.findUnique({
@@ -95,7 +95,8 @@ export class AssignmentSubmissionService {
         return this.prisma.assignmentSubmission.update({
           where: { id: submissionId },
           data: {
-            grade,
+            grade: grade.grade,
+            comment: grade.comment,
             status: SubmissionStatus.GRADED
           }
         });

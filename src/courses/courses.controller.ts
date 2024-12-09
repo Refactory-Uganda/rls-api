@@ -15,6 +15,7 @@ import {
   ParseFilePipeBuilder,
   BadRequestException,
   UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 import { CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -25,6 +26,9 @@ import { diskStorage } from 'multer';
 import { ImageService } from './images.service';
 import { FacilitatorService } from './faculitator.service';
 import { ParseArrayPipe } from './pipes/parse-array.pipe';
+import { RolesGuard } from 'src/authentication/guards/roles.guard';
+import { Roles } from 'src/authentication/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
  
 
 @Controller('courses')
@@ -68,13 +72,6 @@ async getStaffFromRims() {
     message: 'Facilitators have been fetched and stored successfully.'
   }
 }
-
-
-
-
-
-
-
 
   //  courses and staff
 
@@ -199,8 +196,8 @@ async getStaffFromRims() {
   // }
 
   @Get()
-  // @UseGuards(JwtAuthGaurd, RolesGaurd)
-  // @Roles('Staff', 'Administrator')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get all Courses' })
   async findAll() {
     // @Query('limit') limit: number = 2 // @Query('page') page: number = 1,

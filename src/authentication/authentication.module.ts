@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaModule } from '../prisma/prisma.module';
 import { HttpModule } from '@nestjs/axios';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { RolesGaurd } from './guards/roles.guard';
+import { RolesGuard } from './guards/roles.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
@@ -25,7 +25,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     HttpModule,
   ],
   controllers: [AuthenticationController],
-  providers: [AuthenticationService, JwtStrategy, RolesGaurd],
+  providers: [AuthenticationService, JwtStrategy, RolesGuard],
   exports: [AuthenticationService],
 })
 export class AuthenticationModule {}

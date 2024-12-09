@@ -15,10 +15,6 @@ export class SubmitAssignmentDto {
   answerUpload?: Express.Multer.File; // File path of the uploaded answer
 
 
-  
-
-  // @ApiProperty({ enum:SubmissionStatus })
-  // status: SubmissionStatus;
 }
 export class GradeSubmissionDto {
   @ApiProperty({

@@ -76,12 +76,16 @@ async getStaffFromRims() {
   //  courses and staff
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Administrator')
   @ApiOperation({ summary: 'Delete a Course' })
   async deleteCourse(@Param('id') id: string) {
     return await this.courseService.deleteCourse(id);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Administrator')
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -208,12 +212,16 @@ async getStaffFromRims() {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Administrator')
   @ApiOperation({ summary: 'Get a Course by ID' })
   async findOne(@Param('id') id: string) {
     return await this.courseService.findOne(id);
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('Administrator')
   @UseInterceptors(
     FileInterceptor('image', {
       fileFilter: (req, file, callback) => {

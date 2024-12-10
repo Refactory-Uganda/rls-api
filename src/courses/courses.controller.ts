@@ -197,7 +197,7 @@ async getStaffFromRims() {
 
   @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Staff', 'Administrator')
+  @Roles('Administrator')
   @ApiOperation({ summary: 'Get all Courses' })
   async findAll() {
     // @Query('limit') limit: number = 2 // @Query('page') page: number = 1,
@@ -325,4 +325,8 @@ async getStaffFromRims() {
   async draftCourse(@Param('id') id: string) {
     return this.courseService.draftCourse(id);
   }
+
+
+  
+
 }

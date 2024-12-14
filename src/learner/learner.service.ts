@@ -16,6 +16,11 @@ export class LearnerService {
     return response.data;
   }
 
+  async fetchLearners(){
+    const response = await this.httpService.get('https://rims-api-xufp.onrender.com/students').toPromise(); 
+    return response.data
+  }
+
   async getLearner(learnerId: string): Promise<LearnerDto> {
     const response = await this.httpService
       .get(

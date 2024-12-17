@@ -23,8 +23,8 @@ export class LessonController {
   constructor(private lessonService: LessonService) {}
 
   @Post(':topic_id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Staff')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff')
   @ApiOperation({ summary: 'Create a Lesson' })
   async createLesson(
     @Param('topic_id') topic_id: string,
@@ -34,8 +34,8 @@ export class LessonController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Staff')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff')
   @ApiOperation({ summary: 'Partially Update Lesson' })
   @ApiBody({ type: UpdateLessonDto }) // Use the new DTO here
   async patch(
@@ -46,23 +46,23 @@ export class LessonController {
   }
 
   @Delete(':lesson_id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Staff')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff')
   @ApiOperation({ summary: 'Delete a Lesson' })
   async deleteLesson(@Param('lesson_id') lesson_id: string) {
     return this.lessonService.deleteLesson(lesson_id);
   }
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Staff', 'Administrator')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get all Lessons under different topics' })
   async findAllLessons() {
     return await this.lessonService.findAllLessons();
   }
 
   @Get(':lessonId')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('Staff', 'Administrator')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get a particular Lesson under a specific Topic' })
   async findLessonById(
   @Param('lessonId') lessonId: string

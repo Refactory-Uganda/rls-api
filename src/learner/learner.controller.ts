@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { LearnerService } from './learner.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LearnerEnrollService } from './learner_enroll.service';
@@ -19,7 +19,12 @@ export class LearnerController {
 @Post('/enroll')
 async learnerEnroll(@Body() dto: CreateEnrollmentsDto) { 
     // const { courseId, learnerIds } = dto
-    return this.learnerEnrollService.learnerEnroll(dto)
+    return this.learnerEnrollService.enrollLearner(dto)
+}
+
+@Get(':course_id')
+async getEnrollmentsByCourse(@Param('courseId') courseId:string){
+  return this.learnerEnrollService.getEnrollmentsByCourse(courseId)
 }
 
 

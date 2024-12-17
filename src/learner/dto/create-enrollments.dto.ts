@@ -7,6 +7,6 @@ export class CreateEnrollmentsDto {
     courseId: string;
 
     @ApiProperty()
-    @IsArray()
-    learnerIds: string[];
+    @IsString()
+    learnerId: string;
   }

@@ -22,7 +22,7 @@ model Course {
   courseOutline    String[]    
   requirements     String[]  
   assessmentMode   AssessmentMode? 
-  facilitatorId    String? @db.ObjectId
+  facilitatorId    String? 
   facilitator      User?   @relation(fields: [facilitatorId],references: [id])
   award            String?           
   courseObjective  String[]      
@@ -30,6 +30,8 @@ model Course {
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
   image       String?
+
+  Enrollment Enrollment[]
 }
 
 
@@ -123,7 +125,7 @@ model Option {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(cuid()) @map("_id")
   externalId String @unique // ID from RIMS
   email     String   @unique
   firstName String
@@ -136,6 +138,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   Course Course[]
+  // enrollments Enrollment[]
 }
 
 enum Role {
@@ -210,6 +213,17 @@ model AssignmentSubmission {
   submittedAt DateTime @default(now())
   grade Float?
   status SubmissionStatus @default(SUBMITTED)
+}
+
+model Enrollment {
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
+  courseId  String @db.ObjectId
+  course    Course  @relation(fields: [courseId], references: [id])
+
+  enrolledAt  DateTime  @default(now())
+
+  learnerId   String 
+  // learner User @relation(fields: [learnerId], references: [id])
 }
 
 enum SubmissionStatus {

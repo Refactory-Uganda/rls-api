@@ -29,6 +29,7 @@ import { ParseArrayPipe } from './pipes/parse-array.pipe';
 import { RolesGuard } from 'src/authentication/guards/roles.guard';
 import { Roles } from 'src/authentication/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
+import { GetCourseContentsDto } from './dto/create-user.dto';
  
 
 @Controller('courses')
@@ -70,6 +71,14 @@ async getStaffFromRims() {
   await this.facilitatorService.getStaffFromRims();
   return {
     message: 'Facilitators have been fetched and stored successfully.'
+  }
+}
+// Student from Rims
+@Post('getstudentfromrims')
+async getStudentFromRims() {
+  await this.facilitatorService.getLearnerFromRims();
+  return {
+    message: 'Students have been fetched and stored successfully.'
   }
 }
 
@@ -332,6 +341,16 @@ async getStaffFromRims() {
   @HttpCode(HttpStatus.OK) // Set the response status code to 200
   async draftCourse(@Param('id') id: string) {
     return this.courseService.draftCourse(id);
+  }
+
+
+  @Get(':id/contents')
+  async getCourseContents(@Param('courseId') courseId: string, @Body() dto: GetCourseContentsDto) {
+    const { learnerId } = dto;
+    const course = await this.courseService.getCourseContents(courseId, learnerId);
+   
+
+    return course;
   }
 
 

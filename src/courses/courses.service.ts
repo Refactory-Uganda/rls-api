@@ -511,4 +511,46 @@ export class CourseService {
       );
     }
   }
+
+  async getCourseContents(learnerId: string, courseId: string) {
+     // Check if the student is enrolled in the course
+     const enrollment = await this.prisma.enrollment.findFirst({
+      where: {
+          learnerId,
+          courseId,
+      },
+    });
+
+    if (!enrollment) {
+      throw new BadRequestException('Student is not enrolled in this course');
+    }
+
+    // Retrieve and return the course contents
+    const course = await this.prisma.course.findUnique({
+      where: { id: courseId },
+      include: {
+        topics: true,
+        facilitator: true,
+      },
+    });
+
+    return course;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

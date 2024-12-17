@@ -221,8 +221,8 @@ async getStudentFromRims() {
   }
 
   @Get(':id')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Roles('Administrator')
+  // @UseGuards(JwtAuthGaurd, RolesGaurd)
+  // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get a Course by ID' })
   async findOne(@Param('id') id: string) {
     return await this.courseService.findOne(id);

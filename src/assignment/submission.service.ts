@@ -6,7 +6,7 @@ import { GradeSubmissionDto, SubmitAssignmentDto } from "./dto/submit-assignment
 
 @Injectable()
 export class AssignmentSubmissionService {
-    constructor(
+  constructor(
         private prisma: PrismaService,
         private docUploadService: DocUploadService
     ) {}

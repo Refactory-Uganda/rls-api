@@ -13,6 +13,9 @@ import {
   UploadedFile,
   UseInterceptors,
   ParseFilePipeBuilder,
+  BadRequestException,
+  UsePipes,
+  UseGuards,
 } from '@nestjs/common';
 import { CourseService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -22,6 +25,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ImageService } from './images.service';
 import { FacilitatorService } from './faculitator.service';
+import { ParseArrayPipe } from './pipes/parse-array.pipe';
+import { RolesGuard } from 'src/authentication/guards/roles.guard';
+import { Roles } from 'src/authentication/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
+import { GetCourseContentsDto } from './dto/create-user.dto';
  
 
 @Controller('courses')
@@ -52,8 +60,8 @@ export class CourseController {
     )
     file: Express.Multer.File,
   ) {
-    const filename = await this.imageService.saveImage(file);
-    return filename;
+    const fileId = await this.imageService.saveImage(file);
+    return fileId;
   }
 
   
@@ -65,23 +73,28 @@ async getStaffFromRims() {
     message: 'Facilitators have been fetched and stored successfully.'
   }
 }
-
-
-
-
-
-
-
+// Student from Rims
+@Post('getstudentfromrims')
+async getStudentFromRims() {
+  await this.facilitatorService.getLearnerFromRims();
+  return {
+    message: 'Students have been fetched and stored successfully.'
+  }
+}
 
   //  courses and staff
 
   @Delete(':id')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Administrator')
   @ApiOperation({ summary: 'Delete a Course' })
   async deleteCourse(@Param('id') id: string) {
     return await this.courseService.deleteCourse(id);
   }
 
   @Patch(':id')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Administrator')
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -171,7 +184,7 @@ async getStaffFromRims() {
     @UploadedFile() image?: Express.Multer.File,
   ) {
     if (image) {
-      updateCourseDto.image = image.filename;
+      updateCourseDto.image.filePath = image.filename;
     }
     return this.courseService.patchCourse(id, updateCourseDto);
   }
@@ -196,8 +209,8 @@ async getStaffFromRims() {
   // }
 
   @Get()
-  // @UseGuards(JwtAuthGaurd, RolesGaurd)
-  // @Roles('Staff', 'Administrator')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Administrator')
   @ApiOperation({ summary: 'Get all Courses' })
   async findAll() {
     // @Query('limit') limit: number = 2 // @Query('page') page: number = 1,
@@ -208,22 +221,18 @@ async getStaffFromRims() {
   }
 
   @Get(':id')
+  // @UseGuards(JwtAuthGaurd, RolesGaurd)
+  // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get a Course by ID' })
   async findOne(@Param('id') id: string) {
     return await this.courseService.findOne(id);
   }
 
   @Post()
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Administrator')
   @UseInterceptors(
     FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './uploads/courses',
-        filename: (req, file, callback) => {
-          // generate a unique name for the file
-          const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          callback(null, `${uniqueName}${file.originalname}`);
-        },
-      }),
       fileFilter: (req, file, callback) => {
         // validate the file type to only image files
         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
@@ -296,7 +305,8 @@ async getStaffFromRims() {
         },
       },
     },
-  })
+  })  
+  @UsePipes(new ParseArrayPipe())
   @HttpCode(HttpStatus.CREATED) // Set the response status code to 201
   async createCourseP_D(
     @Body() createCourseDto: CreateCourseDto,
@@ -305,7 +315,16 @@ async getStaffFromRims() {
     console.log('Recieved DTO:', createCourseDto); // Debugging
     console.log('Recieved Image:', image); // Debugging
     if (image) {
-      createCourseDto.image = image.filename;
+      try {
+        // upload image 
+        const driveResponse = await this.imageService.saveImage(image);
+        createCourseDto.image = createCourseDto.image || {};
+        console.log('Drive Response:', driveResponse);
+        createCourseDto.image.webContentLink = driveResponse.webContentLink;
+      }catch(error){
+        console.error('Error uploading image:', error);
+        throw new BadRequestException('Failed to upload image to Drive');
+      }
     }
     return this.courseService.createCourseDraft(createCourseDto);
   }
@@ -323,4 +342,18 @@ async getStaffFromRims() {
   async draftCourse(@Param('id') id: string) {
     return this.courseService.draftCourse(id);
   }
+
+
+  @Get(':id/contents')
+  async getCourseContents(@Param('courseId') courseId: string, @Body() dto: GetCourseContentsDto) {
+    const { learnerId } = dto;
+    const course = await this.courseService.getCourseContents(courseId, learnerId);
+   
+
+    return course;
+  }
+
+
+  
+
 }

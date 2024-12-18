@@ -12,10 +12,10 @@ export class ModulesService {
 
   async create(createModuleDto: CreateModuleDto): Promise<any> {
     try {
-      const repsonse = await this.httpService
+      const response = await this.httpService
         .post(`${this.baseUrl}`, createModuleDto)
         .toPromise();
-      return repsonse.data;
+      return response.data;
     } catch (error) {
       console.error('Error Message:', error.Message);
 

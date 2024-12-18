@@ -7,16 +7,18 @@ import { FacilitatorDto } from './dto/facilitator-dto';
 export class FacilitatorService {
   constructor(private httpService: HttpService) {}
 
+  // Fetch all staff members from RiMs API
   async getAll() {
     const response = await this.httpService
-      .get('http://localhost:3001/staff')
+      .get('https://rims-api-xufp.onrender.com/staff') 
       .toPromise();
     return response.data;
   }
 
+  // Fetch a specific facilitator by ID from RiMs API
   async getFacilitator(facilitatorId: string): Promise<FacilitatorDto> {
     const response = await this.httpService
-      .get(`http://localhost:3001/staff/${facilitatorId}`)
+      .get(`https://rims-api-xufp.onrender.com/staff/${facilitatorId}`) 
       .toPromise();
     return response.data;
   }

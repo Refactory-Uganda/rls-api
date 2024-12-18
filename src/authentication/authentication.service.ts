@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -221,4 +222,37 @@ export class AuthenticationService {
       }
     }
   }
+
+
+  async logout(userId: string) {
+    try{
+      // check user exists
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if(!user) {
+        throw new UnauthorizedException('User doesnot exist');
+      }
+
+      //  cancel refresh token
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { refresh_token: null },
+      });
+
+      return {
+        message: 'Logged Out Successfully',
+        success: true,
+      }
+
+    }catch(error){
+      console.error('Unexpected error:', error);
+      throw new HttpException(
+        'something isnot right try again',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
 }

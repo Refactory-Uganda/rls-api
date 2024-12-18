@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { Prisma, Question, Quiz } from '@prisma/client';
 import { CreateQuestionDto } from '../question/dto/create-question.dto';
 import { SubmitAnswerDto } from './dto/submitAnswer.dto';
 import { SubmitQuizDto } from './dto/submitQuiz.dto';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class QuizService {
@@ -22,6 +24,7 @@ export class QuizService {
   async create(createQuizDto: CreateQuizDto) {
     // const { questions, ...quizData } = createQuizDto;
 
+   try {
     return this.prisma.quiz.create({
       data: {
         title: createQuizDto.title,
@@ -31,7 +34,16 @@ export class QuizService {
         },
       },
     });
+  }catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('A quiz with this lesson ID already exists.');
+      }
+    }
+    throw new BadRequestException('Error creating quiz');
   }
+  }
+
 
   async patchQuiz(id: string, partialUpdateDto: UpdateQuizDto) {
     try {
@@ -197,7 +209,7 @@ export class QuizService {
         questionId: question.id,
         selectedOptionId: selectedOption.id,
         isCorrect: selectedOption.isCorrect,
-      },
+      }
     });
 
     return userAnswer;
@@ -292,16 +304,18 @@ export class QuizService {
         question: answer.question.text,
         selectedAnswer: answer.selectedOption.optionText,
         isCorrect: answer.isCorrect,
-        correctOption: attempt.quiz.questions
-          .find((q) => q.id === answer.questionId)
-          ?.option.find((opt) => opt.isCorrect)?.optionText,
-      })),
-    };
+        correctOption: attempt.quiz.questions.find(q => q.id === answer.questionId)?.option.find(opt => opt.isCorrect)?.optionText,
+      }))
+    }
   }
 
   // submit a complete quiz
   async submitQuiz(attemptId: string, submitQuizDto: SubmitQuizDto) {
     const { quizId, answers } = submitQuizDto;
+
+    console.log(attemptId);
+    console.log('AttemptId type:', typeof attemptId);  // should output 'string'
+    console.log('AttemptId value:', attemptId);        // should show the actual value
 
     // Check if the quiz exists
     const quiz = await this.prisma.quiz.findUnique({
@@ -345,15 +359,16 @@ export class QuizService {
         score += 1;
       }
       maxScore += 1;
+    
+    // Add the quiz attempt an array in the database
+    userAnswerData.push({
+      questionId,
+      quizAttemptId: attemptId,
+      optionId,
+      isCorrect: selectedOption.isCorrect,
+    })
+  }
 
-      // Add the quiz attempt an array in the database
-      userAnswerData.push({
-        questionId,
-        quizAttemptId: submitQuizDto.attemptId,
-        optionId,
-        isCorrect: selectedOption.isCorrect,
-      });
-    }
 
     // Create the quiz attempt
     const quizAttempt = await this.prisma.quizAttempt.create({

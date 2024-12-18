@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger"
 import { Groups } from "@prisma/client"
 
 export class CreateUserDto {
@@ -9,4 +10,10 @@ export class CreateUserDto {
   nationality?: string
   residence?: string
   refresh_token?: string
+}
+
+// get-course-contents.dto.ts
+export class GetCourseContentsDto {
+  @ApiProperty()
+  learnerId: string;
 }

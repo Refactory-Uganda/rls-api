@@ -5,8 +5,8 @@ import { IsBoolean, IsString } from 'class-validator';
 
 export class SubmitAnswerDto {
   // @ApiProperty()
-  @IsString()
-  id: string;
+  // @IsString()
+  // id: string;
 
   @ApiProperty()
   @IsString()

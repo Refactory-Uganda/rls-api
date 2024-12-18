@@ -1,4 +1,131 @@
-import { Injectable } from '@nestjs/common';
+// assignment.service.ts
+import { Injectable, HttpException, HttpStatus, BadRequestException, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateAssignmentDto } from './dto/create-assignment.dto';
+import { Assignment} from '@prisma/client';
+import { DocUploadService } from './docUpload.service';
+
+
 
 @Injectable()
-export class AssignmentService {}
+export class AssignmentService {
+  constructor(
+    private prisma: PrismaService,
+    private docUploadService: DocUploadService
+  ) {}
+
+  async create(createAssignmentDto: CreateAssignmentDto, file?: Express.Multer.File) {
+    try{
+      // check if lesson exists
+      const lesson = await this.prisma.lesson.findUnique({
+        where: {id: createAssignmentDto.lessonId}
+      });
+
+      if(!lesson) {
+        throw new NotFoundException('Lesson Doesnot Exist')
+      }
+
+      // Handling file upload
+      let fileUrl = null;
+      if (file) {
+        fileUrl = await this.docUploadService.uploadFile(file, 'assignments');
+      }
+
+      // Create Assignment
+      return this.prisma.assignment.create({
+        data: {
+          title: createAssignmentDto.title,
+          instructions: createAssignmentDto.instructions,
+          dueDate: createAssignmentDto.dueDate,
+          points: createAssignmentDto.points,
+          lessonId: createAssignmentDto.lessonId,
+          uploadQuestion: fileUrl
+        }
+      });
+    }catch(error){
+      throw new BadRequestException('Failed to create Assignment')
+    }
+  }
+
+
+// async submitAssignment(submitAssignmentDto: SubmitAssignmentDto, answerUpload: string): Promise<any> {
+//     try {
+//       const submission = await this.prisma.assignmentSubmission.create({
+//         data: {
+//           assignmentId: submitAssignmentDto.assignmentId,
+//           comment: submitAssignmentDto.comment,
+//           answerUpload: answerUpload, // Path to the uploaded answer
+//         },
+//       });
+//       return submission;
+//     } catch (error) {
+//       throw new HttpException('Failed to submit assignment', HttpStatus.INTERNAL_SERVER_ERROR);
+//     }
+//   }
+
+async getAllAssignments(): Promise<{AllAssignments :Assignment[]}> {
+    try{
+      const assignments = await this.prisma.assignment.findMany();
+      return {AllAssignments : assignments};
+    }catch (error) {
+      throw new HttpException('Failed to get assignments', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+async getAssignmentById(id: string): Promise< Assignment> {
+    try {
+      const assignment = await this.prisma.assignment.findUnique({
+        where: { id },
+      })
+      if(!assignment){
+        throw new NotFoundException(`Assignment with ID ${id} not found`)
+      }
+      return  assignment;
+
+    }catch (error) {
+      throw new HttpException('Failed to get assignment', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+async deleteAssignment(id: string): Promise<{Deleted : Assignment}> {
+    try {
+      const assignment = await this.prisma.assignment.delete({
+        where: { id },
+      })
+      return { Deleted :assignment};
+    }catch (error) {
+      throw new HttpException('Failed to delete assignment', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+
+// async downloadQuestion(id: string) {
+//       const assignment = await this.getAssignmentById(id);
+  
+//       if (!assignment.uploadQuestion) {
+//         throw new NotFoundException('No question file uploaded for this assignment');
+//       }
+  
+//       const filePath = path.join(process.cwd(), assignment.uploadQuestion);
+      
+//       if (!fs.existsSync(filePath)) {
+//         throw new NotFoundException('Question file not found');
+//       }
+  
+//       return {
+//         file: fs.readFileSync(filePath),
+//         filename: path.basename(filePath),
+//         mimetype: this.getMimeType(path.extname(filePath))
+//       };
+//     }
+private getMimeType(ext: string): string {
+      switch(ext.toLowerCase()) {
+        case '.pdf': return 'application/pdf';
+        case '.doc': return 'application/msword';
+        case '.docx': return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        default: return 'application/octet-stream';
+      }
+    }
+  }
+
+

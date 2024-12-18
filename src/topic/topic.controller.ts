@@ -11,6 +11,7 @@ import {
   HttpCode,
   HttpStatus,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { TopicService } from './topic.service';
 import { ApiBody, ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -18,6 +19,9 @@ import { CreateTopicDto } from './dto/create-topic.dto';
 import { UpdateTopicDto } from './dto/update-topic.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { RolesGuard } from 'src/authentication/guards/roles.guard';
+import { Roles } from 'src/authentication/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt-auth.guard';
 
 @Controller('topic')
 @ApiTags('Topic')
@@ -25,6 +29,8 @@ export class TopicController {
   constructor(private readonly topicService: TopicService) {}
 
   @Post(':course_id')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff')
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -98,6 +104,8 @@ export class TopicController {
   // }
 
   @Patch(':id')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff')
   @ApiOperation({ summary: 'Partially Update Topic' })
   @UseInterceptors(
     FileInterceptor('image', {
@@ -161,17 +169,23 @@ export class TopicController {
   }
 
   @Delete(':id')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff')
   @ApiOperation({ summary: 'Delete Topic' })
   deleteTopic(@Param('id') id: string) {
     return this.topicService.deleteTopic(id);
   }
 
   @Get()
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get all Topics by courseId' })
   async findAllTopics() {
     return await this.topicService.findAllTopicsByCourse();
   }
   @Get(':id')
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles('Staff', 'Administrator')
   @ApiOperation({ summary: 'Get Topic by id' })
   async findOneTopic(@Param('id') id: string) {
     return await this.topicService.findOneTopic(id);

@@ -31,6 +31,8 @@ model Course {
   createdAt   DateTime @default(now())
   topics      Topic[]  @relation("CourseTopics")
   image       String?
+
+  Enrollment Enrollment[]
 }
 
 
@@ -57,6 +59,8 @@ model Lesson {
   quizId    String?  @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  assignments Assignment[] @relation(name: "LessonAssignment")
 }
 
 
@@ -135,6 +139,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   Course Course[]
+
+  Enrollment Enrollment[]
 }
 
 enum Role {
@@ -185,22 +191,46 @@ model UserAnswer {
 
 model Assignment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  instructions String[]
+  title  String
+  instructions String?
   dueDate   DateTime
-  question  String
+  uploadQuestion String? // upload a question
+  points Int? // not morethan 100
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   AssignmentSubmission AssignmentSubmission[]
+
+  lesson    Lesson?     @relation(fields: [lessonId], references: [id], name: "LessonAssignment")
+  lessonId  String?     @unique @db.ObjectId
+
 }
 model AssignmentSubmission {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  assignmentId  String @db.ObjectId
   assignment Assignment @relation(fields: [assignmentId], references: [id])
-  answer String
-  response String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  assignmentId  String @db.ObjectId
+  
+  answerUpload String
+  comment String?
+  submittedAt DateTime @default(now())
+  grade Float?
+  status SubmissionStatus @default(SUBMITTED)
+}
+
+model Enrollment {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  courseId String @db.ObjectId
+  course  Course @relation(fields: [courseId], references: [id])
+  enrolledAt  DateTime @default(now())
+  learnerId String @db.ObjectId
+  learner User @relation(fields: [learnerId], references: [id])
+}
+
+enum SubmissionStatus {
+  SUBMITTED
+  GRADED
+  LATE
+  MISSING
 }
 
 enum AttemptStatus {

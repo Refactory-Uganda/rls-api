@@ -1,136 +1,187 @@
-name: Backend Actions
-'on':
+name: Backend CI/CD Pipeline
+
+on:
   push:
     branches:
-      - development
       - staging
-      - main
+      - development
   pull_request:
     branches:
+      - staging
       - development
+
+env:
+  NODE_VERSION: '20.x'
+  CACHE_KEY_PREFIX: v1
+
 jobs:
-  build:
+  run-linters:
+    name: Run linters
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 20.x
-    services:
-      mongo:
-        image: 'mongo:5.0'
-        ports:
-          - '27018:27017'
-        options: >-
-          --health-cmd="mongo --eval \"db.runCommand({ ping:1 })\""
-          --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
-      - name: Check Docker version
-        run: docker --version
-      - name: Checkout repository
+      - name: Check out Git repository
         uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '${{ matrix.node-version }}'
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: >-
-            ${{ runner.os }}-node_modules-${{ hashFiles('package-lock.json',
-            'package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node_modules-
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
       - name: Install dependencies
         run: npm ci
-      - name: Cache Cypress binary
-        uses: actions/cache@v3
+
+      - name: Run ESLint
+        run: npm run lint
+
+  test-and-build:
+    needs: [run-linters]
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd mongosh
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          path: ~/.cache/Cypress
-          key: >-
-            ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json',
-            'package.json') }}
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: node_modules
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-cypress-
-      - name: Install Cypress (if not cached)
-        run: npx cypress install
-      - name: Wait for MongoDB to be ready
-        run: |
-          echo "Waiting for MongoDB to be ready..."
-          for i in {1..30}; do
-            if docker inspect --format="{{json .State.Health.Status}}" mongo | grep '"healthy"'; then
-              echo "MongoDB is ready."
-              break
-            else
-              echo "Waiting for MongoDB..."
-              sleep 2
-            fi
-          done
-      - name: Build NestJS API
+            ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Build application
         run: npm run build
-      - name: Run tests (including API tests)
-        run: 'npm run test:e2e'
-      - name: Check MongoDB logs
-        run: docker logs mongo || echo "No MongoDB logs available."
-  deploy-staging:
-    if: github.ref == 'refs/heads/staging'
-    needs: build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  check-conflicts:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Deploy to staging environment
-        env:
-          STAGING_SERVER: '${{ secrets.STAGING_SERVER }}'
-          SSH_KEY: '${{ secrets.STAGING_SSH_KEY }}'
-        run: >
-          if [ -z "${{ secrets.STAGING_SERVER }}" ] || [ -z "${{
-          secrets.STAGING_SSH_KEY }}" ]; then
-            echo "Staging secrets are missing!" >&2
-            exit 1
-          fi
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-          echo "Deploying to staging environment..."
+      - name: Fetch all branches
+        run: |
+          git fetch --all
 
-          ssh -o StrictHostKeyChecking=no -i $SSH_KEY user@$STAGING_SERVER "bash
-          deploy-staging.sh"
-  deploy-production:
-    if: github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Deploy to production
-        env:
-          PRODUCTION_SERVER: '${{ secrets.PRODUCTION_SERVER }}'
-          SSH_KEY: '${{ secrets.PRODUCTION_SSH_KEY }}'
-        run: >
-          echo "Checking if production secrets are set..."
+      - name: Check for merge conflicts
+        run: |
+          # Create tracking branches if they don't exist
+          git branch -r | grep -v '\->' | while read remote; do
+            branch="${remote#origin/}"
+            git branch --track "${branch}" "$remote" 2>/dev/null || true
+          done
 
-          if [ -z "${{ secrets.PRODUCTION_SERVER }}" ] || [ -z "${{
-          secrets.PRODUCTION_SSH_KEY }}" ]; then
-            echo "Production secrets are missing!" >&2
-            exit 1
-          fi
-
-          echo "Secrets are set. Proceeding with deployment..."
-
-
-          # Debugging output
-
-          echo "Deploying to production on server: $PRODUCTION_SERVER"
-
-
-          # SSH Command with verbose logging
-
-          ssh -o StrictHostKeyChecking=no -i $SSH_KEY -v user@$PRODUCTION_SERVER
-          "bash deploy-production.sh"
-
-
-          if [ $? -ne 0 ]; then
-            echo "Deployment to production failed!" >&2
+          # Check for conflicts between PR branch and target branch
+          if git merge-tree $(git merge-base HEAD origin/${{ github.base_ref }}) origin/${{ github.base_ref }} HEAD | grep -i '<<<<<<<'; then
+            echo "::error::Merge conflicts detected. Please resolve conflicts before merging."
             exit 1
           else
-            echo "Deployment to production succeeded."
+            echo "No merge conflicts detected."
           fi
+
+  e2e-tests:
+    needs: run-linters
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: node_modules
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+  deploy-staging:
+    if: |
+      (github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/development') ||
+      (github.event_name == 'pull_request' && (github.base_ref == 'staging' || github.base_ref == 'development'))
+    needs: [test-and-build, e2e-tests]
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: Deploy to Render
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "Deploying PR #${{ github.event.pull_request.number }} to staging"
+          else
+            echo "Deploying branch ${{ github.ref_name }} to staging"
+          fi
+          curl -X POST ${{ secrets.RENDER_DEPLOYMENT_HUK }}
